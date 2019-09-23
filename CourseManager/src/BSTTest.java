@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Iterator;
 import student.TestCase;
 
 //On my honor:
@@ -148,6 +149,23 @@ public class BSTTest extends TestCase {
         @SuppressWarnings({ "unchecked", "rawtypes" })
         BSTNode node1 = new BSTNode(1, node, node);
         assertEquals(node1.value(), 1);
+    }
+    
+    public void testIterator() {
+        bst.insert(42);
+        bst.insert(12);
+        bst.insert(31);
+        bst.insert(11);
+        bst.insert(0);
+        bst.insert(4);
+        bst.insert(10);
+        bst.insert(100);
+        
+        Iterator<Integer> bstIter = bst.Iterator();
+        
+        while(bstIter.hasNext()) {
+            System.out.println(bstIter.next());
+        }
     }
 
 }

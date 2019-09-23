@@ -255,6 +255,11 @@ public class BST<E extends Comparable<E>> {
         rt.setRight(deletemax(rt.right()));
         return rt;
     }
+    
+    public BSTIterator<E> Iterator() {
+        //private BSTIterator<Integer> bstIter;
+        return new BSTIterator<E>(root);
+    }
 
     // Iterator Class
     private class BSTIterator<E extends Comparable<? super E>> implements Iterator<E>{
