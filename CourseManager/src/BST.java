@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Stack;
 
 // On my honor:
 //
@@ -30,6 +31,11 @@ import java.util.ArrayList;
  * @param <E>
  */
 public class BST<E extends Comparable<E>> {
+    
+    /**
+     * 
+     */
+    private Stack<BSTNode<E>> stack;
     private BSTNode<E> root; // Root of the BST
     private int nodecount; // Number of nodes in the BST
 
