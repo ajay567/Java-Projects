@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Stack;
+import java.util.Iterator;
 
 // On my honor:
 //
@@ -35,9 +36,9 @@ public class BST<E extends Comparable<E>> {
     /**
      * 
      */
-    private Stack<BSTNode<E>> stack;
     private BSTNode<E> root; // Root of the BST
     private int nodecount; // Number of nodes in the BST
+    private BSTIterator<E> iterator;
 
 
     // constructor
@@ -253,5 +254,35 @@ public class BST<E extends Comparable<E>> {
         }
         rt.setRight(deletemax(rt.right()));
         return rt;
+    }
+
+    // Iterator Class
+    private class BSTIterator<E extends Comparable<? super E>> implements Iterator<E>{
+        Stack<BSTNode<E>> stack;
+        
+        public BSTIterator(BSTNode<E> root) {
+            stack = new Stack<BSTNode<E>>();
+            while(root != null) {
+                stack.push(root);
+                root = root.left();
+            }
+        }
+        
+        public boolean hasNext() {
+            return !stack.isEmpty();
+        }
+        
+        public E next() {
+            BSTNode<E> node = stack.pop();
+            E value = node.value();
+            if(node.right() != null) {
+                node = node.right();
+                while(node != null) {
+                    stack.push(node);
+                    node = node.left();
+                }
+            }
+            return value;
+        }
     }
 }
