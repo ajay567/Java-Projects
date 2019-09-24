@@ -21,32 +21,33 @@ import java.util.ArrayList;
 // during the discussion. I have violated neither the spirit nor
 // letter of this restriction.
 /**
+ * Testing class for CommandCalculator and Parser.
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
- * @version 2019.9.21
+ * @version 2019.24.21
  *
  */
-public class InputReaderTest extends student.TestCase {
+public class CommandCalculatorTest extends student.TestCase {
 
     /**
      * fields
      */
     private ArrayList<BST<Student>> list;
-    private InputReader input;
+    private CommandCalculator input;
 
 
     /**
-     * 
+     * The two fields have been initialized.
      */
     public void setUp() {
         list = new ArrayList<BST<Student>>();
-        input = new InputReader();
+        input = new CommandCalculator();
     }
 
 
     /**
-     * 
+     * Tests createId method for CommandCalculator.
      */
     public void testCreateID() {
         input.section(10);
@@ -58,19 +59,7 @@ public class InputReaderTest extends student.TestCase {
 
 
     /**
-     * 
-     */
-    public void testScore() {
-        input.section(10);
-        assertTrue(input.createID(1, "", 2).equals("020001"));
-        assertTrue(input.createID(11, "", 2).equals("020011"));
-        assertTrue(input.createID(111, "", 2).equals("020111"));
-
-    }
-
-
-    /**
-     * 
+     * Tests the ScoreHelper method in CommandCalculator.
      */
     public void testScoreHelper() {
         Student student = new Student("Ajay", "Dalmia");
@@ -82,7 +71,7 @@ public class InputReaderTest extends student.TestCase {
 
 
     /**
-     * 
+     * Tests the printInsertHelper method in CommandCalculator.
      */
     public void testPrintInsertHelper() {
         Student student = new Student("Ajay", "Dalmia");
@@ -97,7 +86,7 @@ public class InputReaderTest extends student.TestCase {
 
 
     /**
-     * 
+     * Tests the second score helper method in CommandCalculator.
      */
     public void testScoreHelper2() {
         Student student = new Student("Ajay", "Dalmia");
@@ -112,7 +101,7 @@ public class InputReaderTest extends student.TestCase {
 
 
     /**
-     * 
+     * Tests the search1Helper method in CommandCalculator.
      */
     public void testSearch1Helper() {
         ArrayList<Student> arr = new ArrayList<Student>();
@@ -130,8 +119,9 @@ public class InputReaderTest extends student.TestCase {
 
 
     /**
-     * @throws FileNotFoundException
+     * Tests the reads file method in parser.
      * 
+     * @throws FileNotFoundException
      */
     public void testReadsFile() throws FileNotFoundException {
         Parser parser = new Parser();
@@ -142,7 +132,7 @@ public class InputReaderTest extends student.TestCase {
 
 
     /**
-     * 
+     * Tests the third score helper method in CommandCalculator.
      */
     public void testScoreHelper3() {
         Student student = new Student("Ajay", "Dalmia");
@@ -157,7 +147,7 @@ public class InputReaderTest extends student.TestCase {
 
 
     /**
-     * 
+     * Tests the dumpSection method in CommandCalculator.
      */
     public void testDumpSection() {
         ArrayList<Student> arr = new ArrayList<Student>();
@@ -173,7 +163,7 @@ public class InputReaderTest extends student.TestCase {
 
 
     /**
-     * 
+     * Tests the grade method in CommandCalculator.
      */
     public void testGrade() {
         ArrayList<Student> arr = new ArrayList<Student>();

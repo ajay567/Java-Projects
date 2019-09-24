@@ -20,6 +20,7 @@ import java.io.FileNotFoundException;
 // during the discussion. I have violated neither the spirit nor
 // letter of this restriction.
 /**
+ * Coursemanager1 contains the main function.
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
@@ -28,7 +29,13 @@ import java.io.FileNotFoundException;
  */
 public class Coursemanager1 {
 
+    // Compiler - 
+    // Operating System - Windows 10
+    // Date completed - 24th of September 2019
     /**
+     * The main method creates an object for the parser class.
+     * It passes the file to parser by calling a method created in
+     * parser.
      * 
      * @param args
      *            input files

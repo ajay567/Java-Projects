@@ -23,16 +23,18 @@ import java.util.Scanner;
 // during the discussion. I have violated neither the spirit nor
 // letter of this restriction.
 /**
+ * The parser class takes care of all the commands in the input
+ * file. It also takes care of printing.
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
- * @version 2019.9.21
+ * @version 2019.24.21
  *
  */
 public class Parser {
 
     /**
-     * 
+     * Constructor
      */
     public Parser() {
         // Does Nothing
@@ -40,9 +42,11 @@ public class Parser {
 
 
     /**
+     * Readfile is responsible for all the commands. The three tree
+     * sections are stored inside an ArrayList.
      * 
      * @param fileName
-     *            String
+     *            input file
      * @throws FileNotFoundException
      */
     public void readsFile(String fileName) throws FileNotFoundException {
@@ -52,19 +56,19 @@ public class Parser {
         Scanner scan = new Scanner(input);
 
         ArrayList<BST<Student>> list = new ArrayList<BST<Student>>();
-        list.add(new BST<Student>());
+        list.add(new BST<Student>()); // adding extra which is of no use
         list.add(new BST<Student>());
         list.add(new BST<Student>());
         list.add(new BST<Student>());
 
         int treeIndex = 1;
-        int count1 = 0;
-        int count2 = 0;
-        int count3 = 0;
+        int count1 = 0; // for treeSection 1
+        int count2 = 0; // for treeSection 2
+        int count3 = 0; // for treeSection 3
 
         while (scan.hasNext()) {
             String command = scan.next();
-            InputReader read = new InputReader();
+            CommandCalculator read = new CommandCalculator();
 
             // Section Command
             if (command.equals("section")) {
@@ -79,7 +83,7 @@ public class Parser {
                 String lName = scan.next().toLowerCase();
                 String name = fName + " " + lName;
 
-                Student student1 = new Student(fName,lName);
+                Student student1 = new Student(fName, lName);
 
                 if (list.get(treeIndex).find(student1) == null) {
                     Student student = new Student(fName, lName);
@@ -214,7 +218,7 @@ public class Parser {
 
             } // search ends
 
-            // dumpsection begins
+            // dumpsection command begins
             if (command.equals("dumpsection")) {
 
                 System.out.println("Section " + treeIndex + " dump:");
@@ -286,7 +290,7 @@ public class Parser {
 
             // findpair
             if (command.equals("findpair")) {
-                //ArrayList<Student> check = list.get(treeIndex).toArray();
+                // ArrayList<Student> check = list.get(treeIndex).toArray();
                 if (scan.hasNextInt()) {
                     int n = scan.nextInt();
                     read.findPairHasScore(list.get(treeIndex), n);

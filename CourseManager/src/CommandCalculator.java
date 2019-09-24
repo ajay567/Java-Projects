@@ -21,26 +21,31 @@ import java.util.Iterator;
 // during the discussion. I have violated neither the spirit nor
 // letter of this restriction.
 /**
+ * This class contains methods that implements the tasks that are 
+ * supposed to be done for the commands. All methods in this class
+ * have been used by the Parser class.
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
- * @version 2019.9.21
+ * @version 2019.24.21
  *
  */
-public class InputReader {
+public class CommandCalculator {
 
     /**
-     * 
+     * Constructor
      */
-    public InputReader() {
+    public CommandCalculator() {
         // Does Nothing
     }
 
 
     /**
+     * Prints out the switch statement for the section
+     * command.
      * 
      * @param treeIndex
-     *            Integer
+     *            The current section
      */
     public void section(int treeIndex) {
 
@@ -50,14 +55,15 @@ public class InputReader {
 
 
     /**
+     * Creates an Id for each student.
      * 
      * @param count
-     *            Integer
+     *            No of students in that class
      * @param id
-     *            Integer
+     *            The string to be returned
      * @param treeIndex
-     *            Integer
-     * @return String
+     *            The current section
+     * @return The created ID
      */
     public String createID(int count, String id, int treeIndex) {
 
@@ -78,13 +84,15 @@ public class InputReader {
 
 
     /**
+     * Helps to implement the score command for that is inside
+     * the insert command.
      * 
      * @param score
-     *            Integer
+     *            Score specified for the student
      * @param student
-     *            String
+     *            student whose score is supposed to be updated
      * @param name
-     *            String
+     *            name of the student to be printed
      */
     public void scoreHelper(int score, Student student, String name) {
         if (score <= 100 && score >= 0) {
@@ -99,13 +107,14 @@ public class InputReader {
 
 
     /**
+     * Helps to print out stuff for the insert command.
      * 
      * @param student1
-     *            String
+     *            a specific student object 
      * @param treeIndex
-     *            Integer
+     *            The current section
      * @param list
-     *            ArrayList
+     *            ArrayList with the three tree sections
      */
     public void printInsertHelper(
         Student student1,
@@ -121,17 +130,19 @@ public class InputReader {
 
 
     /**
+     * Second score helper for the insert command. It also 
+     * needs an array list of the three tree sections.
      * 
      * @param score
-     *            Integer
+     *            Score specified for the student
      * @param student1
-     *            Student
+     *            student whose score is supposed to be updated
      * @param name
-     *            String
+     *            name of the student to be printed
      * @param treeIndex
-     *            Integer
+     *            The current section
      * @param list
-     *            ArrayList<BST<Student>>
+     *            ArrayList with the three tree sections
      */
     public void scoreHelper2(
         int score,
@@ -151,15 +162,17 @@ public class InputReader {
 
 
     /**
+     * This method helps the search command with a single
+     * parameter. Either first name for last name. 
      * 
      * @param check
-     *            ArrayList<Student>
+     *            ArrayList of students of a particular tree
      * @param n1
-     *            String
+     *            name of the student
      * @param temp
-     *            Integer
+     *            counter variable for the number of students found
      * @param treeIndex
-     *            Integer
+     *            The current section
      * @return Integer
      */
     public int search1Helper(
@@ -196,13 +209,15 @@ public class InputReader {
 
 
     /**
+     * This method helps the search command with two
+     * parameter. Both first name and last name.
      * 
      * @param list
-     *            ArrayList
+     *            ArrayList with the three tree sections
      * @param treeIndex
-     *            Integer
+     *            The current section
      * @param student1
-     *            Student
+     *            a specific student object 
      */
     public void search2Param(
         ArrayList<BST<Student>> list,
@@ -215,19 +230,21 @@ public class InputReader {
 
 
     /**
+     * Third score helper for the search command. It also 
+     * needs an array list of the three tree sections.
      * 
      * @param score
-     *            Integer
+     *            Score specified for the student
      * @param student1
-     *            Student
+     *            student whose score is supposed to be updated
      * @param temp1
-     *            String
+     *            first name of student  
      * @param temp2
-     *            String
+     *            last name of student
      * @param treeIndex
-     *            Integer
+     *            The current section
      * @param list
-     *            ArrayList
+     *            ArrayList with the three tree sections
      */
     public void scoreHelper3(
         int score,
@@ -249,13 +266,15 @@ public class InputReader {
 
 
     /**
+     * This method helps the dumpsection command to print out an 
+     * entire tree using in order traversal.
      * 
      * @param check
-     *            ArrayList
+     *            ArrayList of students of a particular tree
      * @param list
-     *            ArrayList
+     *            ArrayList with the three tree sections
      * @param treeIndex
-     *            Integer
+     *            The current section
      */
     public void dumpSection(
         ArrayList<Student> check,
@@ -275,12 +294,17 @@ public class InputReader {
 
 
     /**
+     * All the grading requirements are done using this
+     * method. It goes through all the students in a
+     * tree and assign them a specific grade.
      * 
      * @param check
-     *            ArrayList
+     *            ArrayList of students of a particular tree
      */
     public void grade(ArrayList<Student> check) {
 
+        // variables to count the number of students that 
+        // received a similar grade
         int a1 = 0;
         int a2 = 0;
         int b1 = 0;
@@ -388,6 +412,8 @@ public class InputReader {
 
 
     /**
+     * Helper method for the findpair command where the score range has
+     * been specified.
      * 
      * @param check
      *            ArrayList
@@ -401,6 +427,9 @@ public class InputReader {
         Iterator<Student> bstIter = check.iterator();
         Iterator<Student> bstIter1 = check.iterator();
 
+        ArrayList<String> pairs = new ArrayList<String>();
+        pairs.add("");
+
         while (bstIter.hasNext()) {
             Student student1 = bstIter.next();
             bstIter1 = check.iterator();
@@ -410,8 +439,18 @@ public class InputReader {
                 if ((!student1.getName().equals(student2.getName())) && (Math
                     .abs(student1.getScore() - student2.getScore()) <= n)) {
 
-                    System.out.println(student1.getName() + ", " + student2
-                        .getName());
+                    String n1 = student1.getName();
+                    String n2 = student2.getName();
+                    String pair = student1.getName() + ", " + student2
+                        .getName();
+                    for (int i = 0; i < pairs.size(); i++) {
+                        System.out.println(pairs.get(i) + "comapre" + n1 +"compare" + n2);
+                        if (!(pairs.get(i).contains(n1) && pairs.get(i).contains(
+                            n2))) {
+                            pairs.add(pair);
+                            System.out.println(pair);
+                        }
+                    }
                     val++;
 
                 }
@@ -425,6 +464,8 @@ public class InputReader {
 
 
     /**
+     * Helper method for the findpair command where the score range has
+     * not been specified.
      * 
      * @param check
      *            ArrayList
