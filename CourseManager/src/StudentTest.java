@@ -18,7 +18,7 @@
 // during the discussion. I have violated neither the spirit nor
 // letter of this restriction.
 /**
- * 
+ * Test class for Student
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
  * @version 2019.9.21
@@ -27,13 +27,13 @@
 public class StudentTest extends student.TestCase {
 
     /**
-     * fields
+     * Variable stubs for testing
      */
     private Student student;
 
 
     /**
-     * 
+     * Set up variables for testing
      */
     public void setUp() {
         student = new Student("Ajay", "Dalmia");
@@ -41,7 +41,7 @@ public class StudentTest extends student.TestCase {
 
 
     /**
-     * 
+     * Tests getter methods for name
      */
     public void testName() {
         assertTrue(student.getFirstName().equals("Ajay"));
@@ -52,7 +52,7 @@ public class StudentTest extends student.TestCase {
 
 
     /**
-     * 
+     * Tests getter and setter methods for ID, Grade, and Score
      */
     public void testIdScoreGrade() {
         student.setID("01010");
@@ -65,7 +65,7 @@ public class StudentTest extends student.TestCase {
 
 
     /**
-     * 
+     * Tests the compareTo() method
      */
     public void testCompareTo() {
 
