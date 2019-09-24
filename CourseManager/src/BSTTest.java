@@ -22,7 +22,7 @@ import student.TestCase;
 //during the discussion. I have violated neither the spirit nor
 //letter of this restriction.
 /**
- * 
+ * Testing Class for BST and BSTNode
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
  * @version 2019.9.21
@@ -31,13 +31,13 @@ import student.TestCase;
 public class BSTTest extends TestCase {
 
     /**
-     * fields
+     * Setup variable stubs
      */
     private BST<Integer> bst;
 
 
     /**
-     * 
+     * Create variables for testing
      */
     public void setUp() {
         bst = new BST<Integer>();
@@ -45,7 +45,7 @@ public class BSTTest extends TestCase {
 
 
     /**
-     * 
+     * Tests BST constructor
      */
     public void testBST() {
         BST<Integer> myBST = new BST<Integer>();
@@ -55,7 +55,7 @@ public class BSTTest extends TestCase {
 
 
     /**
-     * 
+     * Tests BST clear() method
      */
     public void testClear() {
         bst.insert(2);
@@ -68,7 +68,7 @@ public class BSTTest extends TestCase {
 
 
     /**
-     * 
+     * Tests BST insert() method
      */
     public void testInsert() {
         bst.insert(42);
@@ -83,7 +83,7 @@ public class BSTTest extends TestCase {
 
 
     /**
-     * 
+     * Tests BST remove() method
      */
     public void testRemove() {
         bst.insert(42);
@@ -103,7 +103,7 @@ public class BSTTest extends TestCase {
 
 
     /**
-     * 
+     * Tests BST remove() method with an object not in the tree.
      */
     public void testRemoveNull() {
         bst.insert(42);
@@ -119,7 +119,7 @@ public class BSTTest extends TestCase {
 
 
     /**
-     * 
+     * Tests BST remove() method with an object not in the tree.
      */
     public void testRemoveIsNull() {
         bst.insert(77);
@@ -131,7 +131,7 @@ public class BSTTest extends TestCase {
 
 
     /**
-     * 
+     * Tests BST toArray() method
      */
     public void testToArray() {
         bst.insert(77);
@@ -142,15 +142,18 @@ public class BSTTest extends TestCase {
 
 
     /**
-     * 
+     * Test BSTNode constructors
      */
     public void testBSTNode() {
-        BSTNode<Integer> node = new BSTNode<Integer>();
-        @SuppressWarnings({ "unchecked", "rawtypes" })
-        BSTNode node1 = new BSTNode(1, node, node);
-        assertEquals(node1.value(), 1);
+        BSTNode<Integer> left = new BSTNode<Integer>();
+        BSTNode<Integer> right = new BSTNode<Integer>();
+        BSTNode<Integer> node1 = new BSTNode<Integer>(1, left, right);
+        assertEquals(node1.value(), Integer.valueOf(1));
     }
     
+    /**
+     * Test BST Iterator
+     */
     public void testIterator() {
         bst.insert(42);
         bst.insert(12);
