@@ -24,11 +24,13 @@ import java.util.Iterator;
 
 /**
  * Binary Search Tree (BST) Implementation
+ * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
  * @version 2019.9.21
  *
- * @param <E> The type of element to be stored in the BST
+ * @param <E>
+ *            The type of element to be stored in the BST
  */
 public class BST<E extends Comparable<E>> {
 
@@ -37,6 +39,7 @@ public class BST<E extends Comparable<E>> {
      */
     private BSTNode<E> root; // Root of the BST
     private int nodecount; // Number of nodes in the BST
+
 
     /**
      * Constructor method
@@ -58,7 +61,10 @@ public class BST<E extends Comparable<E>> {
 
     /**
      * Inserts a element into the tree
-     * @param e The element to be inserted. Must implement the comparable interface.
+     * 
+     * @param e
+     *            The element to be inserted. Must implement the comparable
+     *            interface.
      */
     public void insert(E e) {
         root = inserthelp(root, e);
@@ -71,7 +77,9 @@ public class BST<E extends Comparable<E>> {
     // Returns the record removed, null if there is none.
     /**
      * Removes the provided element from the tree
-     * @param key The element to be removed.
+     * 
+     * @param key
+     *            The element to be removed.
      * @return The element that was removed, if successful and null otherwise.
      */
     public E remove(E key) {
@@ -88,7 +96,9 @@ public class BST<E extends Comparable<E>> {
     // key: The key value to find
     /**
      * Finds the record with the given key
-     * @param key The element to be searched for.
+     * 
+     * @param key
+     *            The element to be searched for.
      * @return The record with the provided key or null if it is not found.
      */
     public E find(E key) {
@@ -99,6 +109,7 @@ public class BST<E extends Comparable<E>> {
     // Return the number of records in the dictionary
     /**
      * Gets the number of elements currently in the BST
+     * 
      * @return The current size
      */
     public int size() {
@@ -108,8 +119,11 @@ public class BST<E extends Comparable<E>> {
 
     /**
      * Recursive helper function for finding an element in the BST
-     * @param rt Root node to start searching from.
-     * @param key Element to search for
+     * 
+     * @param rt
+     *            Root node to start searching from.
+     * @param key
+     *            Element to search for
      * @return Element if found and null otherwise
      */
     private E findhelp(BSTNode<E> rt, E key) {
@@ -127,10 +141,14 @@ public class BST<E extends Comparable<E>> {
         }
     }
 
+
     /**
      * Recursive helper function for inserting an element
-     * @param rt Root node to insert under
-     * @param e Element to insert
+     * 
+     * @param rt
+     *            Root node to insert under
+     * @param e
+     *            Element to insert
      * @return Root node
      */
     private BSTNode<E> inserthelp(BSTNode<E> rt, E e) {
@@ -146,10 +164,14 @@ public class BST<E extends Comparable<E>> {
         return rt;
     }
 
+
     /**
      * Recursive helper function for removing an element
-     * @param rt Root node that element is under
-     * @param key Element to be removed
+     * 
+     * @param rt
+     *            Root node that element is under
+     * @param key
+     *            Element to be removed
      * @return Root node
      */
     private BSTNode<E> removehelp(BSTNode<E> rt, E key) {
@@ -181,7 +203,9 @@ public class BST<E extends Comparable<E>> {
 
     /**
      * Convert the BST into an ArrayList
-     * @return The elements of the BST in an ArrayList as ordered by an in-order traversal
+     * 
+     * @return The elements of the BST in an ArrayList as ordered by an in-order
+     *         traversal
      */
     public ArrayList<E> toArray() {
         ArrayList<E> list = new ArrayList<E>();
@@ -192,8 +216,11 @@ public class BST<E extends Comparable<E>> {
 
     /**
      * Recursive helper function for in-order traversal.
-     * @param root1 Root node
-     * @param list ArrayList to be populated
+     * 
+     * @param root1
+     *            Root node
+     * @param list
+     *            ArrayList to be populated
      */
     private void inOrder(BSTNode<E> root1, ArrayList<E> list) {
         if (root1 == null) {
@@ -209,7 +236,9 @@ public class BST<E extends Comparable<E>> {
 
     /**
      * Helper function to get the largest node in the BST.
-     * @param rt Root node under which to search
+     * 
+     * @param rt
+     *            Root node under which to search
      * @return The node containing the largest value
      */
     private BSTNode<E> getmax(BSTNode<E> rt) {
@@ -222,7 +251,9 @@ public class BST<E extends Comparable<E>> {
 
     /**
      * Helper function to delete the max node
-     * @param rt Root node to search under
+     * 
+     * @param rt
+     *            Root node to search under
      * @return Root node
      */
     private BSTNode<E> deletemax(BSTNode<E> rt) {
@@ -233,34 +264,41 @@ public class BST<E extends Comparable<E>> {
         return rt;
     }
 
+
     /**
      * Creates an in-order traversal iterator for the BST
+     * 
      * @return Iterator object
      */
-    public BSTIterator<E> Iterator() {
+    public BSTIterator<E> iterator() {
         return new BSTIterator<E>(root);
     }
 
 
     /**
      * In-order Traversal Iterator Class
-     * @author Ajay Dalmia
+     * 
+     * @author <Ajay Dalmia> <ajay99>
      * @author <Amit Ramesh> <amitr>
      *
-     * @param <E> The generic element type used by the BST
+     * @param <E>
+     *            The generic element type used by the BST
      */
     private class BSTIterator<E extends Comparable<? super E>>
         implements Iterator<E> {
 
         /**
-         * Stack is used to maintain the order of the elements while traversing them in-order.
+         * Stack is used to maintain the order of the elements while traversing
+         * them in-order.
          */
         private Stack<BSTNode<E>> stack;
 
 
         /**
          * Constructor for the iterator
-         * @param root Root node of the BST
+         * 
+         * @param root
+         *            Root node of the BST
          */
         public BSTIterator(BSTNode<E> root) {
             stack = new Stack<BSTNode<E>>();
@@ -270,8 +308,10 @@ public class BST<E extends Comparable<E>> {
             }
         }
 
+
         /**
          * Indicates whether there is another element to traverse over
+         * 
          * @return True if there is another element, False otherwise.
          */
         public boolean hasNext() {
@@ -281,6 +321,7 @@ public class BST<E extends Comparable<E>> {
 
         /**
          * Traverses to the next element
+         * 
          * @return The next element in the traversal
          */
         public E next() {

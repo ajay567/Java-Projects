@@ -398,12 +398,12 @@ public class InputReader {
         int val = 0;
         System.out.println("Students with score difference less than or equal "
             + n + ":");
-        Iterator<Student> bstIter = check.Iterator();
-        Iterator<Student> bstIter1 = check.Iterator();
+        Iterator<Student> bstIter = check.iterator();
+        Iterator<Student> bstIter1 = check.iterator();
 
         while (bstIter.hasNext()) {
             Student student1 = bstIter.next();
-            bstIter1 = check.Iterator();
+            bstIter1 = check.iterator();
             while (bstIter1.hasNext()) {
                 Student student2 = bstIter1.next();
 
@@ -433,12 +433,12 @@ public class InputReader {
         int val = 0;
         System.out.println(
             "Students with score difference less than or equal 0:");
-        Iterator<Student> bstIter = check.Iterator();
-        Iterator<Student> bstIter1 = check.Iterator();
+        Iterator<Student> bstIter = check.iterator();
+        Iterator<Student> bstIter1 = check.iterator();
 
         while (bstIter.hasNext()) {
             Student student1 = bstIter.next();
-            bstIter1 = check.Iterator();
+            bstIter1 = check.iterator();
             while (bstIter1.hasNext()) {
                 Student student2 = bstIter1.next();
 

@@ -79,15 +79,10 @@ public class Parser {
                 String lName = scan.next().toLowerCase();
                 String name = fName + " " + lName;
 
-                Student student1 = new Student();
-                student1.setFirstName(fName);
-                student1.setLastName(lName);
+                Student student1 = new Student(fName,lName);
 
                 if (list.get(treeIndex).find(student1) == null) {
-                    Student student = new Student();
-                    student.setFirstName(fName);
-                    student.setLastName(lName);
-                    student.setName(name);
+                    Student student = new Student(fName, lName);
                     System.out.println(name + " " + "inserted");
 
                     // Creating ID
@@ -163,9 +158,7 @@ public class Parser {
                         }
 
                         // Student object
-                        Student student1 = new Student();
-                        student1.setFirstName(temp1);
-                        student1.setLastName(temp2);
+                        Student student1 = new Student(temp1, temp2);
 
                         // Score command
                         int score = 0;
@@ -196,9 +189,7 @@ public class Parser {
                     String n2 = scan.next().toLowerCase();
                     String name = n1 + " " + n2;
 
-                    Student student1 = new Student();
-                    student1.setFirstName(n1);
-                    student1.setLastName(n2);
+                    Student student1 = new Student(n1, n2);
 
                     // search<a,b>
                     if (list.get(treeIndex).find(student1) != null) {
@@ -241,10 +232,7 @@ public class Parser {
                 String name = fName + " " + lName;
 
                 // Student object
-                Student student1 = new Student();
-                student1.setFirstName(fName);
-                student1.setLastName(lName);
-                student1.setName(name);
+                Student student1 = new Student(fName, lName);
 
                 if (list.get(treeIndex).find(student1) != null) {
                     Student save = list.get(treeIndex).remove(student1);

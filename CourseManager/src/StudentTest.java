@@ -36,7 +36,7 @@ public class StudentTest extends student.TestCase {
      * 
      */
     public void setUp() {
-        student = new Student();
+        student = new Student("Ajay", "Dalmia");
     }
 
 
@@ -44,9 +44,6 @@ public class StudentTest extends student.TestCase {
      * 
      */
     public void testName() {
-        student.setFirstName("Ajay");
-        student.setLastName("Dalmia");
-        student.setName("Ajay Dalmia");
         assertTrue(student.getFirstName().equals("Ajay"));
         assertTrue(student.getLastName().equals("Dalmia"));
         assertTrue(student.getName().equals("Ajay Dalmia"));
@@ -71,16 +68,10 @@ public class StudentTest extends student.TestCase {
      * 
      */
     public void testCompareTo() {
-        student.setFirstName("Ajay");
-        student.setLastName("Dalmia");
 
-        Student student1 = new Student();
-        student1.setLastName("Dalmia");
-        student1.setFirstName("Akshay");
+        Student student1 = new Student("Akshay", "Dalmia");
 
-        Student student2 = new Student();
-        student2.setLastName("Himashu");
-        student2.setFirstName("Sharma");
+        Student student2 = new Student("Sharma", "Himanshu");
 
         assertEquals(student.compareTo(student1), -1);
         assertEquals(student.compareTo(student2), -4);

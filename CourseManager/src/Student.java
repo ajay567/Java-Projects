@@ -40,8 +40,10 @@ public class Student implements Comparable<Student> {
     /**
      * 
      */
-    public Student() {
-        // Does Nothing
+    public Student(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.name = firstName + " " + lastName;
     }
 
 
@@ -66,17 +68,6 @@ public class Student implements Comparable<Student> {
 
     /**
      * 
-     * @param fName
-     *            String
-     */
-    public void setFirstName(String fName) {
-        firstName = fName;
-
-    }
-
-
-    /**
-     * 
      * @return String
      */
     public String getFirstName() {
@@ -86,32 +77,10 @@ public class Student implements Comparable<Student> {
 
     /**
      * 
-     * @param lName
-     *            String
-     */
-    public void setLastName(String lName) {
-        lastName = lName;
-
-    }
-
-
-    /**
-     * 
      * @return String
      */
     public String getLastName() {
         return lastName;
-    }
-
-
-    /**
-     * 
-     * @param newName
-     *            String
-     */
-    public void setName(String newName) {
-
-        name = newName;
     }
 
 

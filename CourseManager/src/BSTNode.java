@@ -19,11 +19,13 @@
 // letter of this restriction.
 /**
  * Node Class for the Binary Search Tree (BST)
+ * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
  * @version 2019.9.21
  *
- * @param <E> The type of element to be stored in the BST
+ * @param <E>
+ *            The type of element to be stored in the BST
  */
 class BSTNode<E extends Comparable<? super E>> {
     private E element; // Element for this node
@@ -43,7 +45,9 @@ class BSTNode<E extends Comparable<? super E>> {
 
     /**
      * Constructor method to create a node with a given value
-     * @param val Element to be stored in the node
+     * 
+     * @param val
+     *            Element to be stored in the node
      */
     BSTNode(E val) {
         left = null;
@@ -53,10 +57,15 @@ class BSTNode<E extends Comparable<? super E>> {
 
 
     /**
-     * Constructor method to create a node with a given value and given child nodes
-     * @param val Element to be stored in the node
-     * @param l Left child node
-     * @param r Right child node
+     * Constructor method to create a node with a given value and given child
+     * nodes
+     * 
+     * @param val
+     *            Element to be stored in the node
+     * @param l
+     *            Left child node
+     * @param r
+     *            Right child node
      */
     BSTNode(E val, BSTNode<E> l, BSTNode<E> r) {
         left = l;
@@ -65,10 +74,11 @@ class BSTNode<E extends Comparable<? super E>> {
     }
 
 
-    //Getter and Setter methods:
-    
+    // Getter and Setter methods:
+
     /**
      * Gets the value of the current node
+     * 
      * @return Value of the node
      */
     public E value() {
@@ -78,7 +88,9 @@ class BSTNode<E extends Comparable<? super E>> {
 
     /**
      * Sets value of the current node
-     * @param v Value to be set
+     * 
+     * @param v
+     *            Value to be set
      */
     public void setValue(E v) {
         element = v;
@@ -87,6 +99,7 @@ class BSTNode<E extends Comparable<? super E>> {
 
     /**
      * Gets left child of current node
+     * 
      * @return Left child node
      */
     public BSTNode<E> left() {
@@ -96,15 +109,18 @@ class BSTNode<E extends Comparable<? super E>> {
 
     /**
      * Set left child node of current node
-     * @param p Left child node to be set
+     * 
+     * @param p
+     *            Left child node to be set
      */
     public void setLeft(BSTNode<E> p) {
         left = p;
     }
 
-    
+
     /**
      * Gets right child of current node
+     * 
      * @return Right child node
      */
     public BSTNode<E> right() {
@@ -114,7 +130,9 @@ class BSTNode<E extends Comparable<? super E>> {
 
     /**
      * Set right child node of current node
-     * @param p Right child to be set
+     * 
+     * @param p
+     *            Right child to be set
      */
     public void setRight(BSTNode<E> p) {
         right = p;
