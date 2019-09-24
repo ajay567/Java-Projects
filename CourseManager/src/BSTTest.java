@@ -165,6 +165,7 @@ public class BSTTest extends TestCase {
         
         while(bstIter.hasNext()) {
             System.out.println(bstIter.next());
+            System.out.println(bstIter.next());
         }
     }
 

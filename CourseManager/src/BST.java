@@ -32,7 +32,7 @@ import java.util.Iterator;
  * @param <E>
  */
 public class BST<E extends Comparable<E>> {
-    
+
     /**
      * 
      */
@@ -255,34 +255,62 @@ public class BST<E extends Comparable<E>> {
         rt.setRight(deletemax(rt.right()));
         return rt;
     }
-    
+
+
     public BSTIterator<E> Iterator() {
-        //private BSTIterator<Integer> bstIter;
+        // private BSTIterator<Integer> bstIter;
         return new BSTIterator<E>(root);
     }
 
+
     // Iterator Class
-    private class BSTIterator<E extends Comparable<? super E>> implements Iterator<E>{
-        Stack<BSTNode<E>> stack;
-        
+    /**
+     * 
+     * @author Ajay Dalmia
+     * @author <Amit Ramesh> <amitr>
+     *
+     * @param <E>
+     */
+    private class BSTIterator<E extends Comparable<? super E>>
+        implements Iterator<E> {
+
+        /**
+         * fields
+         */
+        private Stack<BSTNode<E>> stack;
+
+
+        /**
+         * 
+         * @param root
+         *            BSTNode<E>
+         */
         public BSTIterator(BSTNode<E> root) {
             stack = new Stack<BSTNode<E>>();
-            while(root != null) {
+            while (root != null) {
                 stack.push(root);
                 root = root.left();
             }
         }
-        
+
+
+        /**
+         * 
+         */
         public boolean hasNext() {
             return !stack.isEmpty();
         }
-        
+
+
+        /**
+         * 
+         */
         public E next() {
             BSTNode<E> node = stack.pop();
             E value = node.value();
-            if(node.right() != null) {
+            if (node.right() != null) {
                 node = node.right();
-                while(node != null) {
+                while (node != null) {
                     stack.push(node);
                     node = node.left();
                 }

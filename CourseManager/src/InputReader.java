@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Iterator;
 
 // On my honor:
 //
@@ -393,20 +394,31 @@ public class InputReader {
      * @param n
      *            Integer
      */
-    public void findPairHasScore(ArrayList<Student> check, int n) {
+    public void findPairHasScore(BST<Student> check, int n) {
         int val = 0;
         System.out.println("Students with score difference less than or equal "
             + n + ":");
-        for (int i = 0; i < check.size(); i++) {
-            for (int j = i + 1; j < check.size(); j++) {
-                if (Math.abs(check.get(i).getScore() - check.get(j)
-                    .getScore()) <= n) {
-                    System.out.println(check.get(i).getName() + ", " + check
-                        .get(j).getName());
+        Iterator<Student> bstIter = check.Iterator();
+        Iterator<Student> bstIter1 = check.Iterator();
+
+        while (bstIter.hasNext()) {
+            Student student1 = bstIter.next();
+            bstIter1 = check.Iterator();
+            while (bstIter1.hasNext()) {
+                Student student2 = bstIter1.next();
+
+                if ((!student1.getName().equals(student2.getName())) && (Math
+                    .abs(student1.getScore() - student2.getScore()) <= n)) {
+
+                    System.out.println(student1.getName() + ", " + student2
+                        .getName());
                     val++;
+
                 }
             }
+
         }
+
         System.out.println("found " + val + " pairs");
 
     }
@@ -417,20 +429,30 @@ public class InputReader {
      * @param check
      *            ArrayList
      */
-    public void findPairHasNoScore(ArrayList<Student> check) {
+    public void findPairHasNoScore(BST<Student> check) {
         int val = 0;
         System.out.println(
             "Students with score difference less than or equal 0:");
+        Iterator<Student> bstIter = check.Iterator();
+        Iterator<Student> bstIter1 = check.Iterator();
 
-        for (int i = 0; i < check.size(); i++) {
-            for (int j = i + 1; j < check.size(); j++) {
-                if (check.get(i).getScore() == check.get(j).getScore()) {
-                    System.out.println(check.get(i).getName() + ", " + check
-                        .get(j).getName());
+        while (bstIter.hasNext()) {
+            Student student1 = bstIter.next();
+            bstIter1 = check.Iterator();
+            while (bstIter1.hasNext()) {
+                Student student2 = bstIter1.next();
+
+                if ((!student1.getName().equals(student2.getName()))
+                    && (student1.getScore() == student2.getScore())) {
+                    System.out.println(student1.getName() + ", " + student2
+                        .getName());
                     val++;
+
                 }
             }
+
         }
+
         System.out.println("found " + val + " pairs");
 
     }

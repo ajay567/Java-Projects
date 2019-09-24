@@ -298,15 +298,15 @@ public class Parser {
 
             // findpair
             if (command.equals("findpair")) {
-                ArrayList<Student> check = list.get(treeIndex).toArray();
+                //ArrayList<Student> check = list.get(treeIndex).toArray();
                 if (scan.hasNextInt()) {
                     int n = scan.nextInt();
-                    read.findPairHasScore(check, n);
+                    read.findPairHasScore(list.get(treeIndex), n);
 
                 }
                 else {
 
-                    read.findPairHasNoScore(check);
+                    read.findPairHasNoScore(list.get(treeIndex));
 
                 }
             }
