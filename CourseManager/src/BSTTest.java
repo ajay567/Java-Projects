@@ -82,27 +82,6 @@ public class BSTTest extends TestCase {
         assertEquals(bst.size(), 7);
     }
 
-
-    /**
-     * Tests BST remove() method
-     */
-    public void testRemove() {
-        bst.insert(42);
-        bst.insert(12);
-        bst.insert(31);
-        bst.insert(11);
-        bst.insert(5);
-        bst.insert(77);
-        bst.insert(72);
-        bst.remove(42);
-        bst.remove(12);
-        bst.remove(31);
-        bst.remove(12);
-        bst.remove(11);
-        assertEquals(bst.size(), 3);
-    }
-
-
     /**
      * Tests BST remove() method with an object not in the tree.
      */

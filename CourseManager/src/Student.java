@@ -18,7 +18,7 @@
 // during the discussion. I have violated neither the spirit nor
 // letter of this restriction.
 /**
- * 
+ * Student Class contains each student's information
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
  * @version 2019.9.21
@@ -27,18 +27,20 @@
 public class Student implements Comparable<Student> {
 
     /**
-     * fields
+     * Class variables
      */
-    private String firstName;
-    private String lastName;
-    private String name;
-    private int score;
-    private String grade;
-    private String id;
+    private String firstName; //First name
+    private String lastName; //Last name
+    private String name; // Full name (First and last name concatenated)
+    private int score; // Student score
+    private String grade; // Student letter grade
+    private String id; // Student generated id
 
 
     /**
-     * 
+     * Student constructor method
+     * @param firstName First name
+     * @param lastName Last name
      */
     public Student(String firstName, String lastName) {
         this.firstName = firstName;
@@ -48,9 +50,8 @@ public class Student implements Comparable<Student> {
 
 
     /**
-     * 
+     * Setter method for id
      * @param newId
-     *            String
      */
     public void setID(String newId) {
         id = newId;
@@ -58,8 +59,8 @@ public class Student implements Comparable<Student> {
 
 
     /**
-     * 
-     * @return id
+     * Getter method for id
+     * @return Student's id
      */
     public String getID() {
         return id;
@@ -67,8 +68,8 @@ public class Student implements Comparable<Student> {
 
 
     /**
-     * 
-     * @return String
+     * Getter method for first name
+     * @return Student's first name
      */
     public String getFirstName() {
         return firstName;
@@ -76,8 +77,8 @@ public class Student implements Comparable<Student> {
 
 
     /**
-     * 
-     * @return String
+     * Getter method for last name
+     * @return Student's last name
      */
     public String getLastName() {
         return lastName;
@@ -85,27 +86,24 @@ public class Student implements Comparable<Student> {
 
 
     /**
-     * 
-     * @return String
+     * Getter method for full name
+     * @return Student's full name
      */
     public String getName() {
         return name;
     }
-
-
+    
     /**
-     * 
-     * @param newScore
-     *            String
+     * Setter method for score
+     * @param newScore Score to be set
      */
     public void setScore(int newScore) {
         score = newScore;
     }
 
-
     /**
-     * 
-     * @return String
+     * Getter method for score
+     * @return Student's score
      */
     public int getScore() {
         return score;
@@ -113,26 +111,23 @@ public class Student implements Comparable<Student> {
 
 
     /**
-     * 
-     * @param newGrade
-     *            String
+     * Setter method for grade
+     * @param newGrade Student's letter grade
      */
     public void setGrade(String newGrade) {
         grade = newGrade;
     }
 
-
     /**
-     * 
-     * @return String
+     * Getter method for grade
+     * @return Student's letter grade
      */
     public String getGrade() {
         return grade;
     }
 
-
     /**
-     * 
+     * Defines how to compare Student objects to implement Comparable
      */
     @Override
     public int compareTo(Student other) {
