@@ -21,7 +21,7 @@ import java.util.Iterator;
 // during the discussion. I have violated neither the spirit nor
 // letter of this restriction.
 /**
- * This class contains methods that implements the tasks that are 
+ * This class contains methods that implements the tasks that are
  * supposed to be done for the commands. All methods in this class
  * have been used by the Parser class.
  * 
@@ -110,7 +110,7 @@ public class CommandCalculator {
      * Helps to print out stuff for the insert command.
      * 
      * @param student1
-     *            a specific student object 
+     *            a specific student object
      * @param treeIndex
      *            The current section
      * @param list
@@ -130,7 +130,7 @@ public class CommandCalculator {
 
 
     /**
-     * Second score helper for the insert command. It also 
+     * Second score helper for the insert command. It also
      * needs an array list of the three tree sections.
      * 
      * @param score
@@ -163,9 +163,9 @@ public class CommandCalculator {
 
     /**
      * This method helps the search command with a single
-     * parameter. Either first name for last name. 
+     * parameter. Either first name for last name.
      * 
-     * @param check
+     * @param studentArray
      *            ArrayList of students of a particular tree
      * @param n1
      *            name of the student
@@ -176,13 +176,13 @@ public class CommandCalculator {
      * @return Integer
      */
     public int search1Helper(
-        ArrayList<Student> check,
+        ArrayList<Student> studentArray,
         String n1,
         int temp,
         int treeIndex) {
-        for (int i = 0; i < check.size(); i++) {
-            if (check.get(i).getFirstName().equals(n1) || check.get(i)
-                .getLastName().equals(n1)) {
+        for (int i = 0; i < studentArray.size(); i++) {
+            if (studentArray.get(i).getFirstName().equals(n1) || studentArray
+                .get(i).getLastName().equals(n1)) {
                 temp++;
             }
         }
@@ -192,11 +192,12 @@ public class CommandCalculator {
                 + " records in Section " + treeIndex);
         }
         else {
-            for (int i = 0; i < check.size(); i++) {
-                if (check.get(i).getFirstName().equals(n1) || check.get(i)
-                    .getLastName().equals(n1)) {
-                    System.out.println(check.get(i).getID() + ", " + check.get(
-                        i).getName() + ", score = " + check.get(i).getScore());
+            for (int i = 0; i < studentArray.size(); i++) {
+                if (studentArray.get(i).getFirstName().equals(n1)
+                    || studentArray.get(i).getLastName().equals(n1)) {
+                    System.out.println(studentArray.get(i).getID() + ", "
+                        + studentArray.get(i).getName() + ", score = "
+                        + studentArray.get(i).getScore());
                 }
             }
             System.out.println(n1 + " was found in " + temp
@@ -217,7 +218,7 @@ public class CommandCalculator {
      * @param treeIndex
      *            The current section
      * @param student1
-     *            a specific student object 
+     *            a specific student object
      */
     public void search2Param(
         ArrayList<BST<Student>> list,
@@ -230,7 +231,7 @@ public class CommandCalculator {
 
 
     /**
-     * Third score helper for the search command. It also 
+     * Third score helper for the search command. It also
      * needs an array list of the three tree sections.
      * 
      * @param score
@@ -238,7 +239,7 @@ public class CommandCalculator {
      * @param student1
      *            student whose score is supposed to be updated
      * @param temp1
-     *            first name of student  
+     *            first name of student
      * @param temp2
      *            last name of student
      * @param treeIndex
@@ -266,10 +267,10 @@ public class CommandCalculator {
 
 
     /**
-     * This method helps the dumpsection command to print out an 
+     * This method helps the dumpsection command to print out an
      * entire tree using in order traversal.
      * 
-     * @param check
+     * @param studentArray
      *            ArrayList of students of a particular tree
      * @param list
      *            ArrayList with the three tree sections
@@ -277,14 +278,15 @@ public class CommandCalculator {
      *            The current section
      */
     public void dumpSection(
-        ArrayList<Student> check,
+        ArrayList<Student> studentArray,
         ArrayList<BST<Student>> list,
         int treeIndex) {
 
-        for (int i = 0; i < check.size(); i++) {
+        for (int i = 0; i < studentArray.size(); i++) {
 
-            System.out.println(check.get(i).getID() + ", " + check.get(i)
-                .getName() + ", score = " + check.get(i).getScore());
+            System.out.println(studentArray.get(i).getID() + ", " + studentArray
+                .get(i).getName() + ", score = " + studentArray.get(i)
+                    .getScore());
 
         }
 
@@ -298,12 +300,12 @@ public class CommandCalculator {
      * method. It goes through all the students in a
      * tree and assign them a specific grade.
      * 
-     * @param check
+     * @param studentArray
      *            ArrayList of students of a particular tree
      */
-    public void grade(ArrayList<Student> check) {
+    public void grade(ArrayList<Student> studentArray) {
 
-        // variables to count the number of students that 
+        // variables to count the number of students that
         // received a similar grade
         int a1 = 0;
         int a2 = 0;
@@ -318,53 +320,53 @@ public class CommandCalculator {
         int d3 = 0;
         int f = 0;
 
-        for (int i = 0; i < check.size(); i++) {
-            if (check.get(i).getScore() >= 90) {
-                check.get(i).setGrade("A");
+        for (int i = 0; i < studentArray.size(); i++) {
+            if (studentArray.get(i).getScore() >= 90) {
+                studentArray.get(i).setGrade("A");
                 a1++;
             }
-            else if (check.get(i).getScore() >= 85) {
-                check.get(i).setGrade("A-");
+            else if (studentArray.get(i).getScore() >= 85) {
+                studentArray.get(i).setGrade("A-");
                 a2++;
             }
-            else if (check.get(i).getScore() >= 80) {
-                check.get(i).setGrade("B+");
+            else if (studentArray.get(i).getScore() >= 80) {
+                studentArray.get(i).setGrade("B+");
                 b1++;
             }
-            else if (check.get(i).getScore() >= 75) {
-                check.get(i).setGrade("B");
+            else if (studentArray.get(i).getScore() >= 75) {
+                studentArray.get(i).setGrade("B");
                 b2++;
             }
-            else if (check.get(i).getScore() >= 70) {
-                check.get(i).setGrade("B-");
+            else if (studentArray.get(i).getScore() >= 70) {
+                studentArray.get(i).setGrade("B-");
                 b3++;
             }
-            else if (check.get(i).getScore() >= 65) {
-                check.get(i).setGrade("C+");
+            else if (studentArray.get(i).getScore() >= 65) {
+                studentArray.get(i).setGrade("C+");
                 c1++;
             }
-            else if (check.get(i).getScore() >= 60) {
-                check.get(i).setGrade("C");
+            else if (studentArray.get(i).getScore() >= 60) {
+                studentArray.get(i).setGrade("C");
                 c2++;
             }
-            else if (check.get(i).getScore() >= 57.5) {
-                check.get(i).setGrade("C-");
+            else if (studentArray.get(i).getScore() >= 57.5) {
+                studentArray.get(i).setGrade("C-");
                 c3++;
             }
-            else if (check.get(i).getScore() >= 55) {
-                check.get(i).setGrade("D+");
+            else if (studentArray.get(i).getScore() >= 55) {
+                studentArray.get(i).setGrade("D+");
                 d1++;
             }
-            else if (check.get(i).getScore() >= 52.5) {
-                check.get(i).setGrade("D");
+            else if (studentArray.get(i).getScore() >= 52.5) {
+                studentArray.get(i).setGrade("D");
                 d2++;
             }
-            else if (check.get(i).getScore() >= 50) {
-                check.get(i).setGrade("D-");
+            else if (studentArray.get(i).getScore() >= 50) {
+                studentArray.get(i).setGrade("D-");
                 d3++;
             }
             else {
-                check.get(i).setGrade("F");
+                studentArray.get(i).setGrade("F");
                 f++;
             }
 
@@ -415,27 +417,31 @@ public class CommandCalculator {
      * Helper method for the findpair command where the score range has
      * been specified.
      * 
-     * @param check
-     *            ArrayList
+     * @param tree
+     *            ArrayList of students of a particular tree
      * @param n
      *            Integer
      */
-    public void findPairHasScore(BST<Student> check, int n) {
-        int val = 0;
+    public void findPairHasScore(BST<Student> tree, int n) {
+        int val = 0; // Count values for the pairs found
         System.out.println("Students with score difference less than or equal "
             + n + ":");
-        Iterator<Student> bstIter = check.iterator();
-        Iterator<Student> bstIter1 = check.iterator();
 
+        // Initializing two iterators for the BST<Student>
+        Iterator<Student> bstIter = tree.iterator();
+        Iterator<Student> bstIter1 = tree.iterator();
+
+        // Array list for valid student pairs
         ArrayList<String> pairs = new ArrayList<String>();
-        pairs.add("");
+        pairs.add(""); // invalid pair
 
         while (bstIter.hasNext()) {
-            Student student1 = bstIter.next();
-            bstIter1 = check.iterator();
+            Student student1 = bstIter.next(); // Student object
+            bstIter1 = tree.iterator(); // Reinitializing second iterator
             while (bstIter1.hasNext()) {
-                Student student2 = bstIter1.next();
+                Student student2 = bstIter1.next(); // Student object
 
+                // comparing scores in range n
                 if ((!student1.getName().equals(student2.getName())) && (Math
                     .abs(student1.getScore() - student2.getScore()) <= n)) {
 
@@ -443,15 +449,21 @@ public class CommandCalculator {
                     String n2 = student2.getName();
                     String pair = student1.getName() + ", " + student2
                         .getName();
+
+                    boolean exists = false;
                     for (int i = 0; i < pairs.size(); i++) {
-                        System.out.println(pairs.get(i) + "comapre" + n1 +"compare" + n2);
-                        if (!(pairs.get(i).contains(n1) && pairs.get(i).contains(
+
+                        // adding pairs if they are not in array
+                        if ((pairs.get(i).contains(n1) && pairs.get(i).contains(
                             n2))) {
-                            pairs.add(pair);
-                            System.out.println(pair);
+                            exists = true;
                         }
                     }
-                    val++;
+                    if (!exists) {
+                        pairs.add(pair);
+                        System.out.println(pair);
+                        val++;
+                    }
 
                 }
             }
@@ -467,27 +479,53 @@ public class CommandCalculator {
      * Helper method for the findpair command where the score range has
      * not been specified.
      * 
-     * @param check
-     *            ArrayList
+     * @param tree
+     *            ArrayList of students of a particular tree
+     * 
      */
-    public void findPairHasNoScore(BST<Student> check) {
-        int val = 0;
+    public void findPairHasNoScore(BST<Student> tree) {
+        int val = 0; // Count values for the pairs found
         System.out.println(
             "Students with score difference less than or equal 0:");
-        Iterator<Student> bstIter = check.iterator();
-        Iterator<Student> bstIter1 = check.iterator();
+
+        // Initializing two iterators for the BST<Student>
+        Iterator<Student> bstIter = tree.iterator();
+        Iterator<Student> bstIter1 = tree.iterator();
+
+        // Array list for valid student pairs
+        ArrayList<String> pairs = new ArrayList<String>();
+        pairs.add(""); // invalid pair
 
         while (bstIter.hasNext()) {
-            Student student1 = bstIter.next();
-            bstIter1 = check.iterator();
+            Student student1 = bstIter.next(); // Student object
+            bstIter1 = tree.iterator(); // Reinitializing second iterator
             while (bstIter1.hasNext()) {
-                Student student2 = bstIter1.next();
+                Student student2 = bstIter1.next(); // Student object
 
+                // Comparing students with equal score
                 if ((!student1.getName().equals(student2.getName()))
                     && (student1.getScore() == student2.getScore())) {
-                    System.out.println(student1.getName() + ", " + student2
-                        .getName());
-                    val++;
+
+                    String n1 = student1.getName();
+                    String n2 = student2.getName();
+                    String pair = student1.getName() + ", " + student2
+                        .getName();
+
+                    boolean exists = false;
+
+                    for (int i = 0; i < pairs.size(); i++) {
+
+                        // adding pairs if they are not in array
+                        if ((pairs.get(i).contains(n1) && pairs.get(i).contains(
+                            n2))) {
+                            exists = true;
+                        }
+                    }
+                    if (!exists) {
+                        pairs.add(pair);
+                        System.out.println(pair);
+                        val++;
+                    }
 
                 }
             }
@@ -495,6 +533,5 @@ public class CommandCalculator {
         }
 
         System.out.println("found " + val + " pairs");
-
     }
 }

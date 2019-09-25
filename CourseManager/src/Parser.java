@@ -52,7 +52,6 @@ public class Parser {
     public void readsFile(String fileName) throws FileNotFoundException {
 
         File input = new File(fileName);
-
         Scanner scan = new Scanner(input);
 
         ArrayList<BST<Student>> list = new ArrayList<BST<Student>>();
@@ -74,7 +73,6 @@ public class Parser {
             if (command.equals("section")) {
                 treeIndex = scan.nextInt();
                 read.section(treeIndex);
-
             }
 
             // insert command
@@ -83,6 +81,7 @@ public class Parser {
                 String lName = scan.next().toLowerCase();
                 String name = fName + " " + lName;
 
+                // Student temporary object
                 Student student1 = new Student(fName, lName);
 
                 if (list.get(treeIndex).find(student1) == null) {
@@ -111,14 +110,12 @@ public class Parser {
                         scan.next();
                         score = scan.nextInt();
                         read.scoreHelper(score, student, name);
-
                     }
 
                     // insert student in tree
                     list.get(treeIndex).insert(student);
                 }
                 else {
-
                     read.printInsertHelper(student1, treeIndex, list);
 
                     // Score command
@@ -128,9 +125,7 @@ public class Parser {
                         score = scan.nextInt();
                         read.scoreHelper2(score, student1, name, treeIndex,
                             list);
-
                     }
-
                 }
             }
 
@@ -144,24 +139,27 @@ public class Parser {
                             .hasNext("dumpsection") || scan.hasNext("grade")
                     || scan.hasNext("findpair")) { // start of search<A>
 
-                    ArrayList<Student> check = list.get(treeIndex).toArray();
+                    ArrayList<Student> studentArray = list.get(treeIndex)
+                        .toArray();
                     int temp = 0;
-                    temp = read.search1Helper(check, n1, temp, treeIndex);
+                    temp = read.search1Helper(studentArray, n1, temp,
+                        treeIndex);
 
                     if (temp == 1) {
 
                         // Saving String values
                         String temp1 = "";
                         String temp2 = "";
-                        for (int i = 0; i < check.size(); i++) {
-                            if (check.get(i).getFirstName().equals(n1) || check
-                                .get(i).getLastName().equals(n1)) {
-                                temp1 = check.get(i).getFirstName();
-                                temp2 = check.get(i).getLastName();
+                        for (int i = 0; i < studentArray.size(); i++) {
+                            if (studentArray.get(i).getFirstName().equals(n1)
+                                || studentArray.get(i).getLastName().equals(
+                                    n1)) {
+                                temp1 = studentArray.get(i).getFirstName();
+                                temp2 = studentArray.get(i).getLastName();
                             }
                         }
 
-                        // Student object
+                        // Student temporary object
                         Student student1 = new Student(temp1, temp2);
 
                         // Score command
@@ -171,9 +169,7 @@ public class Parser {
                             score = scan.nextInt();
                             read.scoreHelper3(score, student1, temp1, temp2,
                                 treeIndex, list);
-
                         }
-
                     }
 
                     // invalid score command for search
@@ -184,7 +180,6 @@ public class Parser {
                             "score command can only be called after an insert "
                                 + "command or a successful search command with "
                                 + "one exact output.");
-
                     } // end of search<A>
 
                 }
@@ -193,6 +188,7 @@ public class Parser {
                     String n2 = scan.next().toLowerCase();
                     String name = n1 + " " + n2;
 
+                    // Student temporary object
                     Student student1 = new Student(n1, n2);
 
                     // search<a,b>
@@ -206,27 +202,21 @@ public class Parser {
                             score = scan.nextInt();
                             read.scoreHelper2(score, student1, name, treeIndex,
                                 list);
-
                         }
                     }
                     else {
                         System.out.println("Search failed. Student " + name
                             + " doesn't exist in section " + treeIndex);
                     }
-
                 } // end of search<A,A>
 
             } // search ends
 
             // dumpsection command begins
             if (command.equals("dumpsection")) {
-
                 System.out.println("Section " + treeIndex + " dump:");
-
-                ArrayList<Student> check = list.get(treeIndex).toArray();
-
-                read.dumpSection(check, list, treeIndex);
-
+                ArrayList<Student> studentArray = list.get(treeIndex).toArray();
+                read.dumpSection(studentArray, list, treeIndex);
             } // dumpsection ends
 
             // remove begins
@@ -235,7 +225,7 @@ public class Parser {
                 String lName = scan.next().toLowerCase();
                 String name = fName + " " + lName;
 
-                // Student object
+                // Student temporary object
                 Student student1 = new Student(fName, lName);
 
                 if (list.get(treeIndex).find(student1) != null) {
@@ -264,6 +254,7 @@ public class Parser {
                     else {
                         count3 = 0;
                     }
+
                     System.out.println("Section " + newIndex + " removed");
                 }
                 else {
@@ -284,22 +275,20 @@ public class Parser {
 
             // grade begins
             if (command.equals("grade")) {
-                ArrayList<Student> check = list.get(treeIndex).toArray();
-                read.grade(check);
+                ArrayList<Student> studentArray = list.get(treeIndex).toArray();
+                read.grade(studentArray);
             } // grade ends
 
             // findpair
             if (command.equals("findpair")) {
+
                 // ArrayList<Student> check = list.get(treeIndex).toArray();
                 if (scan.hasNextInt()) {
                     int n = scan.nextInt();
                     read.findPairHasScore(list.get(treeIndex), n);
-
                 }
                 else {
-
                     read.findPairHasNoScore(list.get(treeIndex));
-
                 }
             }
 

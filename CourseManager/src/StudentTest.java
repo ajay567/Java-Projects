@@ -19,9 +19,10 @@
 // letter of this restriction.
 /**
  * Test class for Student
+ * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
- * @version 2019.9.21
+ * @version 2019.24.21
  *
  */
 public class StudentTest extends student.TestCase {
@@ -47,7 +48,6 @@ public class StudentTest extends student.TestCase {
         assertTrue(student.getFirstName().equals("Ajay"));
         assertTrue(student.getLastName().equals("Dalmia"));
         assertTrue(student.getName().equals("Ajay Dalmia"));
-
     }
 
 
@@ -68,11 +68,8 @@ public class StudentTest extends student.TestCase {
      * Tests the compareTo() method
      */
     public void testCompareTo() {
-
         Student student1 = new Student("Akshay", "Dalmia");
-
         Student student2 = new Student("Sharma", "Himanshu");
-
         assertEquals(student.compareTo(student1), -1);
         assertEquals(student.compareTo(student2), -4);
     }

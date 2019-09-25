@@ -24,12 +24,12 @@ import java.io.FileNotFoundException;
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
- * @version 2019.9.21
+ * @version 2019.24.21
  *
  */
 public class Coursemanager1 {
 
-    // Compiler - 
+    // Compiler - Eclipse (Java version 10.0.2)
     // Operating System - Windows 10
     // Date completed - 24th of September 2019
     /**
@@ -43,7 +43,7 @@ public class Coursemanager1 {
      */
     public static void main(String[] args) throws FileNotFoundException {
 
-        Parser parser = new Parser();
+        Parser parser = new Parser(); // Object for parser class
         parser.readsFile(args[0]);
 
     }

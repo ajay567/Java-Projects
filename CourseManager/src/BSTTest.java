@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Iterator;
 import student.TestCase;
 
 // On my honor:
@@ -26,7 +25,7 @@ import student.TestCase;
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
- * @version 2019.9.21
+ * @version 2019.24.21
  *
  */
 public class BSTTest extends TestCase {
@@ -81,6 +80,7 @@ public class BSTTest extends TestCase {
         bst.insert(72);
         assertEquals(bst.size(), 7);
     }
+
 
     /**
      * Tests BST remove() method with an object not in the tree.

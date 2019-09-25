@@ -19,9 +19,10 @@
 // letter of this restriction.
 /**
  * Student Class contains each student's information
+ * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
- * @version 2019.9.21
+ * @version 2019.24.21
  *
  */
 public class Student implements Comparable<Student> {
@@ -29,8 +30,8 @@ public class Student implements Comparable<Student> {
     /**
      * Class variables
      */
-    private String firstName; //First name
-    private String lastName; //Last name
+    private String firstName; // First name
+    private String lastName; // Last name
     private String name; // Full name (First and last name concatenated)
     private int score; // Student score
     private String grade; // Student letter grade
@@ -39,8 +40,11 @@ public class Student implements Comparable<Student> {
 
     /**
      * Student constructor method
-     * @param firstName First name
-     * @param lastName Last name
+     * 
+     * @param firstName
+     *            First name
+     * @param lastName
+     *            Last name
      */
     public Student(String firstName, String lastName) {
         this.firstName = firstName;
@@ -51,7 +55,9 @@ public class Student implements Comparable<Student> {
 
     /**
      * Setter method for id
+     * 
      * @param newId
+     *            The new generated id for a student
      */
     public void setID(String newId) {
         id = newId;
@@ -60,6 +66,7 @@ public class Student implements Comparable<Student> {
 
     /**
      * Getter method for id
+     * 
      * @return Student's id
      */
     public String getID() {
@@ -69,6 +76,7 @@ public class Student implements Comparable<Student> {
 
     /**
      * Getter method for first name
+     * 
      * @return Student's first name
      */
     public String getFirstName() {
@@ -78,6 +86,7 @@ public class Student implements Comparable<Student> {
 
     /**
      * Getter method for last name
+     * 
      * @return Student's last name
      */
     public String getLastName() {
@@ -87,22 +96,28 @@ public class Student implements Comparable<Student> {
 
     /**
      * Getter method for full name
+     * 
      * @return Student's full name
      */
     public String getName() {
         return name;
     }
-    
+
+
     /**
      * Setter method for score
-     * @param newScore Score to be set
+     * 
+     * @param newScore
+     *            Score to be set
      */
     public void setScore(int newScore) {
         score = newScore;
     }
 
+
     /**
      * Getter method for score
+     * 
      * @return Student's score
      */
     public int getScore() {
@@ -112,19 +127,24 @@ public class Student implements Comparable<Student> {
 
     /**
      * Setter method for grade
-     * @param newGrade Student's letter grade
+     * 
+     * @param newGrade
+     *            Student's letter grade
      */
     public void setGrade(String newGrade) {
         grade = newGrade;
     }
 
+
     /**
      * Getter method for grade
+     * 
      * @return Student's letter grade
      */
     public String getGrade() {
         return grade;
     }
+
 
     /**
      * Defines how to compare Student objects to implement Comparable
