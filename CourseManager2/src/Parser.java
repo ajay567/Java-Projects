@@ -49,7 +49,7 @@ public class Parser {
      *            input file
      * @throws FileNotFoundException
      */
-    public void readsFile(String fileName) throws FileNotFoundException {
+    public void readsFile(String fileName) throws FileNotFoundException { 
         File input = new File(fileName);
         Scanner scan = new Scanner(input);
         
@@ -68,7 +68,7 @@ public class Parser {
 
         // loadStudentData begins
         if (scan.hasNext("loadstudentdata")) {
-            scan.next();
+            scan.next(); 
             String temp = scan.next();
             System.out.println(temp + " successfully loaded");
             StudentManager manager = new StudentManager();

@@ -1,6 +1,3 @@
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-
 // On my honor:
 //
 // - I have not used source code obtained from another student,
@@ -27,7 +24,7 @@ import java.util.ArrayList;
  * @version 2019.9.21
  *
  */
-public class Name implements Comparable<Name>{
+public class Name {
     
     private String firstName; // First name
     private String lastName; // Last name
@@ -40,17 +37,22 @@ public class Name implements Comparable<Name>{
     }
     
     /**
-     * Defines how to compare Student objects to implement Comparable
+     * Getter method for first name
+     * 
+     * @return Student's first name
      */
-    @Override
-    public int compareTo(Name other) {
-        Name obj = (Name)other;
-        int a = lastName.compareTo(obj.lastName);
-        if (a == 0) {
-            a = firstName.compareTo(obj.firstName);
-        }
-        lastName.compareTo(obj.lastName);
-        return a;
+    public String getFirstName() {
+        return firstName;
+    }
+
+
+    /**
+     * Getter method for last name
+     * 
+     * @return Student's last name
+     */
+    public String getLastName() {
+        return lastName;
     }
 
 }

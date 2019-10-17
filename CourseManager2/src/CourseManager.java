@@ -71,7 +71,7 @@ public class CourseManager {
             int courseNumberDuplicate = 0;
             int sectionId = Integer.parseInt(currentLine[0]);
             int pid = Integer.parseInt(currentLine[1]);
-            String fName = currentLine[2].toLowerCase();
+            String fName = currentLine[2].toLowerCase();  
             String lName = currentLine[3].toLowerCase();
             int score = Integer.parseInt(currentLine[4]);
             String grade = currentLine[5];

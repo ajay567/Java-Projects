@@ -31,6 +31,7 @@ class BSTNode<E extends Comparable<? super E>> {
     private E element; // Element for this node
     private BSTNode<E> left; // Pointer to left child
     private BSTNode<E> right; // Pointer to right child
+    private int index;
 
 
     // Constructors methods:
@@ -53,6 +54,21 @@ class BSTNode<E extends Comparable<? super E>> {
         left = null;
         right = null;
         element = val;
+    }
+
+
+    /**
+     * Constructor method to create a node with a given value
+     * 
+     * @param val
+     *            Element to be stored in the node
+     */
+    BSTNode(E val, int temp) {
+        left = null;
+        right = null;
+        element = val;
+        index = temp;
+
     }
 
 
@@ -94,6 +110,29 @@ class BSTNode<E extends Comparable<? super E>> {
      */
     public void setValue(E v) {
         element = v;
+    }
+
+
+    // Getter and Setter methods:
+
+    /**
+     * Gets the value of the current node
+     * 
+     * @return Value of the node
+     */
+    public int index() {
+        return index;
+    }
+
+
+    /**
+     * Sets value of the current node
+     * 
+     * @param v
+     *            Value to be set
+     */
+    public void setIndex(int temp) {
+        index = temp;
     }
 
 

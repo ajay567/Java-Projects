@@ -1,6 +1,3 @@
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-
 // On my honor:
 //
 // - I have not used source code obtained from another student,
@@ -21,31 +18,14 @@ import java.util.ArrayList;
 // during the discussion. I have violated neither the spirit nor
 // letter of this restriction.
 /**
+ * The parser class takes care of all the commands in the input
+ * file. It also takes care of printing.
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
- * @version 2019.9.21
+ * @version 2019.24.21
  *
  */
-public class Score implements Comparable<Score> {
-
-    private int score; // Student id
-
-
-    /**
-     * 
-     */
-    public Score() {
-        // does nothing
-    }
-
-
-    /**
-     * Defines how to compare Student objects to implement Comparable
-     */
-    @Override
-    public int compareTo(Score other) {
-        return Integer.compare(this.score, other.score);
-    }
+public class SectionManager {
 
 }
