@@ -27,17 +27,23 @@ import java.util.ArrayList;
  * @version 2019.9.21
  *
  */
-public class Coursemanager2 {
-
+public class PID implements Comparable<PID> {
+    
+    private int id; // Student id
+    
     /**
      * 
-     * @param args
-     *            input files
-     * @throws FileNotFoundException
      */
-    public static void main(String[] args) throws FileNotFoundException {
-        Parser parser = new Parser(); // Object for parser class
-        parser.readsFile("SampleInput2.txt");
+    public PID(){
+        //does nothing
+    }
+    
+    /**
+     * Defines how to compare Student objects to implement Comparable
+     */
+    @Override
+    public int compareTo(PID other) {
+        return Integer.compare(this.id, other.id);
     }
 
 }

@@ -25,7 +25,7 @@
  * @version 2019.24.21
  *
  */
-public class Student implements Comparable<Student> {
+public class Student {
 
     /**
      * Class variables
@@ -36,7 +36,7 @@ public class Student implements Comparable<Student> {
     private String name; // Full name (First and last name concatenated)
     private int score; // Student score
     private String grade; // Student letter grade
-    private String id; // Student generated id
+    private int id; // Student id
 
 
     /**
@@ -48,13 +48,11 @@ public class Student implements Comparable<Student> {
      *            Last name
      */
     public Student(
-        String id,
+        int id,
         String firstName,
-        String middleName,
         String lastName) {
         this.id = id;
         this.firstName = firstName;
-        this.middleName = middleName;
         this.lastName = lastName;
         this.name = firstName + " " + lastName;
     }
@@ -65,7 +63,7 @@ public class Student implements Comparable<Student> {
      * 
      * @return Student's id
      */
-    public String getID() {
+    public int getID() {
         return id;
     }
 
@@ -79,6 +77,14 @@ public class Student implements Comparable<Student> {
         return firstName;
     }
 
+    /**
+     * Getter method for middle name
+     * 
+     * @return Student's middle name
+     */
+    public void setMiddleName(String tempMidName) {
+        tempMidName = middleName;
+    }
 
     /**
      * Getter method for middle name
@@ -149,20 +155,5 @@ public class Student implements Comparable<Student> {
      */
     public String getGrade() {
         return grade;
-    }
-
-
-    /**
-     * Defines how to compare Student objects to implement Comparable
-     */
-    @Override
-    public int compareTo(Student other) {
-        Student obj = (Student)other;
-        int a = getLastName().compareTo(obj.getLastName());
-        if (a == 0) {
-            a = getFirstName().compareTo(obj.getFirstName());
-        }
-        getLastName().compareTo(obj.getLastName());
-        return a;
     }
 }

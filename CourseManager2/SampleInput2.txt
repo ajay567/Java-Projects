@@ -1,0 +1,6 @@
+loadcoursedata CS3114.csv
+
+loadstudentdata students.csv
+
+
+loadcoursedata CS3114.csv

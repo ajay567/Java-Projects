@@ -31,18 +31,12 @@ import java.util.Scanner;
  * @version 2019.24.21
  *
  */
-public class StudentManager {
-
-    /**
-     * fields
-     */
-    private ArrayList<Student> list = new ArrayList<Student>();
-
+public class Parser {
 
     /**
      * Constructor
      */
-    public StudentManager() {
+    public Parser() {
         // Does Nothing
     }
 
@@ -55,29 +49,46 @@ public class StudentManager {
      *            input file
      * @throws FileNotFoundException
      */
-    public void readsStudentFile(String fileName) throws FileNotFoundException {
+    public void readsFile(String fileName) throws FileNotFoundException {
         File input = new File(fileName);
         Scanner scan = new Scanner(input);
+        
+        ArrayList<Student> list = new ArrayList<Student>();
+        //ArrayList<BST<Student>> course = new ArrayList<BST<Student>>();
 
-        String currentLine[] = null;
-        while (scan.hasNextLine()) {
-            String newLine = scan.nextLine();
-            currentLine = newLine.split(",");
-            Student student = new Student(Integer.parseInt(currentLine[0]),
-                currentLine[1].toLowerCase(), currentLine[3].toLowerCase());
-            student.setMiddleName(currentLine[2].toLowerCase());
-            list.add(student);
+        // Failed loadCourseData begins
+        while (!scan.hasNext("loadstudentdata")) {
+            String temp = scan.next();
+            if (temp.equals("loadcoursedata")) {
+                scan.next();
+                System.out.println(
+                    "Course Load Failed. You have to load Student Information file first.");
+            }
+        } // Failed loadCourseData ends
+
+        // loadStudentData begins
+        if (scan.hasNext("loadstudentdata")) {
+            scan.next();
+            String temp = scan.next();
+            System.out.println(temp + " successfully loaded");
+            StudentManager manager = new StudentManager();
+            manager.readsStudentFile(temp);
+            list = manager.studentList();
+        } // loadStudentData ends
+
+        // parser begins
+        while (scan.hasNext()) {
+            String command = scan.next();
+            
+            // loadCourseData begins
+            if(command.equals("loadcoursedata")) {
+                CourseManager manager = new CourseManager();
+                String temp = scan.next();
+                manager.readsCourseFile(temp,list);
+                //course = manager.courseList();
+                
+            }
         }
-        scan.close();
-    }
-
-
-    /**
-     * 
-     * @return
-     */
-    public ArrayList<Student> studentList() {
-        return list;
     }
 
 }

@@ -27,17 +27,30 @@ import java.util.ArrayList;
  * @version 2019.9.21
  *
  */
-public class Coursemanager2 {
-
+public class Name implements Comparable<Name>{
+    
+    private String firstName; // First name
+    private String lastName; // Last name
+    
     /**
      * 
-     * @param args
-     *            input files
-     * @throws FileNotFoundException
      */
-    public static void main(String[] args) throws FileNotFoundException {
-        Parser parser = new Parser(); // Object for parser class
-        parser.readsFile("SampleInput2.txt");
+    public Name(){
+        //does nothing
+    }
+    
+    /**
+     * Defines how to compare Student objects to implement Comparable
+     */
+    @Override
+    public int compareTo(Name other) {
+        Name obj = (Name)other;
+        int a = lastName.compareTo(obj.lastName);
+        if (a == 0) {
+            a = firstName.compareTo(obj.firstName);
+        }
+        lastName.compareTo(obj.lastName);
+        return a;
     }
 
 }
