@@ -33,7 +33,7 @@ import java.util.Scanner;
  */
 public class CourseManager {
 
-    //private ArrayList<BST<Student>> course = new ArrayList<BST<Student>>();
+    private ArrayList<SectionManager> course = new ArrayList<SectionManager>();
 
 
     /**
@@ -52,13 +52,15 @@ public class CourseManager {
      *            input file
      * @throws FileNotFoundException
      */
-    public void readsCourseFile(String fileName, ArrayList<Student> list)
+    public void readsCourseFile(
+        String fileName,
+        ArrayList<Student> studentDatabaseList)
         throws FileNotFoundException {
         File input = new File(fileName);
         Scanner scan = new Scanner(input);
 
-        for (int i = 0; i < 24; i++) {
-            //course.add(new BST<Student>());
+        for (int i = 0; i < 22; i++) {
+            course.add(new SectionManager());
         }
 
         String currentLine[] = null;
@@ -66,12 +68,13 @@ public class CourseManager {
             String newLine = scan.nextLine();
             currentLine = newLine.split(",");
 
-            boolean checkList = false;
             boolean checkCourse = false;
+            boolean checkStudent = false;
+            boolean checkStudentDatabase = false;
             int courseNumberDuplicate = 0;
             int sectionId = Integer.parseInt(currentLine[0]);
-            int pid = Integer.parseInt(currentLine[1]);
-            String fName = currentLine[2].toLowerCase();  
+            String pid = currentLine[1];
+            String fName = currentLine[2].toLowerCase();
             String lName = currentLine[3].toLowerCase();
             int score = Integer.parseInt(currentLine[4]);
             String grade = currentLine[5];
@@ -80,48 +83,86 @@ public class CourseManager {
             student.setScore(score);
             student.setGrade(grade);
 
-            for (int i = 0; i < list.size(); i++) {
-                if (pid == list.get(i).getID() && fName.equals(list.get(i)
-                    .getFirstName()) && lName.equals(list.get(i)
-                        .getLastName())) {
-                    checkList = true;
-                }
-                else if (pid == list.get(i).getID() && (!fName.equals(list.get(
-                    i).getFirstName()) || !lName.equals(list.get(i)
-                        .getLastName()))) {
+            // checking student database
+            for (int i = 0; i < studentDatabaseList.size(); i++) {
+                if (pid.equals(studentDatabaseList.get(i).getID()) && (!fName
+                    .equals(studentDatabaseList.get(i).getFirstName()) || !lName
+                        .equals(studentDatabaseList.get(i).getLastName()))) {
                     System.out.println("Warning: Student " + fName + " " + lName
                         + " " + "is not loaded to section " + sectionId + " "
                         + "since the corresponding pid belongs to another student.");
                 }
-            }
+                else if (pid.equals(studentDatabaseList.get(i).getID()) && fName
+                    .equals(studentDatabaseList.get(i).getFirstName()) && lName
+                        .equals(studentDatabaseList.get(i).getLastName())) {
+                    checkStudentDatabase = true;
+                }
+            } // checking student database ends
 
-            //for (int i = 0; i < 24; i++) {
-            //    if (i == sectionId) {
-            //        i = i + 1;
-            //    }
-            //    ArrayList<Student> tempList = course.get(i).toArray();
-            //    for (int j = 0; j < tempList.size(); j++) {
-            //        if (pid == tempList.get(j).getID()) {
-            //            checkCourse = true;
-            //            courseNumberDuplicate = i;
-            //        }
-            //    }
-            //}
-
-            if (checkList == false) {
+            if (checkStudentDatabase == false) {
                 System.out.println("Warning: Student " + fName + " " + lName
                     + " " + "is not loaded to section " + sectionId + " "
-                    + "since  he/she doesn't exist in the loaded student records.");
+                    + "since he/she doesn't exist in the loaded student records.");
             }
-            else if (checkCourse == true) {
+
+            // checking existing sections
+            for (int i = 0; i < 22; i++) {
+                if (i == sectionId) {
+                    i = i + 1;
+                }
+                ArrayList<Student> sectionList = course.get(i).getSectionList();
+                for (int j = 0; j < sectionList.size(); j++) {
+                    if (pid.equals(sectionList.get(j).getID())) {
+                        checkCourse = true;
+                        courseNumberDuplicate = j;
+                    }
+                }
+            } // checking existing sections ends
+
+            // checking current section
+            String overLoadedStudent = "";
+            ArrayList<Student> sectionList = course.get(sectionId)
+                .getSectionList();
+            for (int i = 0; i < sectionList.size(); i++) {
+                if (pid.equals(sectionList.get(i).getID())) {
+                    checkStudent = true;
+                    course.get(sectionId).getSectionList().get(i).setGrade(
+                        grade);
+                    course.get(sectionId).getSectionList().get(i).setScore(
+                        score);
+                    overLoadedStudent = pid;
+                }
+            } // checking current section ends
+
+            if (checkCourse) {
                 System.out.println("Warning: ​Student " + fName + " " + lName
-                    + " " + " is not loaded to section" + sectionId
+                    + " is not loaded to section" + sectionId
                     + " since he/she is already enrolled in section "
                     + courseNumberDuplicate);
             }
+            else if (checkStudent) {
+                Score tempScore = new Score(pid, score);
+                ArrayList<Score> arrayScore = course.get(sectionId)
+                    .getTreeScore().toArray();
+                for (int i = 0; i < arrayScore.size(); i++) {
+                    if (arrayScore.get(i).getID().equals(pid)) {
+                        arrayScore.remove(i);
+                    }
+                }
+                course.get(sectionId).getTreeScore().clear();
+                for (int i = 0; i < arrayScore.size(); i++) {
+                    course.get(sectionId).getTreeScore().insert(arrayScore.get(
+                        i));
+                }
+                course.get(sectionId).getTreeScore().insert(tempScore);
+
+            }
             else {
-                
-                
+                Score tempScore = new Score(pid, score);
+                course.get(sectionId).getTreeName().insert(student);
+                course.get(sectionId).getTreePID().insert(pid);
+                course.get(sectionId).getSectionList().add(student);
+                course.get(sectionId).getTreeScore().insert(tempScore);
             }
 
         }
@@ -129,5 +170,12 @@ public class CourseManager {
     }
 
 
+    /**
+     * 
+     * @return
+     */
+    public ArrayList<SectionManager> courseList() {
+        return course;
+    }
 
 }

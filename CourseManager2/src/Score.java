@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 // On my honor:
 //
 // - I have not used source code obtained from another student,
@@ -19,62 +17,85 @@ import java.util.ArrayList;
 // anything during the discussion or modifies any computer file
 // during the discussion. I have violated neither the spirit nor
 // letter of this restriction.
+
 /**
- * The parser class takes care of all the commands in the input
- * file. It also takes care of printing.
+ * Binary Search Tree (BST) Implementation
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
  * @version 2019.24.21
  *
+ * @param <E>
+ *            The type of element to be stored in the BST
  */
-public class SectionManager {
-    
+public class Score implements Comparable<Score> {
+
     /**
      * fields
      */
-    private BST<Student> name = new BST<Student>();
-    private BST<String> pid = new BST<String>();
-    private BST<Score> score = new BST<Score>();
-    private ArrayList<Student> sectionList = new ArrayList<Student>();
-    
-    /**
-     * Constructor
-     */
-    public SectionManager() {
-        // Does nothing        
-    }
-    
+    private String id;
+    private int score;
+
+
     /**
      * 
-     * @return
+     * @param id
+     * @param score
      */
-    public BST<Student> getTreeName(){
-        return name;
+    public Score(String id, int score) {
+        this.id = id;
+        this.score = score;
     }
-    
+
+
     /**
+     * Setter method for id
      * 
-     * @return
+     * @param newId
+     *            Id to be set
      */
-    public BST<String> getTreePID(){
-        return pid;
+    public void setId(String newId) {
+        id = newId;
     }
-    
+
+
     /**
+     * Getter method for id
      * 
-     * @return
+     * @return Student's id
      */
-    public BST<Score> getTreeScore(){
+    public String getID() {
+        return id;
+    }
+
+
+    /**
+     * Setter method for score
+     * 
+     * @param newScore
+     *            Score to be set
+     */
+    public void setScore(int newScore) {
+        score = newScore;
+    }
+
+
+    /**
+     * Getter method for score
+     * 
+     * @return Student's score
+     */
+    public int getScore() {
         return score;
     }
-    
+
+
     /**
-     * 
-     * @return
+     * Defines how to compare Student objects to implement Comparable
      */
-    public ArrayList<Student> getSectionList(){
-        return sectionList;
+    @Override
+    public int compareTo(Score other) {
+        return Integer.compare(this.score, other.score);
     }
 
 }

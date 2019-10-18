@@ -1,6 +1,27 @@
 loadcoursedata CS3114.csv
 
 loadstudentdata students.csv
-
-
 loadcoursedata CS3114.csv
+section 1
+insert 977159896 Naomi Cote
+
+insert 256593948 Sandra Duncan
+
+insert 239721904 Aileen   Ford
+
+insert 239721905 Caleb   Foley
+insert 239721905    Aileen Ford
+score 91
+
+searchid 394691224
+score 100
+searchid 291935757
+score 100
+searchid 239721905
+
+search Mostafa Kamel
+
+search Sage Forbes
+
+search Naomi
+dumpsection

@@ -30,12 +30,13 @@ public class Student implements Comparable<Student> {
     /**
      * Class variables
      */
-    private Name nameObj;
+    private String firstName; // First name
+    private String lastName; // Last name
     private String middleName; // Middle name
     private String name; // Full name (First and last name concatenated)
     private int score; // Student score
     private String grade; // Student letter grade
-    private int id; // Student id
+    private String id; // Student id
 
 
     /**
@@ -46,13 +47,10 @@ public class Student implements Comparable<Student> {
      * @param lastName
      *            Last name
      */
-    public Student(int id, String firstName, String lastName) {
-        nameObj = new Name();
+    public Student(String id, String firstName, String lastName) {
+        this.firstName = firstName;
         this.id = id;
-        String tempFName = nameObj.getFirstName();
-        tempFName = firstName;
-        String tempLName = nameObj.getLastName();
-        tempLName = lastName;
+        this.lastName = lastName;
         this.name = firstName + " " + lastName;
     }
 
@@ -62,7 +60,7 @@ public class Student implements Comparable<Student> {
      * 
      * @return Student's id
      */
-    public int getID() {
+    public String getID() {
         return id;
     }
 
@@ -73,7 +71,7 @@ public class Student implements Comparable<Student> {
      * @return Student's first name
      */
     public String getFirstName() {
-        return nameObj.getFirstName();
+        return firstName;
     }
 
 
@@ -103,7 +101,7 @@ public class Student implements Comparable<Student> {
      * @return Student's last name
      */
     public String getLastName() {
-        return nameObj.getLastName();
+        return lastName;
     }
 
 
@@ -165,11 +163,11 @@ public class Student implements Comparable<Student> {
     @Override
     public int compareTo(Student other) {
         Student obj = (Student)other;
-        int a = nameObj.getLastName().compareTo(obj.nameObj.getLastName());
+        int a = getLastName().compareTo(obj.getLastName());
         if (a == 0) {
-            a = nameObj.getFirstName().compareTo(obj.nameObj.getFirstName());
+            a = getFirstName().compareTo(obj.getFirstName());
         }
-        nameObj.getLastName().compareTo(obj.nameObj.getLastName());
+        getLastName().compareTo(obj.getLastName());
         return a;
     }
 }

@@ -63,7 +63,7 @@ public class StudentManager {
         while (scan.hasNextLine()) {
             String newLine = scan.nextLine();
             currentLine = newLine.split(",");
-            Student student = new Student(Integer.parseInt(currentLine[0]),
+            Student student = new Student(currentLine[0],
                 currentLine[1].toLowerCase(), currentLine[3].toLowerCase());
             student.setMiddleName(currentLine[2].toLowerCase());
             list.add(student); 
