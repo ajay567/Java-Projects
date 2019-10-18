@@ -1,5 +1,11 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -167,6 +173,180 @@ public class CourseManager {
 
         }
         scan.close();
+    }
+    
+    public void readsCourseDataFile(
+        String fileName,
+        ArrayList<Student> studentDatabaseList)
+        throws IOException {
+        
+        Path path = Paths.get(fileName);
+        byte[] fileContents = Files.readAllBytes(path);
+        
+        ByteBuffer wrapped = ByteBuffer.wrap(fileContents, 10, 4);
+        int secCount = wrapped.getInt();
+        
+        for (int i = 0; i < secCount; i++) {
+            course.add(new SectionManager());
+        }
+        
+        int offsetPos = 14;
+        //loop over sections
+        for(int i=0; i<secCount; i++) {
+            int sectionId = i;
+            
+            //get num students
+            wrapped = ByteBuffer.wrap(fileContents, offsetPos, 4);
+            int studentCount = wrapped.getInt();
+            offsetPos += 4;
+            
+            //loop over students
+            for(int j=0; j<studentCount; j++) {
+                //get pid
+                wrapped = ByteBuffer.wrap(fileContents, offsetPos, 8);
+                long pidL = wrapped.getLong();
+                String pid = String.format("%09d", pidL);
+                offsetPos+=8;
+                
+                //get first name
+                int endPos = offsetPos;
+                while(fileContents[endPos] != 36) {
+                    endPos++;
+                }
+                wrapped = ByteBuffer.wrap(fileContents, offsetPos, endPos-offsetPos);
+                String fName = StandardCharsets.UTF_8.decode(wrapped).toString();
+                offsetPos=endPos+1;
+                
+                //get last name
+                endPos = offsetPos;
+                while(fileContents[endPos] != 36) {
+                    endPos++;
+                }
+                wrapped = ByteBuffer.wrap(fileContents, offsetPos, endPos-offsetPos);
+                String lName = StandardCharsets.UTF_8.decode(wrapped).toString();
+                offsetPos=endPos+1;
+                
+                //get score
+                wrapped = ByteBuffer.wrap(fileContents, offsetPos, 4);
+                int score= wrapped.getInt();
+                offsetPos+=4;
+                
+                //get grade
+                wrapped = ByteBuffer.wrap(fileContents, offsetPos, 2);
+                String grade = StandardCharsets.UTF_8.decode(wrapped).toString();
+                offsetPos+=2;
+                
+                
+                boolean checkCourse = false;
+                boolean checkStudent = false;
+                boolean checkStudentDatabase = false;
+                int courseNumberDuplicate = 0;
+                
+                /*
+                int sectionId = Integer.parseInt(currentLine[0]);
+                String pid = currentLine[1];
+                String fName = currentLine[2].toLowerCase();
+                String lName = currentLine[3].toLowerCase();
+                int score = Integer.parseInt(currentLine[4]);
+                String grade = currentLine[5];
+                
+                */
+                
+
+                Student student = new Student(pid, fName, lName);
+                student.setScore(score);
+                student.setGrade(grade);
+
+                // checking student database
+                for (int k = 0; k < studentDatabaseList.size(); k++) {
+                    if (pid.equals(studentDatabaseList.get(k).getID()) && (!fName
+                        .equals(studentDatabaseList.get(k).getFirstName()) || !lName
+                            .equals(studentDatabaseList.get(k).getLastName()))) {
+                        System.out.println("Warning: Student " + fName + " " + lName
+                            + " " + "is not loaded to section " + sectionId + " "
+                            + "since the corresponding pid belongs to another student.");
+                    }
+                    else if (pid.equals(studentDatabaseList.get(k).getID()) && fName
+                        .equals(studentDatabaseList.get(k).getFirstName()) && lName
+                            .equals(studentDatabaseList.get(k).getLastName())) {
+                        checkStudentDatabase = true;
+                    }
+                } // checking student database ends
+
+                if (checkStudentDatabase == false) {
+                    System.out.println("Warning: Student " + fName + " " + lName
+                        + " " + "is not loaded to section " + sectionId + " "
+                        + "since he/she doesn't exist in the loaded student records.");
+                }
+
+                // checking existing sections
+                for (int k = 0; k < 22; k++) {
+                    if (k == sectionId) {
+                        k = k + 1;
+                    }
+                    ArrayList<Student> sectionList = course.get(k).getSectionList();
+                    for (int l = 0; l < sectionList.size(); l++) {
+                        if (pid.equals(sectionList.get(l).getID())) {
+                            checkCourse = true;
+                            courseNumberDuplicate = l;
+                        }
+                    }
+                } // checking existing sections ends
+
+                // checking current section
+                String overLoadedStudent = "";
+                ArrayList<Student> sectionList = course.get(sectionId)
+                    .getSectionList();
+                for (int k = 0; k < sectionList.size(); k++) {
+                    if (pid.equals(sectionList.get(k).getID())) {
+                        checkStudent = true;
+                        course.get(sectionId).getSectionList().get(k).setGrade(
+                            grade);
+                        course.get(sectionId).getSectionList().get(k).setScore(
+                            score);
+                        overLoadedStudent = pid;
+                    }
+                } // checking current section ends
+
+                if (checkCourse) {
+                    System.out.println("Warning: ​Student " + fName + " " + lName
+                        + " is not loaded to section" + sectionId
+                        + " since he/she is already enrolled in section "
+                        + courseNumberDuplicate);
+                }
+                else if (checkStudent) {
+                    Score tempScore = new Score(pid, score);
+                    ArrayList<Score> arrayScore = course.get(sectionId)
+                        .getTreeScore().toArray();
+                    for (int k = 0; k < arrayScore.size(); k++) {
+                        if (arrayScore.get(k).getID().equals(pid)) {
+                            arrayScore.remove(k);
+                        }
+                    }
+                    course.get(sectionId).getTreeScore().clear();
+                    for (int k = 0; k < arrayScore.size(); k++) {
+                        course.get(sectionId).getTreeScore().insert(arrayScore.get(
+                            k));
+                    }
+                    course.get(sectionId).getTreeScore().insert(tempScore);
+
+                }
+                else {
+                    Score tempScore = new Score(pid, score);
+                    course.get(sectionId).getTreeName().insert(student);
+                    course.get(sectionId).getTreePID().insert(pid);
+                    course.get(sectionId).getSectionList().add(student);
+                    course.get(sectionId).getTreeScore().insert(tempScore);
+                }
+                
+                
+                
+            }
+            System.out.println("Finished section\n");
+            offsetPos+=8;
+        }
+        
+
     }
 
 

@@ -1,5 +1,11 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -69,6 +75,57 @@ public class StudentManager {
             list.add(student); 
         }
         scan.close();
+    }
+    
+    public void readsStudentDataFile(String fileName) throws IOException {
+        Path path = Paths.get(fileName);
+        byte[] fileContents = Files.readAllBytes(path);
+        
+        ByteBuffer wrapped = ByteBuffer.wrap(fileContents, 10, 4);
+        int count = wrapped.getInt();
+        
+        int offsetPos = 14;
+        for(int i=0; i<count; i++) {
+            //get pid
+            wrapped = ByteBuffer.wrap(fileContents, offsetPos, 8);
+            long pid = wrapped.getLong();
+            String paddedPID = String.format("%09d", pid);
+            offsetPos+=8;
+            
+            //get first name
+            int endPos = offsetPos;
+            while(fileContents[endPos] != 36) {
+                endPos++;
+            }
+            wrapped = ByteBuffer.wrap(fileContents, offsetPos, endPos-offsetPos);
+            String firstName = StandardCharsets.UTF_8.decode(wrapped).toString();
+            offsetPos=endPos+1;
+            
+            //get middle name
+            endPos = offsetPos;
+            while(fileContents[endPos] != 36) {
+                endPos++;
+            }
+            wrapped = ByteBuffer.wrap(fileContents, offsetPos, endPos-offsetPos);
+            String middleName = StandardCharsets.UTF_8.decode(wrapped).toString();
+            offsetPos=endPos+1;
+            
+            //get last name
+            endPos = offsetPos;
+            while(fileContents[endPos] != 36) {
+                endPos++;
+            }
+            wrapped = ByteBuffer.wrap(fileContents, offsetPos, endPos-offsetPos);
+            String lastName = StandardCharsets.UTF_8.decode(wrapped).toString();
+            offsetPos=endPos+1+8;
+            
+            //create student object
+            Student student = new Student(paddedPID,
+                firstName.toLowerCase(), lastName.toLowerCase());
+            student.setMiddleName(middleName.toLowerCase());
+            list.add(student);
+            
+        }
     }
 
 
