@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -47,9 +48,9 @@ public class Parser {
      * 
      * @param fileName
      *            input file
-     * @throws FileNotFoundException
+     * @throws IOException
      */
-    public void readsFile(String fileName) throws FileNotFoundException {
+    public void readsFile(String fileName) throws IOException {
         File input = new File(fileName);
         Scanner scan = new Scanner(input);
 
@@ -73,7 +74,12 @@ public class Parser {
             String temp = scan.next();
             System.out.println(temp + " successfully loaded");
             StudentManager manager = new StudentManager();
-            manager.readsStudentFile(temp);
+            if (temp.contains("csv")) {
+                manager.readsStudentFile(temp);
+            }
+            else {
+                manager.readsStudentDataFile(temp);
+            }
             studentDatabaseList = manager.studentList();
         } // loadStudentData ends
 
@@ -87,7 +93,15 @@ public class Parser {
             if (command.equals("loadcoursedata")) {
                 CourseManager manager = new CourseManager();
                 String temp = scan.next();
-                manager.readsCourseFile(temp, studentDatabaseList);
+                String courseName[] = temp.split(".");
+                System.out.println(temp
+                    + " Course has been successfully loaded.");
+                if (temp.contains("csv")) {
+                    manager.readsCourseFile(temp, studentDatabaseList);
+                }
+                else {
+                    manager.readsCourseDataFile(temp, studentDatabaseList);
+                }
                 course = manager.courseList();
             }
 
@@ -150,7 +164,7 @@ public class Parser {
 
                     // checking existing sections
                     boolean checkCourse = false;
-                    for (int i = 0; i < 22; i++) {
+                    for (int i = 0; i < course.size(); i++) {
                         if (i == currentSection) {
                             i = i + 1;
                         }
@@ -252,7 +266,7 @@ public class Parser {
                 }
                 else {
                     System.out.println(
-                        "Search Failed. Couldn't find any student with ID ​"
+                        "Search Failed. Couldn't find any student with ID "
                             + pid);
 
                     // invalid score command for search
@@ -383,7 +397,7 @@ public class Parser {
                 new ArrayList<SectionManager>();
             if (command.equals("clearcoursedata")) {
                 savedCourse = course;
-                for (int i = 0; i < 22; i++) {
+                for (int i = 0; i < course.size(); i++) {
                     course.get(i).getSectionList().clear();
                     course.get(i).getTreeName().clear();
                     course.get(i).getTreePID().clear();
@@ -394,8 +408,7 @@ public class Parser {
             // dumpsection begins
             if (command.equals("dumpsection")) {
 
-                int total = 0;
-                System.out.print("Section " + currentSection + " dump:");
+                System.out.println("Section " + currentSection + " dump:");
                 ArrayList<Student> dumpName = course.get(currentSection)
                     .getTreeName().toArray();
                 ArrayList<String> dumpPid = course.get(currentSection)
@@ -408,14 +421,123 @@ public class Parser {
                 System.out.println("BST by ID:");
                 for (int i = 0; i < dumpPid.size(); i++) {
                     for (int j = 0; j < sectionList.size(); j++) {
-                        if (dumpPid.get(i).equals(sectionList.get(j)
-                            .getID())) {
-
+                        if (dumpPid.get(i).equals(sectionList.get(j).getID())) {
+                            System.out.println(sectionList.get(j).getID() + ", "
+                                + sectionList.get(j).getName() + ", score = "
+                                + sectionList.get(j).getScore());
                         }
                     }
                 }
 
+                System.out.println("BST by name:");
+                for (int i = 0; i < dumpName.size(); i++) {
+                    for (int j = 0; j < sectionList.size(); j++) {
+                        if (dumpName.get(i).getID().equals(sectionList.get(j)
+                            .getID())) {
+                            System.out.println(sectionList.get(j).getID() + ", "
+                                + sectionList.get(j).getName() + ", score = "
+                                + sectionList.get(j).getScore());
+                        }
+                    }
+                }
+
+                System.out.println("BST by score:");
+                for (int i = 0; i < dumpScore.size(); i++) {
+                    for (int j = 0; j < sectionList.size(); j++) {
+                        if (dumpScore.get(i).getID().equals(sectionList.get(j)
+                            .getID())) {
+                            System.out.println(sectionList.get(j).getID() + ", "
+                                + sectionList.get(j).getName() + ", score = "
+                                + sectionList.get(j).getScore());
+                        }
+                    }
+                }
+
+                System.out.println("Size = " + dumpScore.size());
+
             } // dumpsection ends
+
+            // remove begins
+            if (command.equals("remove")) {
+
+                String pid = scan.next();
+
+                if (scan.hasNext("section") || scan.hasNext("insert") || scan
+                    .hasNext("search") || scan.hasNext("score") || scan.hasNext(
+                        "remove") || scan.hasNext("clearsection") || scan
+                            .hasNext("dumpsection") || scan.hasNext("grade")
+                    || scan.hasNext("findpair") || scan.hasNext(
+                        "loadstudentdata") || scan.hasNext("loadcoursedata")
+                    || scan.hasNext("searchid") || scan.hasNext("stat") || scan
+                        .hasNext("list") || scan.hasNext("merge") || scan
+                            .hasNext("savestudentdata") || scan.hasNext(
+                                "savecoursedata") || scan.hasNext(
+                                    "clearcoursedata")) {
+                    boolean studentExists = false;
+
+                    for (int i = 0; i < studentDatabaseList.size(); i++) {
+                        if (studentDatabaseList.get(i).getID().equals(pid)) {
+                            studentExists = true;
+                        }
+                    }
+
+                    boolean studentExistsCourse = false;
+                    if (studentExists == true) {
+                        for (int i = 0; i < course.size(); i++) {
+                            ArrayList<Student> sectionList = course.get(i)
+                                .getSectionList();
+                            ArrayList<String> pidList = course.get(i)
+                                .getTreePID().toArray();
+                            ArrayList<Student> nameList = course.get(i)
+                                .getTreeName().toArray();
+                            ArrayList<Score> scoreList = course.get(i)
+                                .getTreeScore().toArray();
+                            
+                            int tempSize = sectionList.size();
+
+                            for (int j = 0; j < tempSize; j++) {
+                                if (sectionList.get(j).getID().equals(pid)) {
+                                    studentExistsCourse = true;
+                                    sectionList.remove(j);
+                                }
+                                if (pidList.get(j).equals(pid)) {
+                                    pidList.remove(j);
+                                }
+                                if (nameList.get(j).getID().equals(pid)) {
+                                    nameList.remove(j);
+                                }
+                                if (scoreList.get(j).getID().equals(pid)) {
+                                    scoreList.remove(j);
+                                }
+                            }
+
+                            course.get(i).getTreeName().clear();
+                            course.get(i).getTreeScore().clear();
+                            course.get(i).getTreePID().clear();
+
+                            for (int j = 0; j < sectionList.size(); j++) {
+                                course.get(i).getTreeName().insert(nameList.get(
+                                    i));
+                                course.get(i).getTreeScore().insert(scoreList
+                                    .get(i));
+                                course.get(i).getTreePID().insert(pidList.get(
+                                    i));
+                            }
+                        }
+
+                        if (studentExistsCourse == false) {
+                            System.out.print(
+                                "Remove failed: couldn't find any student with id "
+                                    + pid);
+                        }
+                    }
+                    else {
+                        System.out.print(
+                            "Remove failed: couldn't find any student with id "
+                                + pid);
+                    }
+                }
+            } // remove ends
         }
     }
 }

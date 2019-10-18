@@ -186,7 +186,7 @@ public class CourseManager {
         ByteBuffer wrapped = ByteBuffer.wrap(fileContents, 10, 4);
         int secCount = wrapped.getInt();
         
-        for (int i = 0; i < secCount; i++) {
+        for (int i = 0; i < 22; i++) {
             course.add(new SectionManager());
         }
         
@@ -214,7 +214,7 @@ public class CourseManager {
                     endPos++;
                 }
                 wrapped = ByteBuffer.wrap(fileContents, offsetPos, endPos-offsetPos);
-                String fName = StandardCharsets.UTF_8.decode(wrapped).toString();
+                String fName = StandardCharsets.UTF_8.decode(wrapped).toString().toLowerCase();
                 offsetPos=endPos+1;
                 
                 //get last name
@@ -223,7 +223,7 @@ public class CourseManager {
                     endPos++;
                 }
                 wrapped = ByteBuffer.wrap(fileContents, offsetPos, endPos-offsetPos);
-                String lName = StandardCharsets.UTF_8.decode(wrapped).toString();
+                String lName = StandardCharsets.UTF_8.decode(wrapped).toString().toLowerCase();
                 offsetPos=endPos+1;
                 
                 //get score
@@ -280,7 +280,7 @@ public class CourseManager {
                 }
 
                 // checking existing sections
-                for (int k = 0; k < 22; k++) {
+                for (int k = 0; k < course.size(); k++) {
                     if (k == sectionId) {
                         k = k + 1;
                     }
@@ -340,9 +340,7 @@ public class CourseManager {
                 }
                 
                 
-                
             }
-            System.out.println("Finished section\n");
             offsetPos+=8;
         }
         
