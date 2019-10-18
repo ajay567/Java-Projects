@@ -1,5 +1,7 @@
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -137,4 +139,30 @@ public class StudentManager {
         return list;
     }
 
+    public void writeStudentDataFile(String filename) throws IOException {
+        
+        DataOutputStream os = new DataOutputStream(new FileOutputStream(filename, false));
+        os.writeBytes("VTSTUDENTS");
+        os.writeInt(list.size());
+        
+        for(int i=0; i<list.size(); i++) {
+            Student temp = list.get(i);
+            long pid = Long.valueOf(temp.getID()).longValue();
+            os.writeLong(pid);
+            os.writeBytes(temp.getFirstName());
+            os.writeBytes("$");
+            if(temp.getMiddleName() != null && !temp.getMiddleName().isEmpty()) {
+                os.writeBytes(temp.getMiddleName());
+            }
+            os.writeBytes("$");
+            os.writeBytes(temp.getLastName());
+            os.writeBytes("$");
+            os.writeBytes("GOHOKIES");
+        }
+        
+        os.close();
+        
+    }
+    
+    
 }

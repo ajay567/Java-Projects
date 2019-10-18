@@ -81,7 +81,7 @@ public class Student implements Comparable<Student> {
      * @return Student's middle name
      */
     public void setMiddleName(String tempMidName) {
-        tempMidName = middleName;
+        middleName = tempMidName;
     }
 
 
