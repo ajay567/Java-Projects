@@ -1,5 +1,3 @@
-import java.io.IOException;
-
 // On my honor:
 //
 // - I have not used source code obtained from another student,
@@ -19,24 +17,56 @@ import java.io.IOException;
 // anything during the discussion or modifies any computer file
 // during the discussion. I have violated neither the spirit nor
 // letter of this restriction.
+
 /**
+ * Binary Search Tree (BST) Implementation
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
- * @version 2019.9.21
+ * @version 2019.24.21
  *
+ * @param <E>
+ *            The type of element to be stored in the BST
  */
-public class Coursemanager2 {
+public class ScoreTest extends student.TestCase {
+    
+    /**
+     * Variable stubs for testing
+     */
+    private Score score;
+
 
     /**
-     * 
-     * @param args
-     *            input files
-     * @throws IOException
+     * Set up variables for testing
      */
-    public static void main(String[] args) throws IOException {
-        Parser parser = new Parser(); // Object for parser class
-        parser.readsFile("SampleInput2.txt");
+    public void setUp() {
+        score = new Score("983057537", 100);
+    }
+    
+    /**
+     * 
+     */
+    public void testId() {
+        score.setId("9123455666");
+        assertTrue(score.getID().equals("9123455666"));
+    }
+    
+    /**
+     * 
+     */
+    public void testScore() {
+        score.setScore(29);
+        assertEquals(score.getScore(),29);
+    }
+    
+    /**
+     * Tests the compareTo() method
+     */
+    public void testCompareTo() {
+        Score score1 = new Score("983057537", 50);
+        Score score2 = new Score("983057532", 60);
+        assertEquals(score1.compareTo(score2), -1);
+        assertEquals(score.compareTo(score2), 1);
     }
 
 }

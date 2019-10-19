@@ -1,5 +1,3 @@
-import java.io.IOException;
-
 // On my honor:
 //
 // - I have not used source code obtained from another student,
@@ -19,24 +17,17 @@ import java.io.IOException;
 // anything during the discussion or modifies any computer file
 // during the discussion. I have violated neither the spirit nor
 // letter of this restriction.
+
 /**
+ * Binary Search Tree (BST) Implementation
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
- * @version 2019.9.21
+ * @version 2019.24.21
  *
+ * @param <E>
+ *            The type of element to be stored in the BST
  */
-public class Coursemanager2 {
-
-    /**
-     * 
-     * @param args
-     *            input files
-     * @throws IOException
-     */
-    public static void main(String[] args) throws IOException {
-        Parser parser = new Parser(); // Object for parser class
-        parser.readsFile("SampleInput2.txt");
-    }
+public class CommandCalculatorTest {
 
 }

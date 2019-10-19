@@ -469,19 +469,26 @@ public class Parser {
             } // findpair ends
 
             // savestudentdata begins
-            if (command.equals("savestudentdata")) {
+            if (command.equals("savestudentsdata")) {
                 StudentManager manager = new StudentManager();
                 String studentFile = scan.next();
                 manager.writeStudentDataFile(studentFile);
-                System.out.print("Saved all Students data to " + studentFile);
+                System.out.println("Saved all Students data to " + studentFile);
             } // savestudentdata ends
 
             // savecoursedata begins
             if (command.equals("savecoursedata")) {
                 CourseManager manager = new CourseManager();
                 manager.writeCourseDataFile(scan.next());
-                System.out.print("Saved all course data to cs3114course.data");
+                System.out.println(
+                    "Saved all course data to cs3114course.data");
             } // savecoursedata ends
+
+            // merge begins
+            //if (command.equals("merge")) {
+            //    commandCalculator.merge(course, currentSection);
+            //} // merger ends
+
         }
         scan.close();
     }

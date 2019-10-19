@@ -565,4 +565,46 @@ public class CommandCalculator {
 
         System.out.println("Size = " + dumpScore.size());
     }
+
+
+    public ArrayList<SectionManager> merge(
+        ArrayList<SectionManager> course,
+        int currentSection) {
+
+        if (course.get(currentSection).getSectionList().isEmpty()) {
+            for (int i = 0; i < currentSection; i++) {
+                ArrayList<Student> sectionList = course.get(i).getSectionList();
+                ArrayList<String> pidList = course.get(i).getTreePID()
+                    .toArray();
+                ArrayList<Student> nameList = course.get(i).getTreeName()
+                    .toArray();
+                ArrayList<Score> scoreList = course.get(i).getTreeScore()
+                    .toArray();
+
+                for (int j = 0; j < sectionList.size(); j++) {
+                    System.out.print(sectionList.size() + " " +j);
+                    course.get(currentSection).getTreeName().insert(nameList
+                        .get(j));
+                    course.get(currentSection).getTreeScore().insert(scoreList
+                        .get(j));
+                    course.get(currentSection).getTreePID().insert(pidList.get(
+                        j));
+                    course.get(currentSection).getSectionList().add(sectionList
+                        .get(j));
+
+                }
+            }
+
+            System.out.println("All sections merged at section "
+                + currentSection);
+        }
+        else {
+
+            System.out.println(
+                "Sections could only be merged to an empty section.");
+            System.out.println("Section " + currentSection + " is not empty.");
+        }
+        return course;
+
+    }
 }
