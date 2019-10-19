@@ -471,14 +471,18 @@ public class Parser {
             // savestudentdata begins
             if (command.equals("savestudentdata")) {
                 StudentManager manager = new StudentManager();
-                manager.writeStudentDataFile(scan.next());
+                String studentFile = scan.next();
+                manager.writeStudentDataFile(studentFile);
+                System.out.print("Saved all Students data to " + studentFile);
             } // savestudentdata ends
 
             // savecoursedata begins
             if (command.equals("savecoursedata")) {
                 CourseManager manager = new CourseManager();
                 manager.writeCourseDataFile(scan.next());
+                System.out.print("Saved all course data to cs3114course.data");
             } // savecoursedata ends
         }
+        scan.close();
     }
 }
