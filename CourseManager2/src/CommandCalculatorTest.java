@@ -1,3 +1,7 @@
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+
 // On my honor:
 //
 // - I have not used source code obtained from another student,
@@ -28,6 +32,36 @@
  * @param <E>
  *            The type of element to be stored in the BST
  */
-public class CommandCalculatorTest {
+public class CommandCalculatorTest extends student.TestCase {
+
+    /**
+     * fields
+     */
+    private CommandCalculator command;
+    private CourseManager courseManager;
+    private StudentManager studentManager;
+    private Parser parser;
+
+
+    /**
+     * Set up variables for testing
+     */
+    public void setUp() {
+        command = new CommandCalculator();
+        parser = new Parser();
+        courseManager = new CourseManager();
+        studentManager = new StudentManager();
+    }
+
+
+    public void testScoreHelper() throws IOException {
+        studentManager.readsStudentFile("students.csv");
+        ArrayList<Student> studentDatabaseList = studentManager.studentList();
+        courseManager.readsCourseFile("CS3114.csv", studentDatabaseList);
+        ArrayList<SectionManager> course = courseManager.courseList();
+        parser.readsFile("SampleInput2.txt");
+        Student student = new Student("983057537","Ajay","Dalmia");
+        assertTrue(student.getFirstName().equals("Ajay"));
+    }
 
 }

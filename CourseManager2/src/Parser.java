@@ -98,10 +98,10 @@ public class Parser {
                 System.out.println(courseName
                     + " Course has been successfully loaded.");
                 if (temp.contains("csv")) {
-                    manager.readsCourseFile(temp, studentDatabaseList);
+                   manager.readsCourseFile(temp, studentDatabaseList);
                 }
                 else {
-                    manager.readsCourseDataFile(temp, studentDatabaseList);
+                   manager.readsCourseDataFile(temp, studentDatabaseList);
                 }
                 course = manager.courseList();
             }

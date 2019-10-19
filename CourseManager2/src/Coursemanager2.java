@@ -36,7 +36,7 @@ public class Coursemanager2 {
      */
     public static void main(String[] args) throws IOException {
         Parser parser = new Parser(); // Object for parser class
-        parser.readsFile("SampleInput2.txt");
+        parser.readsFile(args[0]);
     }
 
 }
