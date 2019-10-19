@@ -55,9 +55,9 @@ public class CommandCalculatorTest extends student.TestCase {
 
 
     public void testScoreHelper() throws IOException {
-        studentManager.readsStudentFile("students.csv");
+        studentManager.readsStudentFile("students_ajay.csv");
         ArrayList<Student> studentDatabaseList = studentManager.studentList();
-        courseManager.readsCourseFile("CS3114.csv", studentDatabaseList);
+        courseManager.readsCourseFile("CS3114_ajay.csv", studentDatabaseList);
         ArrayList<SectionManager> course = courseManager.courseList();
         parser.readsFile("SampleInput2.txt");
         Student student = new Student("983057537","Ajay","Dalmia");

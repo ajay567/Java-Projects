@@ -68,65 +68,73 @@ public class StudentManager {
         Scanner scan = new Scanner(input);
 
         String currentLine[] = null;
-        while (scan.hasNextLine()) {
+        while (scan.hasNext()) {
             String newLine = scan.nextLine();
             currentLine = newLine.split(",");
-            Student student = new Student(currentLine[0],
-                currentLine[1].toLowerCase(), currentLine[3].toLowerCase());
-            student.setMiddleName(currentLine[2].toLowerCase());
-            list.add(student); 
+            if (!currentLine[0].equals("")) {
+                Student student = new Student(currentLine[0], currentLine[1]
+                    .toLowerCase(), currentLine[3].toLowerCase());
+                student.setMiddleName(currentLine[2].toLowerCase());
+                list.add(student);
+            }
         }
         scan.close();
     }
-    
+
+
     public void readsStudentDataFile(String fileName) throws IOException {
         Path path = Paths.get(fileName);
         byte[] fileContents = Files.readAllBytes(path);
-        
+
         ByteBuffer wrapped = ByteBuffer.wrap(fileContents, 10, 4);
         int count = wrapped.getInt();
-        
+
         int offsetPos = 14;
-        for(int i=0; i<count; i++) {
-            //get pid
+        for (int i = 0; i < count; i++) {
+            // get pid
             wrapped = ByteBuffer.wrap(fileContents, offsetPos, 8);
             long pid = wrapped.getLong();
             String paddedPID = String.format("%09d", pid);
-            offsetPos+=8;
-            
-            //get first name
+            offsetPos += 8;
+
+            // get first name
             int endPos = offsetPos;
-            while(fileContents[endPos] != 36) {
+            while (fileContents[endPos] != 36) {
                 endPos++;
             }
-            wrapped = ByteBuffer.wrap(fileContents, offsetPos, endPos-offsetPos);
-            String firstName = StandardCharsets.UTF_8.decode(wrapped).toString();
-            offsetPos=endPos+1;
-            
-            //get middle name
+            wrapped = ByteBuffer.wrap(fileContents, offsetPos, endPos
+                - offsetPos);
+            String firstName = StandardCharsets.UTF_8.decode(wrapped)
+                .toString();
+            offsetPos = endPos + 1;
+
+            // get middle name
             endPos = offsetPos;
-            while(fileContents[endPos] != 36) {
+            while (fileContents[endPos] != 36) {
                 endPos++;
             }
-            wrapped = ByteBuffer.wrap(fileContents, offsetPos, endPos-offsetPos);
-            String middleName = StandardCharsets.UTF_8.decode(wrapped).toString();
-            offsetPos=endPos+1;
-            
-            //get last name
+            wrapped = ByteBuffer.wrap(fileContents, offsetPos, endPos
+                - offsetPos);
+            String middleName = StandardCharsets.UTF_8.decode(wrapped)
+                .toString();
+            offsetPos = endPos + 1;
+
+            // get last name
             endPos = offsetPos;
-            while(fileContents[endPos] != 36) {
+            while (fileContents[endPos] != 36) {
                 endPos++;
             }
-            wrapped = ByteBuffer.wrap(fileContents, offsetPos, endPos-offsetPos);
+            wrapped = ByteBuffer.wrap(fileContents, offsetPos, endPos
+                - offsetPos);
             String lastName = StandardCharsets.UTF_8.decode(wrapped).toString();
-            offsetPos=endPos+1+8;
-            
-            //create student object
-            Student student = new Student(paddedPID,
-                firstName.toLowerCase(), lastName.toLowerCase());
+            offsetPos = endPos + 1 + 8;
+
+            // create student object
+            Student student = new Student(paddedPID, firstName.toLowerCase(),
+                lastName.toLowerCase());
             student.setMiddleName(middleName.toLowerCase());
             list.add(student);
-            
+
         }
     }
 
@@ -139,19 +147,22 @@ public class StudentManager {
         return list;
     }
 
+
     public void writeStudentDataFile(String filename) throws IOException {
-        
-        DataOutputStream os = new DataOutputStream(new FileOutputStream(filename, false));
+
+        DataOutputStream os = new DataOutputStream(new FileOutputStream(
+            filename, false));
         os.writeBytes("VTSTUDENTS");
         os.writeInt(list.size());
-        
-        for(int i=0; i<list.size(); i++) {
+
+        for (int i = 0; i < list.size(); i++) {
             Student temp = list.get(i);
             long pid = Long.valueOf(temp.getID()).longValue();
             os.writeLong(pid);
             os.writeBytes(temp.getFirstName());
             os.writeBytes("$");
-            if(temp.getMiddleName() != null && !temp.getMiddleName().isEmpty()) {
+            if (temp.getMiddleName() != null && !temp.getMiddleName()
+                .isEmpty()) {
                 os.writeBytes(temp.getMiddleName());
             }
             os.writeBytes("$");
@@ -159,9 +170,8 @@ public class StudentManager {
             os.writeBytes("$");
             os.writeBytes("GOHOKIES");
         }
-        
-        os.close(); 
+
+        os.close();
     }
-    
-    
+
 }

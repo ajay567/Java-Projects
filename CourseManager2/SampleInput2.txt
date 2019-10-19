@@ -1,9 +1,9 @@
-loadcoursedata CS3114.csv
+loadcoursedata CS3114_ajay.csv
 
-loadstudentdata students.csv 
+loadstudentdata students_ajay.csv
 
 
-loadcoursedata CS3114.csv
+loadcoursedata CS3114_ajay.csv
 
 section 1
 
@@ -91,10 +91,10 @@ clearcoursedata
 section 1
 dumpsection
 
-loadcoursedata cs3114course.data
+loadcoursedata cs3114course_ajay.data
 section 1
 dumpsection
 
-loadcoursedata CS3114_2.csv
+loadcoursedata CS3114_2_ajay.csv
 section 2
 dumpsection
