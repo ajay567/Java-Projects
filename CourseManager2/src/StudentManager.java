@@ -160,8 +160,7 @@ public class StudentManager {
             os.writeBytes("GOHOKIES");
         }
         
-        os.close();
-        
+        os.close(); 
     }
     
     

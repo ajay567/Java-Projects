@@ -482,53 +482,64 @@ public class Parser {
                     }
 
                     boolean studentExistsCourse = false;
+                    String name = "";
+                    int removeValueSectionList = 0;
+                    int removeValuePidList = 0;
+                    int removeValueNameList = 0;
+                    int removeValueScoreList = 0;
                     if (studentExists == true) {
-                        for (int i = 0; i < course.size(); i++) {
-                            ArrayList<Student> sectionList = course.get(i)
-                                .getSectionList();
-                            ArrayList<String> pidList = course.get(i)
-                                .getTreePID().toArray();
-                            ArrayList<Student> nameList = course.get(i)
-                                .getTreeName().toArray();
-                            ArrayList<Score> scoreList = course.get(i)
-                                .getTreeScore().toArray();
-                            
-                            int tempSize = sectionList.size();
+                        ArrayList<Student> sectionList = course.get(
+                            currentSection).getSectionList();
+                        ArrayList<String> pidList = course.get(currentSection)
+                            .getTreePID().toArray();
+                        ArrayList<Student> nameList = course.get(currentSection)
+                            .getTreeName().toArray();
+                        ArrayList<Score> scoreList = course.get(currentSection)
+                            .getTreeScore().toArray();
 
-                            for (int j = 0; j < tempSize; j++) {
-                                if (sectionList.get(j).getID().equals(pid)) {
-                                    studentExistsCourse = true;
-                                    sectionList.remove(j);
-                                }
-                                if (pidList.get(j).equals(pid)) {
-                                    pidList.remove(j);
-                                }
-                                if (nameList.get(j).getID().equals(pid)) {
-                                    nameList.remove(j);
-                                }
-                                if (scoreList.get(j).getID().equals(pid)) {
-                                    scoreList.remove(j);
-                                }
+                        int tempSize = sectionList.size();
+
+                        for (int j = 0; j < tempSize; j++) {
+                            if (sectionList.get(j).getID().equals(pid)) {
+                                studentExistsCourse = true;
+                                name = sectionList.get(j).getName();
+                                removeValueSectionList = j;
                             }
-
-                            course.get(i).getTreeName().clear();
-                            course.get(i).getTreeScore().clear();
-                            course.get(i).getTreePID().clear();
-
-                            for (int j = 0; j < sectionList.size(); j++) {
-                                course.get(i).getTreeName().insert(nameList.get(
-                                    i));
-                                course.get(i).getTreeScore().insert(scoreList
-                                    .get(i));
-                                course.get(i).getTreePID().insert(pidList.get(
-                                    i));
+                            if (pidList.get(j).equals(pid)) {
+                                removeValuePidList = j;
                             }
+                            if (nameList.get(j).getID().equals(pid)) {
+                                removeValueNameList = j;
+                            }
+                            if (scoreList.get(j).getID().equals(pid)) {
+                                removeValueScoreList = j;
+                            }
+                        }
+                        sectionList.remove(removeValueSectionList);
+                        pidList.remove(removeValuePidList);
+                        nameList.remove(removeValueNameList);
+                        scoreList.remove(removeValueScoreList);
+
+                        course.get(currentSection).getTreeName().clear();
+                        course.get(currentSection).getTreeScore().clear();
+                        course.get(currentSection).getTreePID().clear();
+
+                        for (int j = 0; j < sectionList.size(); j++) {
+                            course.get(j).getTreeName().insert(nameList.get(j));
+                            course.get(j).getTreeScore().insert(scoreList.get(
+                                j));
+                            course.get(j).getTreePID().insert(pidList.get(j));
                         }
 
                         if (studentExistsCourse == false) {
-                            System.out.print(
+                            System.out.println(
                                 "Remove failed: couldn't find any student with id "
                                     + pid);
+                        }
+                        else {
+                            System.out.println("Student " + name
+                                + " get removed from section "
+                                + currentSection);
                         }
                     }
                     else {
@@ -536,8 +547,92 @@ public class Parser {
                             "Remove failed: couldn't find any student with id "
                                 + pid);
                     }
-                }
+                } // remove <pid #> ends
+                else { // remove <first name> <last name> begins
+                    String nameToBeRemoved = pid.toLowerCase() + " " + scan
+                        .next().toLowerCase();
+                    int occurrence = 0;
+
+                    int removeValueSectionList = 0;
+                    int removeValuePidList = 0;
+                    int removeValueNameList = 0;
+                    int removeValueScoreList = 0;
+
+                    ArrayList<Student> sectionList = course.get(currentSection)
+                        .getSectionList();
+
+                    for (int i = 0; i < sectionList.size(); i++) {
+                        if (sectionList.get(i).getName().equals(
+                            nameToBeRemoved)) {
+                            occurrence++;
+                            pid = sectionList.get(i).getID();
+                        }
+                    }
+
+                    if (occurrence == 1) {
+                        ArrayList<String> pidList = course.get(currentSection)
+                            .getTreePID().toArray();
+                        ArrayList<Student> nameList = course.get(currentSection)
+                            .getTreeName().toArray();
+                        ArrayList<Score> scoreList = course.get(currentSection)
+                            .getTreeScore().toArray();
+
+                        for (int j = 0; j < sectionList.size(); j++) {
+                            if (sectionList.get(j).getID().equals(pid)) {
+                                removeValueSectionList = j;
+                            }
+                            if (pidList.get(j).equals(pid)) {
+                                removeValuePidList = j;
+                            }
+                            if (nameList.get(j).getID().equals(pid)) {
+                                removeValueNameList = j;
+                            }
+                            if (scoreList.get(j).getID().equals(pid)) {
+                                removeValueScoreList = j;
+                            }
+                        }
+                        sectionList.remove(removeValueSectionList);
+                        pidList.remove(removeValuePidList);
+                        nameList.remove(removeValueNameList);
+                        scoreList.remove(removeValueScoreList);
+
+                        course.get(currentSection).getTreeName().clear();
+                        course.get(currentSection).getTreeScore().clear();
+                        course.get(currentSection).getTreePID().clear();
+
+                        for (int j = 0; j < sectionList.size(); j++) {
+                            course.get(j).getTreeName().insert(nameList.get(j));
+                            course.get(j).getTreeScore().insert(scoreList.get(
+                                j));
+                            course.get(j).getTreePID().insert(pidList.get(j));
+                        }
+
+                        System.out.println("Student " + nameToBeRemoved
+                            + " get removed from section " + currentSection);
+                    }
+                    else {
+                        System.out.println("Remove failed. Student "
+                            + nameToBeRemoved + " doesn't exist in section "
+                            + currentSection);
+                    }
+
+                } // remove <first name> <last name> ends
             } // remove ends
+
+            // grade begins
+            if (command.equals("grade")) {
+                course = commandCalculator.grade(course, currentSection);
+            } // grade ends
+
+            // stat begins
+            if (command.equals("stat")) {
+                commandCalculator.stat(course, currentSection);
+            } // stat ends
+
+            // list begins
+            if (command.equals("list")) {
+                String grade = scan.next().toUpperCase();
+            }// list ends
         }
     }
 }

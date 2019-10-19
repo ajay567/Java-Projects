@@ -3,7 +3,7 @@ loadcoursedata CS3114.csv
 loadstudentdata students.csv 
 
 
-loadcoursedata CS3114_2.csv
+loadcoursedata CS3114.csv
 
 section 1
 
@@ -44,7 +44,7 @@ section 3
 dumpsection
 insert 349195701 Gloria     Chavez
 score 100
-
+remove 020380028
 grade
 section 1
 grade
