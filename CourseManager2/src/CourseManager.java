@@ -1,5 +1,7 @@
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -40,7 +42,6 @@ import java.util.Scanner;
 public class CourseManager {
 
     private ArrayList<SectionManager> course = new ArrayList<SectionManager>();
-
 
     /**
      * Constructor
@@ -345,6 +346,43 @@ public class CourseManager {
         }
         
 
+    }
+    
+    public void writeCourseDataFile(String fileName) throws IOException {
+        DataOutputStream os = new DataOutputStream(new FileOutputStream(fileName, false));
+        os.writeBytes("CS3114atVT");
+        
+        //calculate number of sections
+        int secCount = 0;
+        for(int i=0; i<course.size(); i++) {
+            if(!course.get(i).isEmpty()) {
+                secCount++;
+            }
+        }
+        os.writeInt(secCount);
+        
+        for(int i=1; i<secCount+1; i++) {
+            for(Student student: course.get(i).getSectionList()) {
+                long pid = Long.valueOf(student.getID()).longValue();
+                os.writeLong(pid);
+                os.writeBytes(student.getFirstName());
+                os.writeBytes("$");
+                os.writeBytes(student.getLastName());
+                os.writeBytes("$");
+                os.writeInt(student.getScore());
+                
+                String grade = student.getGrade();
+                if(grade.length() < 2) {
+                    os.writeBytes(grade);
+                    os.writeBytes(" ");
+                }
+                else {
+                    os.writeBytes(grade);
+                }
+            }
+            os.writeBytes("GOHOKIES");
+        }
+        
     }
 
 

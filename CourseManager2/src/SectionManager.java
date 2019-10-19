@@ -76,5 +76,9 @@ public class SectionManager {
     public ArrayList<Student> getSectionList(){
         return sectionList;
     }
+    
+    public boolean isEmpty() {
+        return sectionList.size() <= 0;
+    }
 
 }
