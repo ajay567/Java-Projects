@@ -1,6 +1,4 @@
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 
 // On my honor:
 //
@@ -34,11 +32,11 @@ public class Coursemanager2 {
      * 
      * @param args
      *            input files
-     * @throws IOException 
+     * @throws IOException
      */
     public static void main(String[] args) throws IOException {
         Parser parser = new Parser(); // Object for parser class
-        parser.readsFile("SampleInput2.txt");
+        parser.readsFile(args[0]);
     }
 
 }

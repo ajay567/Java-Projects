@@ -285,6 +285,7 @@ public class CommandCalculator {
         ArrayList<Student> current = studentArray.get(currentSection)
             .getSectionList();
 
+        System.out.println("Students with grade " + grade + " are:");
         if (grade.contains("*")) {
             String tempChar = grade.substring(0, 1);
             for (int i = 0; i < current.size(); i++) {
@@ -297,6 +298,271 @@ public class CommandCalculator {
                 }
             }
         }
+        else {
+            for (int i = 0; i < current.size(); i++) {
+                if (current.get(i).getGrade().contains(grade)) {
+                    total++;
+                    System.out.println(current.get(i).getID() + ", " + current
+                        .get(i).getName() + ", score = " + current.get(i)
+                            .getScore() + ", grade = " + current.get(i)
+                                .getGrade());
+                }
+            }
 
+        }
+
+        System.out.println("Found " + total + " students");
+    }
+
+
+    /**
+     * 
+     * @param check
+     *            ArrayList
+     * @param n
+     *            Integer
+     */
+    public void findPairHasScore(ArrayList<Student> check, int n) {
+        int val = 0;
+        System.out.println("Students with score difference less than or equal "
+            + n + ":");
+        for (int i = 0; i < check.size(); i++) {
+            for (int j = i + 1; j < check.size(); j++) {
+                if (Math.abs(check.get(i).getScore() - check.get(j)
+                    .getScore()) <= n) {
+                    System.out.println(check.get(i).getName() + ", " + check
+                        .get(j).getName());
+                    val++;
+                }
+            }
+        }
+        System.out.println("found " + val + " pairs");
+
+    }
+
+
+    /**
+     * 
+     * @param check
+     *            ArrayList
+     */
+    public void findPairHasNoScore(ArrayList<Student> check) {
+        int val = 0;
+        System.out.println(
+            "Students with score difference less than or equal 0:");
+
+        for (int i = 0; i < check.size(); i++) {
+            for (int j = i + 1; j < check.size(); j++) {
+                if (check.get(i).getScore() == check.get(j).getScore()) {
+                    System.out.println(check.get(i).getName() + ", " + check
+                        .get(j).getName());
+                    val++;
+                }
+            }
+        }
+        System.out.println("found " + val + " pairs");
+
+    }
+
+
+    public ArrayList<SectionManager> removeName(
+        ArrayList<SectionManager> course,
+        String nameToBeRemoved,
+        String pid,
+        int currentSection) {
+        int occurrence = 0;
+
+        int removeValueSectionList = 0;
+        int removeValuePidList = 0;
+        int removeValueNameList = 0;
+        int removeValueScoreList = 0;
+
+        ArrayList<Student> sectionList = course.get(currentSection)
+            .getSectionList();
+
+        for (int i = 0; i < sectionList.size(); i++) {
+            if (sectionList.get(i).getName().equals(nameToBeRemoved)) {
+                occurrence++;
+                pid = sectionList.get(i).getID();
+            }
+        }
+
+        if (occurrence == 1) {
+            ArrayList<String> pidList = course.get(currentSection).getTreePID()
+                .toArray();
+            ArrayList<Student> nameList = course.get(currentSection)
+                .getTreeName().toArray();
+            ArrayList<Score> scoreList = course.get(currentSection)
+                .getTreeScore().toArray();
+
+            for (int j = 0; j < sectionList.size(); j++) {
+                if (sectionList.get(j).getID().equals(pid)) {
+                    removeValueSectionList = j;
+                }
+                if (pidList.get(j).equals(pid)) {
+                    removeValuePidList = j;
+                }
+                if (nameList.get(j).getID().equals(pid)) {
+                    removeValueNameList = j;
+                }
+                if (scoreList.get(j).getID().equals(pid)) {
+                    removeValueScoreList = j;
+                }
+            }
+            sectionList.remove(removeValueSectionList);
+            pidList.remove(removeValuePidList);
+            nameList.remove(removeValueNameList);
+            scoreList.remove(removeValueScoreList);
+
+            course.get(currentSection).getTreeName().clear();
+            course.get(currentSection).getTreeScore().clear();
+            course.get(currentSection).getTreePID().clear();
+
+            for (int j = 0; j < sectionList.size(); j++) {
+                course.get(j).getTreeName().insert(nameList.get(j));
+                course.get(j).getTreeScore().insert(scoreList.get(j));
+                course.get(j).getTreePID().insert(pidList.get(j));
+            }
+
+            System.out.println("Student " + nameToBeRemoved
+                + " get removed from section " + currentSection);
+        }
+        else {
+            System.out.println("Remove failed. Student " + nameToBeRemoved
+                + " doesn't exist in section " + currentSection);
+        }
+        return course;
+    }
+
+
+    public ArrayList<SectionManager> removePidCommand(
+        ArrayList<SectionManager> course,
+        ArrayList<Student> studentDatabaseList,
+        String pid,
+        int currentSection) {
+        boolean studentExists = false;
+
+        for (int i = 0; i < studentDatabaseList.size(); i++) {
+            if (studentDatabaseList.get(i).getID().equals(pid)) {
+                studentExists = true;
+            }
+        }
+
+        boolean studentExistsCourse = false;
+        String name = "";
+        int removeValueSectionList = 0;
+        int removeValuePidList = 0;
+        int removeValueNameList = 0;
+        int removeValueScoreList = 0;
+        if (studentExists == true) {
+            ArrayList<Student> sectionList = course.get(currentSection)
+                .getSectionList();
+            ArrayList<String> pidList = course.get(currentSection).getTreePID()
+                .toArray();
+            ArrayList<Student> nameList = course.get(currentSection)
+                .getTreeName().toArray();
+            ArrayList<Score> scoreList = course.get(currentSection)
+                .getTreeScore().toArray();
+
+            int tempSize = sectionList.size();
+
+            for (int j = 0; j < tempSize; j++) {
+                if (sectionList.get(j).getID().equals(pid)) {
+                    studentExistsCourse = true;
+                    name = sectionList.get(j).getName();
+                    removeValueSectionList = j;
+                }
+                if (pidList.get(j).equals(pid)) {
+                    removeValuePidList = j;
+                }
+                if (nameList.get(j).getID().equals(pid)) {
+                    removeValueNameList = j;
+                }
+                if (scoreList.get(j).getID().equals(pid)) {
+                    removeValueScoreList = j;
+                }
+            }
+
+            if (studentExistsCourse == false) {
+                System.out.println(
+                    "Remove failed: couldn't find any student with id " + pid);
+            }
+            else {
+                sectionList.remove(removeValueSectionList);
+                pidList.remove(removeValuePidList);
+                nameList.remove(removeValueNameList);
+                scoreList.remove(removeValueScoreList);
+
+                course.get(currentSection).getTreeName().clear();
+                course.get(currentSection).getTreeScore().clear();
+                course.get(currentSection).getTreePID().clear();
+
+                for (int j = 0; j < sectionList.size(); j++) {
+                    course.get(j).getTreeName().insert(nameList.get(j));
+                    course.get(j).getTreeScore().insert(scoreList.get(j));
+                    course.get(j).getTreePID().insert(pidList.get(j));
+                }
+
+                System.out.println("Student " + name
+                    + " get removed from section " + currentSection);
+            }
+        }
+        else {
+            System.out.print("Remove failed: couldn't find any student with id "
+                + pid);
+        }
+        return course;
+    }
+
+
+    public void dumpSection(
+        ArrayList<SectionManager> course,
+        int currentSection) {
+        System.out.println("Section " + currentSection + " dump:");
+        ArrayList<Student> dumpName = course.get(currentSection).getTreeName()
+            .toArray();
+        ArrayList<String> dumpPid = course.get(currentSection).getTreePID()
+            .toArray();
+        ArrayList<Score> dumpScore = course.get(currentSection).getTreeScore()
+            .toArray();
+        ArrayList<Student> sectionList = course.get(currentSection)
+            .getSectionList();
+
+        System.out.println("BST by ID:");
+        for (int i = 0; i < dumpPid.size(); i++) {
+            for (int j = 0; j < sectionList.size(); j++) {
+                if (dumpPid.get(i).equals(sectionList.get(j).getID())) {
+                    System.out.println(sectionList.get(j).getID() + ", "
+                        + sectionList.get(j).getName() + ", score = "
+                        + sectionList.get(j).getScore());
+                }
+            }
+        }
+
+        System.out.println("BST by name:");
+        for (int i = 0; i < dumpName.size(); i++) {
+            for (int j = 0; j < sectionList.size(); j++) {
+                if (dumpName.get(i).getID().equals(sectionList.get(j)
+                    .getID())) {
+                    System.out.println(sectionList.get(j).getID() + ", "
+                        + sectionList.get(j).getName() + ", score = "
+                        + sectionList.get(j).getScore());
+                }
+            }
+        }
+
+        System.out.println("BST by score:");
+        for (int i = 0; i < dumpScore.size(); i++) {
+            for (int j = 0; j < sectionList.size(); j++) {
+                if (dumpScore.get(i).getID().equals(sectionList.get(j)
+                    .getID())) {
+                    System.out.println(sectionList.get(j).getID() + ", "
+                        + sectionList.get(j).getName() + ", score = "
+                        + sectionList.get(j).getScore());
+                }
+            }
+        }
+
+        System.out.println("Size = " + dumpScore.size());
     }
 }
