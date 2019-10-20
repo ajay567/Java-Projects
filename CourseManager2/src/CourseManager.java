@@ -64,6 +64,7 @@ public class CourseManager {
         String fileName,
         ArrayList<Student> studentDatabaseList)
         throws FileNotFoundException {
+        
         File input = new File(fileName);
         Scanner scan = new Scanner(input);
 
@@ -127,7 +128,7 @@ public class CourseManager {
                     for (int j = 0; j < sectionList.size(); j++) {
                         if (pid.equals(sectionList.get(j).getID())) {
                             checkCourse = true;
-                            courseNumberDuplicate = j;
+                            courseNumberDuplicate = i;
                         }
                     }
                 } // checking existing sections ends
@@ -200,7 +201,7 @@ public class CourseManager {
 
         int offsetPos = 14;
         // loop over sections
-        for (int i = 0; i < secCount; i++) {
+        for (int i = 1; i <= secCount; i++) {
             int sectionId = i;
 
             // get num students
@@ -254,16 +255,6 @@ public class CourseManager {
                 boolean checkStudentDatabase = false;
                 int courseNumberDuplicate = 0;
 
-                /*
-                 * int sectionId = Integer.parseInt(currentLine[0]);
-                 * String pid = currentLine[1];
-                 * String fName = currentLine[2].toLowerCase();
-                 * String lName = currentLine[3].toLowerCase();
-                 * int score = Integer.parseInt(currentLine[4]);
-                 * String grade = currentLine[5];
-                 * 
-                 */
-
                 Student student = new Student(pid, fName, lName);
                 student.setScore(score);
                 student.setGrade(grade);
@@ -303,7 +294,7 @@ public class CourseManager {
                     for (int l = 0; l < sectionList.size(); l++) {
                         if (pid.equals(sectionList.get(l).getID())) {
                             checkCourse = true;
-                            courseNumberDuplicate = l;
+                            courseNumberDuplicate = k;
                         }
                     }
                 } // checking existing sections ends
@@ -356,27 +347,43 @@ public class CourseManager {
 
             }
             offsetPos += 8;
+            
+            System.out.println("Printing section "+ sectionId);
+            for(int z=0; z<course.get(sectionId).getSectionList().size(); z++) {
+                System.out.println(course.get(sectionId).getSectionList().get(z).getName());
+            }   
         }
 
     }
 
 
-    public void writeCourseDataFile(String fileName) throws IOException {
+    public void writeCourseDataFile(String fileName, ArrayList<SectionManager> courseList) throws IOException {
+        System.out.println("writeCOURSEDATA");
         DataOutputStream os = new DataOutputStream(new FileOutputStream(
             fileName, false));
         os.writeBytes("CS3114atVT");
 
         // calculate number of sections
-        int secCount = 0;
-        for (int i = 0; i < course.size(); i++) {
-            if (!course.get(i).isEmpty()) {
-                secCount++;
+        System.out.println("Sections: "+courseList.size());
+        int maxSec = 0;
+        for (int i = 0; i < courseList.size(); i++) {
+            
+            System.out.println("Section "+ i + " size: " + courseList.get(i).getSectionList().size());
+            for(int xy=0; xy<courseList.get(i).getSectionList().size(); xy++) {
+                System.out.println("Students: "+courseList.get(i).getSectionList().get(xy).getName());
+            }
+            
+            if (!courseList.get(i).getSectionList().isEmpty()) {
+                maxSec=i;
             }
         }
-        os.writeInt(secCount);
-
-        for (int i = 1; i < secCount + 1; i++) {
-            for (Student student : course.get(i).getSectionList()) {
+        os.writeInt(maxSec);
+        System.out.println(maxSec + " sections found");
+        for (int i = 1; i <= maxSec; i++) {
+//            System.out.println("Writing section "+i);
+            os.writeInt(courseList.get(i).getSectionList().size());
+            for (Student student : courseList.get(i).getSectionList()) {
+//                System.out.println("Writing student "+student.getName());
                 long pid = Long.valueOf(student.getID()).longValue();
                 os.writeLong(pid);
                 os.writeBytes(student.getFirstName());
@@ -396,6 +403,7 @@ public class CourseManager {
             }
             os.writeBytes("GOHOKIES");
         }
+        os.close();
 
     }
 
