@@ -57,7 +57,9 @@ public class CourseManager {
      * sections are stored inside an ArrayList.
      * 
      * @param fileName
-     *            input file
+     *            Input file to read
+     * @param studentDatabaseList
+     *            List of all students
      * @throws FileNotFoundException
      */
     public void readsCourseFile(
@@ -72,7 +74,7 @@ public class CourseManager {
             course.add(new SectionManager());
         }
 
-        String currentLine[] = null;
+        String[] currentLine = null;
         while (scan.hasNext()) {
             String newLine = scan.nextLine();
             currentLine = newLine.split(",");
@@ -101,8 +103,8 @@ public class CourseManager {
                                 studentDatabaseList.get(i).getLastName()))) {
                         System.out.println("Warning: Student " + fName + " "
                             + lName + " " + "is not loaded to section "
-                            + sectionId + " "
-                            + "since the corresponding pid belongs to another student.");
+                            + sectionId + " since the corresponding"
+                            + " pid belongs to another student.");
                     }
                     else if (pid.equals(studentDatabaseList.get(i).getID())
                         && fName.equals(studentDatabaseList.get(i)
@@ -112,10 +114,11 @@ public class CourseManager {
                     }
                 } // checking student database ends
 
-                if (checkStudentDatabase == false) {
+                if (!checkStudentDatabase) {
                     System.out.println("Warning: Student " + fName + " " + lName
                         + " " + "is not loaded to section " + sectionId
-                        + " since he/she doesn't exist in the loaded student records.");
+                        + " since he/she doesn't exist"
+                        + " in the loaded student records.");
                 }
 
                 // checking existing sections
@@ -134,7 +137,6 @@ public class CourseManager {
                 } // checking existing sections ends
 
                 // checking current section
-                String overLoadedStudent = "";
                 ArrayList<Student> sectionList = course.get(sectionId)
                     .getSectionList();
                 for (int i = 0; i < sectionList.size(); i++) {
@@ -144,11 +146,10 @@ public class CourseManager {
                             grade);
                         course.get(sectionId).getSectionList().get(i).setScore(
                             score);
-                        overLoadedStudent = pid;
                     }
                 } // checking current section ends
 
-                if (checkCourse == true) {
+                if (checkCourse) {
                     System.out.println("Warning: Student " + fName + " " + lName
                         + " is not loaded to section " + sectionId
                         + " since he/she is already enrolled in section "
@@ -183,7 +184,12 @@ public class CourseManager {
         scan.close();
     }
 
-
+    /**
+     * Reads in the course file in the binary format
+     * @param fileName Data file to read
+     * @param studentDatabaseList List of all students
+     * @throws IOException
+     */
     public void readsCourseDataFile(
         String fileName,
         ArrayList<Student> studentDatabaseList)
@@ -201,6 +207,7 @@ public class CourseManager {
 
         int offsetPos = 14;
         // loop over sections
+        System.out.println("Reading "+secCount+ " sections");
         for (int i = 1; i <= secCount; i++) {
             int sectionId = i;
 
@@ -210,6 +217,7 @@ public class CourseManager {
             offsetPos += 4;
 
             // loop over students
+            System.out.println("Reading "+studentCount+ " students");
             for (int j = 0; j < studentCount; j++) {
                 // get pid
                 wrapped = ByteBuffer.wrap(fileContents, offsetPos, 8);
@@ -258,6 +266,8 @@ public class CourseManager {
                 Student student = new Student(pid, fName, lName);
                 student.setScore(score);
                 student.setGrade(grade);
+                
+                System.out.println(pid+": "+fName+" "+lName);
 
                 // checking student database
                 for (int k = 0; k < studentDatabaseList.size(); k++) {
@@ -268,7 +278,8 @@ public class CourseManager {
                         System.out.println("Warning: Student " + fName + " "
                             + lName + " " + "is not loaded to section "
                             + sectionId + " "
-                            + "since the corresponding pid belongs to another student.");
+                            + "since the corresponding pid"
+                            + "belongs to another student.");
                     }
                     else if (pid.equals(studentDatabaseList.get(k).getID())
                         && fName.equals(studentDatabaseList.get(k)
@@ -278,10 +289,11 @@ public class CourseManager {
                     }
                 } // checking student database ends
 
-                if (checkStudentDatabase == false) {
+                if (!checkStudentDatabase) {
                     System.out.println("Warning: Student " + fName + " " + lName
                         + " " + "is not loaded to section " + sectionId + " "
-                        + "since he/she doesn't exist in the loaded student records.");
+                        + "since he/she doesn't exist"
+                        + "in the loaded student records.");
                 }
 
                 // checking existing sections
@@ -300,7 +312,6 @@ public class CourseManager {
                 } // checking existing sections ends
 
                 // checking current section
-                String overLoadedStudent = "";
                 ArrayList<Student> sectionList = course.get(sectionId)
                     .getSectionList();
                 for (int k = 0; k < sectionList.size(); k++) {
@@ -310,11 +321,10 @@ public class CourseManager {
                             grade);
                         course.get(sectionId).getSectionList().get(k).setScore(
                             score);
-                        overLoadedStudent = pid;
                     }
                 } // checking current section ends
 
-                if (checkCourse == true) {
+                if (checkCourse) {
                     System.out.println("Warning: Student " + fName + " " + lName
                         + " is not loaded to section " + sectionId
                         + " since he/she is already enrolled in section "
@@ -352,7 +362,13 @@ public class CourseManager {
 
     }
 
-
+    /**
+     * Write the course information to a binary file
+     * @param fileName Output file name
+     * @param courseList List of all sections
+     * @param mergedSectionList List indicating which sections were merged
+     * @throws IOException
+     */
     public void writeCourseDataFile(
         String fileName,
         ArrayList<SectionManager> courseList,
@@ -370,10 +386,14 @@ public class CourseManager {
             }
         }
         os.writeInt(maxSec);
+        
+        //loop over sections
         for (int i = 1; i <= maxSec; i++) {
-
+            
+            //don't output if merged section
             if (!mergedSectionList.contains(i)) {
                 os.writeInt(courseList.get(i).getSectionList().size());
+                //loop over students
                 for (Student student : courseList.get(i).getSectionList()) {
 
                     long pid = Long.valueOf(student.getID()).longValue();
@@ -405,8 +425,8 @@ public class CourseManager {
 
 
     /**
-     * 
-     * @return
+     * Provides list of sections
+     * @return ArrayList of sections
      */
     public ArrayList<SectionManager> courseList() {
         return course;
