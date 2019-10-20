@@ -61,7 +61,7 @@ public class CommandCalculator {
                 if (course.get(currentSection).getSectionList().get(i).getID()
                     .equals(insertPid)) {
                     course.get(currentSection).getSectionList().get(i).setScore(
-                        newScore);
+                        newScore); 
                 }
             }
 

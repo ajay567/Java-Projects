@@ -136,7 +136,7 @@ public class Parser {
                             + "insertion failed. Wrong student information. "
                             + "ID belongs to another student");
                         checkStudentEitherName = true;
-                        
+
                         // invalid score command for search
                         if (scan.hasNext("score")) {
                             commandCalculator.scoreHelperInvaid(scan);
@@ -221,7 +221,7 @@ public class Parser {
                             + " inserted");
 
                         // score begins
-                        if (scan.hasNext("score")) {
+                        while (scan.hasNext("score")) {
                             scan.next();
                             int newScore = scan.nextInt();
                             course = commandCalculator.scoreHelper(newScore,
@@ -258,7 +258,7 @@ public class Parser {
                         + ", score = " + score);
 
                     // score begins
-                    if (scan.hasNext("score")) {
+                    while (scan.hasNext("score")) {
                         scan.next();
                         int newScore = scan.nextInt();
                         course = commandCalculator.scoreHelper(newScore, course,
@@ -322,20 +322,27 @@ public class Parser {
                             commandCalculator.scoreHelperInvaid(scan);
                         }
                     }
-                    else {
+                    else if (total == 1) {
                         System.out.println(fName + " was found in " + total
                             + " records in section " + currentSection);
-                    }
 
-                    if (total == 1) {
                         // score begins
-                        if (scan.hasNext("score")) {
+                        while (scan.hasNext("score")) {
                             scan.next();
                             int newScore = scan.nextInt();
                             course = commandCalculator.scoreHelper(newScore,
                                 course, currentSection, pid, tempName);
 
                         } // score ends
+                    }
+                    else {
+                        System.out.println(fName + " was found in " + total
+                            + " records in section " + currentSection);
+
+                        // invalid score command for search
+                        if (scan.hasNext("score")) {
+                            commandCalculator.scoreHelperInvaid(scan);
+                        }
                     }
 
                 } // search <last name> ends
@@ -354,6 +361,7 @@ public class Parser {
                             System.out.println(searchList.get(i).getID() + ", "
                                 + searchList.get(i).getName() + ", score = "
                                 + searchList.get(i).getScore());
+                            pid = searchList.get(i).getID();
                             total++;
                         }
                     }
@@ -367,19 +375,25 @@ public class Parser {
                             commandCalculator.scoreHelperInvaid(scan);
                         }
                     }
-                    else {
+                    else if (total == 1) {
                         System.out.println(name + " was found in " + total
                             + " records in section " + currentSection);
-                    }
-
-                    if (total == 1) {
                         // score begins
-                        if (scan.hasNext("score")) {
+                        while (scan.hasNext("score")) {
                             scan.next();
                             int newScore = scan.nextInt();
                             course = commandCalculator.scoreHelper(newScore,
                                 course, currentSection, pid, name);
                         } // score begins
+                    }
+                    else {
+                        System.out.println(name + " was found in " + total
+                            + " records in section " + currentSection);
+
+                        // invalid score command for search
+                        if (scan.hasNext("score")) {
+                            commandCalculator.scoreHelperInvaid(scan);
+                        }
                     }
 
                 } // search <first name> <last name> ends
@@ -482,7 +496,8 @@ public class Parser {
             if (command.equals("savecoursedata")) {
                 CourseManager manager = new CourseManager();
                 String courseFile = scan.next();
-                manager.writeCourseDataFile(courseFile,course, mergedSectionList);
+                manager.writeCourseDataFile(courseFile, course,
+                    mergedSectionList);
                 System.out.println("Saved all course data to " + courseFile);
             } // savecoursedata ends
 
