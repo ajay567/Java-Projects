@@ -482,7 +482,7 @@ public class Parser {
             if (command.equals("savecoursedata")) {
                 CourseManager manager = new CourseManager();
                 String courseFile = scan.next();
-                manager.writeCourseDataFile(courseFile,course);
+                manager.writeCourseDataFile(courseFile,course, mergedSectionList);
                 System.out.println("Saved all course data to " + courseFile);
             } // savecoursedata ends
 

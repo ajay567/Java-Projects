@@ -64,7 +64,7 @@ public class CourseManager {
         String fileName,
         ArrayList<Student> studentDatabaseList)
         throws FileNotFoundException {
-        
+
         File input = new File(fileName);
         Scanner scan = new Scanner(input);
 
@@ -149,8 +149,8 @@ public class CourseManager {
                 } // checking current section ends
 
                 if (checkCourse == true) {
-                    System.out.println("Warning: Student " + fName + " "
-                        + lName + " is not loaded to section " + sectionId
+                    System.out.println("Warning: Student " + fName + " " + lName
+                        + " is not loaded to section " + sectionId
                         + " since he/she is already enrolled in section "
                         + courseNumberDuplicate);
                 }
@@ -246,8 +246,8 @@ public class CourseManager {
 
                 // get grade
                 wrapped = ByteBuffer.wrap(fileContents, offsetPos, 2);
-                String grade = StandardCharsets.UTF_8.decode(wrapped)
-                    .toString().toUpperCase();
+                String grade = StandardCharsets.UTF_8.decode(wrapped).toString()
+                    .toUpperCase();
                 offsetPos += 2;
 
                 boolean checkCourse = false;
@@ -315,8 +315,8 @@ public class CourseManager {
                 } // checking current section ends
 
                 if (checkCourse == true) {
-                    System.out.println("Warning: Student " + fName + " "
-                        + lName + " is not loaded to section" + sectionId
+                    System.out.println("Warning: Student " + fName + " " + lName
+                        + " is not loaded to section " + sectionId
                         + " since he/she is already enrolled in section "
                         + courseNumberDuplicate);
                 }
@@ -347,59 +347,55 @@ public class CourseManager {
 
             }
             offsetPos += 8;
-            
-            System.out.println("Printing section "+ sectionId);
-            for(int z=0; z<course.get(sectionId).getSectionList().size(); z++) {
-                System.out.println(course.get(sectionId).getSectionList().get(z).getName());
-            }   
+
         }
 
     }
 
 
-    public void writeCourseDataFile(String fileName, ArrayList<SectionManager> courseList) throws IOException {
-        System.out.println("writeCOURSEDATA");
+    public void writeCourseDataFile(
+        String fileName,
+        ArrayList<SectionManager> courseList,
+        ArrayList<Integer> mergedSectionList)
+        throws IOException {
         DataOutputStream os = new DataOutputStream(new FileOutputStream(
             fileName, false));
         os.writeBytes("CS3114atVT");
 
         // calculate number of sections
-        System.out.println("Sections: "+courseList.size());
         int maxSec = 0;
         for (int i = 0; i < courseList.size(); i++) {
-            
-            System.out.println("Section "+ i + " size: " + courseList.get(i).getSectionList().size());
-            for(int xy=0; xy<courseList.get(i).getSectionList().size(); xy++) {
-                System.out.println("Students: "+courseList.get(i).getSectionList().get(xy).getName());
-            }
-            
             if (!courseList.get(i).getSectionList().isEmpty()) {
-                maxSec=i;
+                maxSec = i;
             }
         }
         os.writeInt(maxSec);
-        System.out.println(maxSec + " sections found");
         for (int i = 1; i <= maxSec; i++) {
-//            System.out.println("Writing section "+i);
-            os.writeInt(courseList.get(i).getSectionList().size());
-            for (Student student : courseList.get(i).getSectionList()) {
-//                System.out.println("Writing student "+student.getName());
-                long pid = Long.valueOf(student.getID()).longValue();
-                os.writeLong(pid);
-                os.writeBytes(student.getFirstName());
-                os.writeBytes("$");
-                os.writeBytes(student.getLastName());
-                os.writeBytes("$");
-                os.writeInt(student.getScore());
 
-                String grade = student.getGrade();
-                if (grade.length() < 2) {
-                    os.writeBytes(grade);
-                    os.writeBytes(" ");
+            if (!mergedSectionList.contains(i)) {
+                os.writeInt(courseList.get(i).getSectionList().size());
+                for (Student student : courseList.get(i).getSectionList()) {
+
+                    long pid = Long.valueOf(student.getID()).longValue();
+                    os.writeLong(pid);
+                    os.writeBytes(student.getFirstName());
+                    os.writeBytes("$");
+                    os.writeBytes(student.getLastName());
+                    os.writeBytes("$");
+                    os.writeInt(student.getScore());
+
+                    String grade = student.getGrade();
+                    if (grade.length() < 2) {
+                        os.writeBytes(grade);
+                        os.writeBytes(" ");
+                    }
+                    else {
+                        os.writeBytes(grade);
+                    }
                 }
-                else {
-                    os.writeBytes(grade);
-                }
+            }
+            else {
+                os.writeInt(0);
             }
             os.writeBytes("GOHOKIES");
         }

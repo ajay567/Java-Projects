@@ -52,6 +52,58 @@ public class CommandCalculatorTest extends student.TestCase {
         courseManager = new CourseManager();
         studentManager = new StudentManager();
     }
+    
+    /**
+     * 
+     */
+    public void testGradeStat() {
+        ArrayList<SectionManager> manager = new ArrayList<SectionManager>();
+        ArrayList<Student> studentList = new ArrayList<Student>();
+        int id = 983057537;
+        int score = 100;
+        for (int i =0; i < 35; i++) {
+            id = id - 5;
+            score = score -2;
+            String newId = Integer.toString(id);
+            Student student = new Student(newId, "Ajay", "Dalmia");
+            student.setScore(score);
+            studentList.add(student);
+        }
+        manager.add(new SectionManager());
+        for(int i =0; i<studentList.size();i++) {
+            manager.get(0).getSectionList().add(studentList.get(i));
+        }
+        
+        manager = command.grade(manager, 0);
+        command.stat(manager, 0);
+        assertTrue(manager.get(0).getSectionList().get(0).getGrade().equals("A"));
+    }
+    
+    /**
+     * 
+     */
+    public void testList() {
+        ArrayList<SectionManager> manager = new ArrayList<SectionManager>();
+        ArrayList<Student> studentList = new ArrayList<Student>();
+        int id = 983057537;
+        int score = 100;
+        for (int i =0; i < 35; i++) {
+            id = id - 5;
+            score = score -2;
+            String newId = Integer.toString(id);
+            Student student = new Student(newId, "Ajay", "Dalmia");
+            student.setScore(score);
+            studentList.add(student);
+        }
+        manager.add(new SectionManager());
+        for(int i =0; i<studentList.size();i++) {
+            manager.get(0).getSectionList().add(studentList.get(i));
+        }
+        manager = command.grade(manager, 0);
+        command.list(manager, 0, "A");
+        command.list(manager, 0, "A*");
+        assertTrue(manager.get(0).getSectionList().get(0).getGrade().equals("A"));
+    }
 
 
     public void testScoreHelper() throws IOException {
