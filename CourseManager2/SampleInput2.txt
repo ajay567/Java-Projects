@@ -66,7 +66,7 @@ list F
 list C+
 list C-
 list C
-
+findpair
 remove 256593948
 findpair 10
 
@@ -83,18 +83,15 @@ merge
 grade
 stat
 
-savestudentsdata mystudents.data
-savecoursedata cs3114course.data
-
 clearcoursedata
 
 section 1
 dumpsection
 
-loadcoursedata cs3114course_ajay.data
 section 1
 dumpsection
 
-loadcoursedata CS3114_2_ajay.csv
+loadcoursedata cs3114_2_ajay.csv
 section 2
 dumpsection
+

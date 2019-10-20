@@ -1,0 +1,26 @@
+loadstudentdata students_ajay.csv
+
+
+loadcoursedata CS3114_ajay.csv
+section 1
+
+
+dumpsection
+insert 977159896 Naomi Cote
+
+insert 256593948 Sandra Duncan
+
+insert 239721904 Aileen   Ford
+
+insert 239721905 Caleb   Foley
+insert 239721905    Aileen Ford
+
+insert 265104158 joshua hall
+dumpsection
+
+remove joshua hall
+remove aileen ford
+dumpsection
+remove 239721905
+
+dumpsection

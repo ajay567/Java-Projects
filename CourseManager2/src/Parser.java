@@ -56,6 +56,7 @@ public class Parser {
         ArrayList<Student> studentDatabaseList = new ArrayList<Student>();
         ArrayList<SectionManager> course = new ArrayList<SectionManager>();
         CommandCalculator commandCalculator = new CommandCalculator();
+        ArrayList<Integer> mergedSectionList = new ArrayList<Integer>();
 
         // Failed loadCourseData begins
         while (!scan.hasNext("loadstudentdata")) {
@@ -67,27 +68,26 @@ public class Parser {
             }
         } // Failed loadCourseData ends
 
-        // loadStudentData begins
-        if (scan.hasNext("loadstudentdata")) {
-            scan.next();
-            String temp = scan.next();
-            System.out.println(temp + " successfully loaded");
-            StudentManager manager = new StudentManager();
-            if (temp.contains("csv")) {
-                manager.readsStudentFile(temp);
-            }
-            else {
-                manager.readsStudentDataFile(temp);
-            }
-            studentDatabaseList = manager.studentList();
-        } // loadStudentData ends
-
         // section varaibles
         int currentSection = 1;
 
         // parser begins
         while (scan.hasNext()) {
             String command = scan.next();
+
+            // loadStudentData begins
+            if (command.equals("loadstudentdata")) {
+                String temp = scan.next();
+                System.out.println(temp + " successfully loaded");
+                StudentManager manager = new StudentManager();
+                if (temp.contains("csv")) {
+                    manager.readsStudentFile(temp);
+                }
+                else {
+                    manager.readsStudentDataFile(temp);
+                }
+                studentDatabaseList = manager.studentList();
+            } // loadStudentData ends
 
             // loadCourseData begins
             if (command.equals("loadcoursedata")) {
@@ -98,13 +98,13 @@ public class Parser {
                 System.out.println(courseName
                     + " Course has been successfully loaded.");
                 if (temp.contains("csv")) {
-                   manager.readsCourseFile(temp, studentDatabaseList);
+                    manager.readsCourseFile(temp, studentDatabaseList);
                 }
                 else {
-                   manager.readsCourseDataFile(temp, studentDatabaseList);
+                    manager.readsCourseDataFile(temp, studentDatabaseList);
                 }
                 course = manager.courseList();
-            }
+            } // loadCourseData ends
 
             // section command begins
             if (command.equals("section")) {
@@ -136,6 +136,7 @@ public class Parser {
                             + "insertion failed. Wrong student information. "
                             + "ID belongs to another student");
                         checkStudentEitherName = true;
+                        
                         // invalid score command for search
                         if (scan.hasNext("score")) {
                             commandCalculator.scoreHelperInvaid(scan);
@@ -404,6 +405,7 @@ public class Parser {
                     course.get(i).getTreePID().clear();
                     course.get(i).getTreeScore().clear();
                 }
+                System.out.println("All course data cleared.");
             } // clearcoursedata ends
 
             // dumpsection begins
@@ -469,7 +471,7 @@ public class Parser {
             } // findpair ends
 
             // savestudentdata begins
-            if (command.equals("savestudentsdata")) {
+            if (command.equals("savestudentdata")) {
                 StudentManager manager = new StudentManager();
                 String studentFile = scan.next();
                 manager.writeStudentDataFile(studentFile);
@@ -479,15 +481,71 @@ public class Parser {
             // savecoursedata begins
             if (command.equals("savecoursedata")) {
                 CourseManager manager = new CourseManager();
-                manager.writeCourseDataFile(scan.next());
-                System.out.println(
-                    "Saved all course data to cs3114course.data");
+                String courseFile = scan.next();
+                manager.writeCourseDataFile(courseFile);
+                System.out.println("Saved all course data to " + courseFile);
             } // savecoursedata ends
 
+            // clearsection begins
+            if (command.equals("clearsection")) {
+                course.get(currentSection).getSectionList().clear();
+                course.get(currentSection).getTreeName().clear();
+                course.get(currentSection).getTreePID().clear();
+                course.get(currentSection).getTreeScore().clear();
+                System.out.println("Section " + currentSection + " cleared");
+            }
+            // clearsection ends
+
             // merge begins
-            //if (command.equals("merge")) {
-            //    commandCalculator.merge(course, currentSection);
-            //} // merger ends
+            if (command.equals("merge")) {
+                commandCalculator.merge(course, currentSection,
+                    mergedSectionList);
+
+                // invalid commands after merge begins
+                while (scan.hasNext("insert") || scan.hasNext("searchid")
+                    || scan.hasNext("score") || scan.hasNext("remove") || scan
+                        .hasNext("search")) {
+                    if (scan.hasNext("insert")) {
+                        String commandInvalid = scan.next();
+                        scan.next();
+                        scan.next();
+                        scan.next();
+                        System.out.println("Command " + commandInvalid
+                            + " is not valid for merged sections");
+                    }
+                    else if (scan.hasNext("searchid") || scan.hasNext(
+                        "score")) {
+                        String commandInvalid = scan.next();
+                        scan.next();
+                        System.out.println("Command " + commandInvalid
+                            + " is not valid for merged sections");
+                    }
+                    else if (scan.hasNext("remove") || scan.hasNext("search")) {
+                        String commandInvalid = scan.next();
+                        scan.next();
+                        if (scan.hasNext("section") || scan.hasNext("insert")
+                            || scan.hasNext("search") || scan.hasNext("score")
+                            || scan.hasNext("remove") || scan.hasNext(
+                                "clearsection") || scan.hasNext("dumpsection")
+                            || scan.hasNext("grade") || scan.hasNext("findpair")
+                            || scan.hasNext("loadstudentdata") || scan.hasNext(
+                                "loadcoursedata") || scan.hasNext("searchid")
+                            || scan.hasNext("stat") || scan.hasNext("list")
+                            || scan.hasNext("merge") || scan.hasNext(
+                                "savestudentdata") || scan.hasNext(
+                                    "savecoursedata") || scan.hasNext(
+                                        "clearcoursedata")) {
+                            System.out.println("Command " + commandInvalid
+                                + " is not valid for merged sections");
+                        }
+                        else {
+                            scan.next();
+                            System.out.println("Command " + commandInvalid
+                                + " is not valid for merged sections");
+                        }
+                    }
+                } // invalid commands after merge ends
+            } // merge ends
 
         }
         scan.close();

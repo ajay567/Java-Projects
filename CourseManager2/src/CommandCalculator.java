@@ -67,6 +67,8 @@ public class CommandCalculator {
 
             ArrayList<Score> arrayScore = course.get(currentSection)
                 .getTreeScore().toArray();
+            ArrayList<Student> arrayName = course.get(currentSection)
+                .getTreeName().toArray();
             for (int i = 0; i < arrayScore.size(); i++) {
 
                 if (arrayScore.get(i).getID().equals(insertPid)) {
@@ -74,12 +76,24 @@ public class CommandCalculator {
                     scoreStudent.setScore(newScore);
                 }
             }
+            for (int i = 0; i < arrayName.size(); i++) {
+
+                if (arrayName.get(i).getID().equals(insertPid)) {
+                    arrayName.get(i).setScore(newScore);
+                }
+            }
             course.get(currentSection).getTreeScore().clear();
+            course.get(currentSection).getTreeName().clear();
             for (int i = 0; i < arrayScore.size(); i++) {
                 course.get(currentSection).getTreeScore().insert(arrayScore.get(
                     i));
             }
             course.get(currentSection).getTreeScore().insert(scoreStudent);
+            
+            for (int i = 0; i < arrayName.size(); i++) {
+                course.get(currentSection).getTreeName().insert(arrayName.get(
+                    i));
+            }
 
             System.out.println("Update " + insertStudent + " record, score = "
                 + newScore);
@@ -226,7 +240,7 @@ public class CommandCalculator {
             }
         }
 
-        System.out.println("Statistics​ of section " + i + ":");
+        System.out.println("Statistics of section " + i + ":");
         if (f != 0) {
             System.out.println(f + " students with grade F");
         }
@@ -300,7 +314,7 @@ public class CommandCalculator {
         }
         else {
             for (int i = 0; i < current.size(); i++) {
-                if (current.get(i).getGrade().contains(grade)) {
+                if (current.get(i).getGrade().equals(grade)) {
                     total++;
                     System.out.println(current.get(i).getID() + ", " + current
                         .get(i).getName() + ", score = " + current.get(i)
@@ -399,12 +413,18 @@ public class CommandCalculator {
                 if (sectionList.get(j).getID().equals(pid)) {
                     removeValueSectionList = j;
                 }
+            }
+            for (int j = 0; j < pidList.size(); j++) {
                 if (pidList.get(j).equals(pid)) {
                     removeValuePidList = j;
                 }
+            }
+            for (int j = 0; j < nameList.size(); j++) {
                 if (nameList.get(j).getID().equals(pid)) {
                     removeValueNameList = j;
                 }
+            }
+            for (int j = 0; j < nameList.size(); j++) {
                 if (scoreList.get(j).getID().equals(pid)) {
                     removeValueScoreList = j;
                 }
@@ -418,10 +438,16 @@ public class CommandCalculator {
             course.get(currentSection).getTreeScore().clear();
             course.get(currentSection).getTreePID().clear();
 
-            for (int j = 0; j < sectionList.size(); j++) {
-                course.get(j).getTreeName().insert(nameList.get(j));
-                course.get(j).getTreeScore().insert(scoreList.get(j));
-                course.get(j).getTreePID().insert(pidList.get(j));
+            for (int j = 0; j < nameList.size(); j++) {
+                course.get(currentSection).getTreeName().insert(nameList.get(
+                    j));
+            }
+            for (int j = 0; j < scoreList.size(); j++) {
+                course.get(currentSection).getTreeScore().insert(scoreList.get(
+                    j));
+            }
+            for (int j = 0; j < pidList.size(); j++) {
+                course.get(currentSection).getTreePID().insert(pidList.get(j));
             }
 
             System.out.println("Student " + nameToBeRemoved
@@ -461,23 +487,30 @@ public class CommandCalculator {
                 .toArray();
             ArrayList<Student> nameList = course.get(currentSection)
                 .getTreeName().toArray();
+            for (int j = 0; j < nameList.size(); j++) {
+            }
             ArrayList<Score> scoreList = course.get(currentSection)
                 .getTreeScore().toArray();
 
-            int tempSize = sectionList.size();
-
-            for (int j = 0; j < tempSize; j++) {
+            for (int j = 0; j < sectionList.size(); j++) {
                 if (sectionList.get(j).getID().equals(pid)) {
                     studentExistsCourse = true;
                     name = sectionList.get(j).getName();
                     removeValueSectionList = j;
                 }
+            }
+            for (int j = 0; j < pidList.size(); j++) {
                 if (pidList.get(j).equals(pid)) {
                     removeValuePidList = j;
                 }
+            }
+            for (int j = 0; j < nameList.size(); j++) {
                 if (nameList.get(j).getID().equals(pid)) {
+
                     removeValueNameList = j;
                 }
+            }
+            for (int j = 0; j < nameList.size(); j++) {
                 if (scoreList.get(j).getID().equals(pid)) {
                     removeValueScoreList = j;
                 }
@@ -497,10 +530,17 @@ public class CommandCalculator {
                 course.get(currentSection).getTreeScore().clear();
                 course.get(currentSection).getTreePID().clear();
 
-                for (int j = 0; j < sectionList.size(); j++) {
-                    course.get(j).getTreeName().insert(nameList.get(j));
-                    course.get(j).getTreeScore().insert(scoreList.get(j));
-                    course.get(j).getTreePID().insert(pidList.get(j));
+                for (int j = 0; j < nameList.size(); j++) {
+                    course.get(currentSection).getTreeName().insert(nameList
+                        .get(j));
+                }
+                for (int j = 0; j < scoreList.size(); j++) {
+                    course.get(currentSection).getTreeScore().insert(scoreList
+                        .get(j));
+                }
+                for (int j = 0; j < pidList.size(); j++) {
+                    course.get(currentSection).getTreePID().insert(pidList.get(
+                        j));
                 }
 
                 System.out.println("Student " + name
@@ -569,40 +609,63 @@ public class CommandCalculator {
 
     public ArrayList<SectionManager> merge(
         ArrayList<SectionManager> course,
-        int currentSection) {
+        int currentSection,
+        ArrayList<Integer> mergedSectionList) {
+        boolean canBeMerged = false;
 
-        if (course.get(currentSection).getSectionList().isEmpty()) {
-            for (int i = 0; i < currentSection; i++) {
-                ArrayList<Student> sectionList = course.get(i).getSectionList();
-                ArrayList<String> pidList = course.get(i).getTreePID()
-                    .toArray();
-                ArrayList<Student> nameList = course.get(i).getTreeName()
-                    .toArray();
-                ArrayList<Score> scoreList = course.get(i).getTreeScore()
-                    .toArray();
-
-                for (int j = 0; j < sectionList.size(); j++) {
-                    System.out.print(sectionList.size() + " " +j);
-                    course.get(currentSection).getTreeName().insert(nameList
-                        .get(j));
-                    course.get(currentSection).getTreeScore().insert(scoreList
-                        .get(j));
-                    course.get(currentSection).getTreePID().insert(pidList.get(
-                        j));
-                    course.get(currentSection).getSectionList().add(sectionList
-                        .get(j));
-
-                }
+        for (int l = currentSection ; l < course.size(); l++) {
+            if (!course.get(l).getSectionList().isEmpty()) {
+                canBeMerged = true;
             }
+        }
+        if (canBeMerged == false) {
+            mergedSectionList.add(currentSection);
+            for (int i = 0; i < currentSection; i++) {
+                boolean mergeListChecker = false;
 
+                for (int k = 0; k < mergedSectionList.size(); k++) {
+                    if (mergedSectionList.get(k) == i) {
+                        mergeListChecker = true;
+                    }
+                }
+
+                if (mergeListChecker == false) {
+                    ArrayList<Student> sectionList = course.get(i)
+                        .getSectionList();
+                    ArrayList<String> pidList = course.get(i).getTreePID()
+                        .toArray();
+                    ArrayList<Student> nameList = course.get(i).getTreeName()
+                        .toArray();
+                    ArrayList<Score> scoreList = course.get(i).getTreeScore()
+                        .toArray();
+
+                    for (int j = 0; j < nameList.size(); j++) {
+                        course.get(currentSection).getTreeName().insert(nameList
+                            .get(j));
+                    }
+                    for (int j = 0; j < scoreList.size(); j++) {
+                        course.get(currentSection).getTreeScore().insert(
+                            scoreList.get(j));
+                    }
+                    for (int j = 0; j < pidList.size(); j++) {
+                        course.get(currentSection).getTreePID().insert(pidList
+                            .get(j));
+                    }
+                    for (int j = 0; j < sectionList.size(); j++) {
+                        course.get(currentSection).getSectionList().add(
+                            sectionList.get(j));
+                    }
+                }
+
+            }
             System.out.println("All sections merged at section "
                 + currentSection);
         }
         else {
 
             System.out.println(
-                "Sections could only be merged to an empty section.");
-            System.out.println("Section " + currentSection + " is not empty.");
+                "Sections could only be merged to an empty section. "
+                    + "Section " + currentSection + " is not empty.");
         }
         return course;
 

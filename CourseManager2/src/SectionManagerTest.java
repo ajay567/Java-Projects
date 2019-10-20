@@ -59,7 +59,7 @@ public class SectionManagerTest extends student.TestCase{
      * @throws IOException 
      * 
      */
-    public void testGetTreePid() throws IOException {
+    public void testGetTreePid() {
         BST<String> name = manager.getTreePID();
         String string = "2324234";
         name.insert(string);
@@ -74,8 +74,8 @@ public class SectionManagerTest extends student.TestCase{
     public void testGetTreeScore() throws IOException {
         BST<Score> name = manager.getTreeScore();
         ArrayList<Student> studentDatabaseList = studentManager.studentList();
-        courseManager.readsCourseDataFile("cs3114_ajay.data",studentDatabaseList);
         studentManager.readsStudentFile("students_ajay.csv");
+        courseManager.readsCourseFile("cs3114_2_ajay.csv",studentDatabaseList);
         Score score = new Score("2324234", 100);
         name.insert(score);
         assertTrue(manager.getTreeScore().toArray().get(0).getID().equals("2324234"));
@@ -86,7 +86,7 @@ public class SectionManagerTest extends student.TestCase{
      * 
      */
     public void testGetTreeSectionList() throws IOException {
-        studentManager.readsStudentDataFile("students_ajay.data");
+        studentManager.readsStudentFile("students_ajay.csv");
         ArrayList<Student> studentDatabaseList = studentManager.studentList();
         courseManager.readsCourseFile("CS3114_ajay.csv", studentDatabaseList);
         ArrayList<Student> sectionList = manager.getSectionList();

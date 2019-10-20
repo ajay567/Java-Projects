@@ -86,7 +86,7 @@ public class CourseManager {
                 String fName = currentLine[2].toLowerCase();
                 String lName = currentLine[3].toLowerCase();
                 int score = Integer.parseInt(currentLine[4]);
-                String grade = currentLine[5];
+                String grade = currentLine[5].toUpperCase();
 
                 Student student = new Student(pid, fName, lName);
                 student.setScore(score);
@@ -246,7 +246,7 @@ public class CourseManager {
                 // get grade
                 wrapped = ByteBuffer.wrap(fileContents, offsetPos, 2);
                 String grade = StandardCharsets.UTF_8.decode(wrapped)
-                    .toString();
+                    .toString().toUpperCase();
                 offsetPos += 2;
 
                 boolean checkCourse = false;
@@ -323,7 +323,7 @@ public class CourseManager {
                     }
                 } // checking current section ends
 
-                if (checkCourse) {
+                if (checkCourse == true) {
                     System.out.println("Warning: Student " + fName + " "
                         + lName + " is not loaded to section" + sectionId
                         + " since he/she is already enrolled in section "
