@@ -474,7 +474,7 @@ public class Parser {
             if (command.equals("savestudentdata")) {
                 StudentManager manager = new StudentManager();
                 String studentFile = scan.next();
-                manager.writeStudentDataFile(studentFile);
+                manager.writeStudentDataFile(studentFile, studentDatabaseList);
                 System.out.println("Saved all Students data to " + studentFile);
             } // savestudentdata ends
 

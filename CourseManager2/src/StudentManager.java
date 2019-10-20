@@ -148,15 +148,14 @@ public class StudentManager {
     }
 
 
-    public void writeStudentDataFile(String filename) throws IOException {
-
+    public void writeStudentDataFile(String filename, ArrayList<Student> studentDatabaseList) throws IOException {
         DataOutputStream os = new DataOutputStream(new FileOutputStream(
             filename, false));
         os.writeBytes("VTSTUDENTS");
-        os.writeInt(list.size());
-
-        for (int i = 0; i < list.size(); i++) {
-            Student temp = list.get(i);
+        os.writeInt(studentDatabaseList.size());
+        
+        for (int i = 0; i < studentDatabaseList.size(); i++) {
+            Student temp = studentDatabaseList.get(i);
             long pid = Long.valueOf(temp.getID()).longValue();
             os.writeLong(pid);
             os.writeBytes(temp.getFirstName());
