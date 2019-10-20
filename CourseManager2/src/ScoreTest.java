@@ -23,10 +23,8 @@
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
- * @version 2019.24.21
+ * @version 2019.10.20
  *
- * @param <E>
- *            The type of element to be stored in the BST
  */
 public class ScoreTest extends student.TestCase {
     
@@ -44,7 +42,7 @@ public class ScoreTest extends student.TestCase {
     }
     
     /**
-     * 
+     * Tests setId and getId methods
      */
     public void testId() {
         score.setId("9123455666");
@@ -52,11 +50,11 @@ public class ScoreTest extends student.TestCase {
     }
     
     /**
-     * 
+     * Tests setScore and getScore methods
      */
     public void testScore() {
         score.setScore(29);
-        assertEquals(score.getScore(),29);
+        assertEquals(score.getScore(), 29);
     }
     
     /**
