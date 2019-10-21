@@ -184,10 +184,14 @@ public class CourseManager {
         scan.close();
     }
 
+
     /**
      * Reads in the course file in the binary format
-     * @param fileName Data file to read
-     * @param studentDatabaseList List of all students
+     * 
+     * @param fileName
+     *            Data file to read
+     * @param studentDatabaseList
+     *            List of all students
      * @throws IOException
      */
     public void readsCourseDataFile(
@@ -263,7 +267,6 @@ public class CourseManager {
                 Student student = new Student(pid, fName, lName);
                 student.setScore(score);
                 student.setGrade(grade);
-                
 
                 // checking student database
                 for (int k = 0; k < studentDatabaseList.size(); k++) {
@@ -273,8 +276,7 @@ public class CourseManager {
                                 studentDatabaseList.get(k).getLastName()))) {
                         System.out.println("Warning: Student " + fName + " "
                             + lName + " " + "is not loaded to section "
-                            + sectionId + " "
-                            + "since the corresponding pid"
+                            + sectionId + " " + "since the corresponding pid"
                             + "belongs to another student.");
                     }
                     else if (pid.equals(studentDatabaseList.get(k).getID())
@@ -358,11 +360,16 @@ public class CourseManager {
 
     }
 
+
     /**
      * Write the course information to a binary file
-     * @param fileName Output file name
-     * @param courseList List of all sections
-     * @param mergedSectionList List indicating which sections were merged
+     * 
+     * @param fileName
+     *            Output file name
+     * @param courseList
+     *            List of all sections
+     * @param mergedSectionList
+     *            List indicating which sections were merged
      * @throws IOException
      */
     public void writeCourseDataFile(
@@ -382,14 +389,14 @@ public class CourseManager {
             }
         }
         os.writeInt(maxSec);
-        
-        //loop over sections
+
+        // loop over sections
         for (int i = 1; i <= maxSec; i++) {
-            
-            //don't output if merged section
+
+            // don't output if merged section
             if (!mergedSectionList.contains(i)) {
                 os.writeInt(courseList.get(i).getSectionList().size());
-                //loop over students
+                // loop over students
                 for (Student student : courseList.get(i).getSectionList()) {
 
                     long pid = Long.valueOf(student.getID()).longValue();
@@ -422,6 +429,7 @@ public class CourseManager {
 
     /**
      * Provides list of sections
+     * 
      * @return ArrayList of sections
      */
     public ArrayList<SectionManager> courseList() {
