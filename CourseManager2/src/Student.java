@@ -42,6 +42,8 @@ public class Student implements Comparable<Student> {
     /**
      * Student constructor method
      * 
+     * @param id
+     *            pid for student
      * @param firstName
      *            First name
      * @param lastName
@@ -76,9 +78,10 @@ public class Student implements Comparable<Student> {
 
 
     /**
-     * Getter method for middle name
+     * Setter method for middleName.
      * 
-     * @return Student's middle name
+     * @param tempMidName
+     *            middle Name
      */
     public void setMiddleName(String tempMidName) {
         middleName = tempMidName;

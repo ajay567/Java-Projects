@@ -31,7 +31,7 @@ public class Score implements Comparable<Score> {
      * fields
      */
     private String id;
-    private int score;
+    private int scoreVal;
 
 
     /**
@@ -44,7 +44,7 @@ public class Score implements Comparable<Score> {
      */
     public Score(String id, int score) {
         this.id = id;
-        this.score = score;
+        this.scoreVal = score;
     }
 
 
@@ -76,7 +76,7 @@ public class Score implements Comparable<Score> {
      *            Score to be set
      */
     public void setScore(int newScore) {
-        score = newScore;
+        scoreVal = newScore;
     }
 
 
@@ -86,7 +86,7 @@ public class Score implements Comparable<Score> {
      * @return Student's score
      */
     public int getScore() {
-        return score;
+        return scoreVal;
     }
 
 
@@ -99,7 +99,7 @@ public class Score implements Comparable<Score> {
      */
     @Override
     public int compareTo(Score other) {
-        return Integer.compare(this.score, other.score);
+        return Integer.compare(this.scoreVal, other.scoreVal);
     }
 
 }

@@ -41,7 +41,7 @@ public class Parser {
 
 
     /**
-     * Readfile is responsible for all the commands. The course 
+     * Readfile is responsible for all the commands. The course
      * database and the student database are in this class.
      * 
      * @param fileName
@@ -62,8 +62,8 @@ public class Parser {
             String temp = scan.next();
             if (temp.equals("loadcoursedata")) {
                 scan.next();
-                System.out.println(
-                    "Course Load Failed. You have to load Student Information file first.");
+                System.out.println("Course Load Failed. You have to load "
+                    + "Student Information file first.");
             }
         } // Failed loadCourseData ends
 
@@ -150,8 +150,7 @@ public class Parser {
 
                 } // checking student database ends
 
-                if (checkStudentDatabase == false
-                    && checkStudentEitherName == false) {
+                if (!checkStudentDatabase && !checkStudentEitherName) {
                     System.out.println(insertFName + " " + insertLName + " "
                         + "insertion failed Wrong "
                         + "student information. ID doesn't exist");
@@ -206,7 +205,7 @@ public class Parser {
                             commandCalculator.scoreHelperInvaid(scan);
                         }
                     }
-                    else if (checkStudentDatabase == true) {
+                    else if (checkStudentDatabase) {
                         Score scoreObj = new Score(insertPid, insertScore);
                         course.get(currentSection).getSectionList().add(
                             insertStudent);
@@ -252,7 +251,7 @@ public class Parser {
 
                 }
 
-                if (searchResult == true) {
+                if (searchResult) {
                     System.out.println("Found " + pid + ", " + name
                         + ", score = " + score);
 
@@ -412,6 +411,7 @@ public class Parser {
                 new ArrayList<SectionManager>();
             if (command.equals("clearcoursedata")) {
                 savedCourse = course;
+                savedCourse.size();
                 for (int i = 0; i < course.size(); i++) {
                     course.get(i).getSectionList().clear();
                     course.get(i).getTreeName().clear();

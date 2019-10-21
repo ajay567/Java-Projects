@@ -528,7 +528,7 @@ public class CommandCalculator {
         int removeValuePidList = 0;
         int removeValueNameList = 0;
         int removeValueScoreList = 0;
-        if (studentExists == true) {
+        if (studentExists) {
             ArrayList<Student> sectionList = course.get(currentSection)
                 .getSectionList();
             ArrayList<String> pidList = course.get(currentSection).getTreePID()
@@ -564,7 +564,7 @@ public class CommandCalculator {
                 }
             }
 
-            if (studentExistsCourse == false) {
+            if (!studentExistsCourse) {
                 System.out.println(
                     "Remove failed: couldn't find any student with id " + pid);
             }
@@ -687,7 +687,7 @@ public class CommandCalculator {
                 canBeMerged = true;
             }
         }
-        if (canBeMerged == false) {
+        if (!canBeMerged) {
             mergedSectionList.add(currentSection);
             for (int i = 0; i < currentSection; i++) {
                 boolean mergeListChecker = false;
@@ -698,7 +698,7 @@ public class CommandCalculator {
                     }
                 }
 
-                if (mergeListChecker == false) {
+                if (!mergeListChecker) {
                     ArrayList<Student> sectionList = course.get(i)
                         .getSectionList();
                     ArrayList<String> pidList = course.get(i).getTreePID()

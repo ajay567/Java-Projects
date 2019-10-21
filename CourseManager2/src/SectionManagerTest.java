@@ -28,7 +28,7 @@ import java.util.ArrayList;
  * @version 2019.10.20
  *
  */
-public class SectionManagerTest extends student.TestCase{
+public class SectionManagerTest extends student.TestCase {
 
     /**
      * fields
@@ -54,7 +54,8 @@ public class SectionManagerTest extends student.TestCase{
         BST<Student> name = manager.getTreeName();
         Student student = new Student("2324234", "Ajay", "Dalmia");
         name.insert(student);
-        assertTrue(manager.getTreeName().toArray().get(0).getFirstName().equals("Ajay"));
+        assertTrue(manager.getTreeName().toArray().get(0)
+            .getFirstName().equals("Ajay"));
     }
     
     /**
@@ -77,10 +78,11 @@ public class SectionManagerTest extends student.TestCase{
         BST<Score> name = manager.getTreeScore();
         ArrayList<Student> studentDatabaseList = studentManager.studentList();
         studentManager.readsStudentFile("students_ajay.csv");
-        courseManager.readsCourseFile("cs3114_2_ajay.csv",studentDatabaseList);
+        courseManager.readsCourseFile("cs3114_2_ajay.csv", studentDatabaseList);
         Score score = new Score("2324234", 100);
         name.insert(score);
-        assertTrue(manager.getTreeScore().toArray().get(0).getID().equals("2324234"));
+        assertTrue(manager.getTreeScore().toArray()
+            .get(0).getID().equals("2324234"));
     }
     
     /**
@@ -95,6 +97,7 @@ public class SectionManagerTest extends student.TestCase{
         ArrayList<Student> sectionList = manager.getSectionList();
         Student student = new Student("2324234", "Ajay", "Dalmia");
         sectionList.add(student);
-        assertTrue(manager.getSectionList().get(0).getFirstName().equals("Ajay"));
+        assertTrue(manager.getSectionList().get(0).
+            getFirstName().equals("Ajay"));
     }
 }

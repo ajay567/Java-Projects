@@ -115,7 +115,6 @@ public class CommandCalculatorTest extends student.TestCase {
         studentManager.readsStudentFile("students_ajay.csv");
         ArrayList<Student> studentDatabaseList = studentManager.studentList();
         courseManager.readsCourseFile("CS3114_ajay.csv", studentDatabaseList);
-        ArrayList<SectionManager> course = courseManager.courseList();
         parser.readsFile("SampleInput2.txt");
         Student student = new Student("983057537", "Ajay", "Dalmia");
         assertTrue(student.getFirstName().equals("Ajay"));
