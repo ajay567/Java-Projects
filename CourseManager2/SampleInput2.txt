@@ -30,6 +30,16 @@ search Mostafa Kamel
 search Sage Forbes
 
 search Naomi
+section 1
+insert 983057537 ajay dalmia
+score 200
+remove ajay
+findpair 10
+findpair
+list
+stat
+grade
+merge
 dumpsection
 
 remove Mostafa Kamel
@@ -47,12 +57,22 @@ score 100
 
 grade
 section 1
+remove naomi
 grade
 stat
+remove 983057537
+insert 983057537 ajay dalmia
+score 200
+remove ajay
 
 merge 
 section 4
 merge
+insert 983057537 ajay dalmia
+score 200
+remove ajay
+searchid 98305753
+search ajay
 insert 635043110 Ishmael   Carlson
 grade
 stat
@@ -93,5 +113,7 @@ dumpsection
 
 loadcoursedata cs3114_2_ajay.csv
 section 2
+dumpsection
+remove sandra duncan
 dumpsection
 
