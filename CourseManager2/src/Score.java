@@ -19,14 +19,11 @@
 // letter of this restriction.
 
 /**
- * Binary Search Tree (BST) Implementation
+ * Score object contains the pid and the score.
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
- * @version 2019.24.21
- *
- * @param <E>
- *            The type of element to be stored in the BST
+ * @version 2019.10.20
  */
 public class Score implements Comparable<Score> {
 
@@ -38,9 +35,12 @@ public class Score implements Comparable<Score> {
 
 
     /**
+     * Constructor
      * 
      * @param id
+     *            pid of a student
      * @param score
+     *            score of a student
      */
     public Score(String id, int score) {
         this.id = id;
@@ -92,6 +92,10 @@ public class Score implements Comparable<Score> {
 
     /**
      * Defines how to compare Student objects to implement Comparable
+     * 
+     * @param other
+     *            score object
+     * @return returns an integer
      */
     @Override
     public int compareTo(Score other) {

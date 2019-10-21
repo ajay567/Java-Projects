@@ -21,19 +21,14 @@ import java.util.Scanner;
 // during the discussion. I have violated neither the spirit nor
 // letter of this restriction.
 /**
- * The parser class takes care of all the commands in the input
- * file. It also takes care of printing.
+ * The CommandCalculator class is a helper class for parser. It
+ * helps the parser to display the result for the commands.
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
- * @version 2019.24.21
- *
+ * @version 2019.10.20
  */
 public class CommandCalculator {
-
-    /**
-     * fields
-     */
 
     /**
      * Constructor
@@ -44,7 +39,19 @@ public class CommandCalculator {
 
 
     /**
-     *     
+     * Method that helps to update already existing students scores
+     * 
+     * @param newScore
+     *            the new score to be updated
+     * @param course
+     *            the course database list
+     * @param currentSection
+     *            the current section
+     * @param insertPid
+     *            pid to be checked for score
+     * @param insertStudent
+     *            the student who's score is to be updated
+     * @return the course databaseList
      */
     public ArrayList<SectionManager> scoreHelper(
         int newScore,
@@ -61,7 +68,7 @@ public class CommandCalculator {
                 if (course.get(currentSection).getSectionList().get(i).getID()
                     .equals(insertPid)) {
                     course.get(currentSection).getSectionList().get(i).setScore(
-                        newScore); 
+                        newScore);
                 }
             }
 
@@ -89,7 +96,7 @@ public class CommandCalculator {
                     i));
             }
             course.get(currentSection).getTreeScore().insert(scoreStudent);
-            
+
             for (int i = 0; i < arrayName.size(); i++) {
                 course.get(currentSection).getTreeName().insert(arrayName.get(
                     i));
@@ -107,7 +114,10 @@ public class CommandCalculator {
 
 
     /**
+     * Method that prints invalid score commands.
      * 
+     * @param scan
+     *            A scanner
      */
     public void scoreHelperInvaid(Scanner scan) {
         scan.next();
@@ -124,7 +134,10 @@ public class CommandCalculator {
      * tree and assign them a specific grade.
      * 
      * @param studentArray
-     *            ArrayList of students of a particular tree
+     *            arraylist of the student database
+     * @param i
+     *            the current section
+     * @return the course databaseList
      */
     public ArrayList<SectionManager> grade(
         ArrayList<SectionManager> studentArray,
@@ -176,12 +189,13 @@ public class CommandCalculator {
 
 
     /**
-     * All the grading requirements are done using this
-     * method. It goes through all the students in a
-     * tree and assign them a specific grade.
+     * Stat method helps to get the statistics of all the students with
+     * the their respective grades.
      * 
      * @param studentArray
-     *            ArrayList of students of a particular tree
+     *            arraylist of the student database
+     * @param i
+     *            the current section
      */
     public void stat(ArrayList<SectionManager> studentArray, int i) {
 
@@ -282,12 +296,14 @@ public class CommandCalculator {
 
 
     /**
-     * All the grading requirements are done using this
-     * method. It goes through all the students in a
-     * tree and assign them a specific grade.
+     * List gives the statistics for a particular grade
      * 
      * @param studentArray
-     *            ArrayList of students of a particular tree
+     *            arraylist of the student database
+     * @param currentSection
+     *            the current section
+     * @param grade
+     *            specific grade for the section
      */
     public void list(
         ArrayList<SectionManager> studentArray,
@@ -330,11 +346,13 @@ public class CommandCalculator {
 
 
     /**
+     * Helper method for the findpair command where the score range has
+     * been specified.
      * 
      * @param check
-     *            ArrayList
+     *            list of students
      * @param n
-     *            Integer
+     *            the score for the range
      */
     public void findPairHasScore(ArrayList<Student> check, int n) {
         int val = 0;
@@ -356,9 +374,11 @@ public class CommandCalculator {
 
 
     /**
+     * Helper method for the findpair command where the score range has
+     * not been specified.
      * 
      * @param check
-     *            ArrayList
+     *            list of students
      */
     public void findPairHasNoScore(ArrayList<Student> check) {
         int val = 0;
@@ -379,6 +399,20 @@ public class CommandCalculator {
     }
 
 
+    /**
+     * This method helps to process the remove
+     * command with name.
+     * 
+     * @param course
+     *            the course database arraylist
+     * @param nameToBeRemoved
+     *            the name given by the command
+     * @param pid
+     *            the pid of the student to be removed
+     * @param currentSection
+     *            the current section in progress
+     * @return the course databaseList
+     */
     public ArrayList<SectionManager> removeName(
         ArrayList<SectionManager> course,
         String nameToBeRemoved,
@@ -461,6 +495,20 @@ public class CommandCalculator {
     }
 
 
+    /**
+     * This method helps to process the remove
+     * command with pid.
+     * 
+     * @param course
+     *            the course database arraylist
+     * @param studentDatabaseList
+     *            the list of the studentdatabase
+     * @param pid
+     *            the pid of the student to be removed
+     * @param currentSection
+     *            the current section in progress
+     * @return the course databaseList
+     */
     public ArrayList<SectionManager> removePidCommand(
         ArrayList<SectionManager> course,
         ArrayList<Student> studentDatabaseList,
@@ -555,6 +603,15 @@ public class CommandCalculator {
     }
 
 
+    /**
+     * This method dumps the current section first by ID
+     * then by Name and the by score.
+     * 
+     * @param course
+     *            the course arraylist
+     * @param currentSection
+     *            the current section
+     */
     public void dumpSection(
         ArrayList<SectionManager> course,
         int currentSection) {
@@ -607,13 +664,25 @@ public class CommandCalculator {
     }
 
 
+    /**
+     * This method merges all section into the current
+     * section.
+     * 
+     * @param course
+     *            the coursedatabase list
+     * @param currentSection
+     *            the current section
+     * @param mergedSectionList
+     *            the list all sections already used for merge
+     * @return the course databaseList
+     */
     public ArrayList<SectionManager> merge(
         ArrayList<SectionManager> course,
         int currentSection,
         ArrayList<Integer> mergedSectionList) {
         boolean canBeMerged = false;
 
-        for (int l = currentSection ; l < course.size(); l++) {
+        for (int l = currentSection; l < course.size(); l++) {
             if (!course.get(l).getSectionList().isEmpty()) {
                 canBeMerged = true;
             }

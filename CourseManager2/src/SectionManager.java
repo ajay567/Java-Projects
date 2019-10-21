@@ -20,16 +20,16 @@ import java.util.ArrayList;
 // during the discussion. I have violated neither the spirit nor
 // letter of this restriction.
 /**
- * The parser class takes care of all the commands in the input
- * file. It also takes care of printing.
+ * This method creates a section object for the sections of
+ * the course. It has tree BST's and an array.
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
- * @version 2019.24.21
+ * @version 2019.19.20
  *
  */
 public class SectionManager {
-    
+
     /**
      * fields
      */
@@ -37,48 +37,53 @@ public class SectionManager {
     private BST<String> pid = new BST<String>();
     private BST<Score> score = new BST<Score>();
     private ArrayList<Student> sectionList = new ArrayList<Student>();
-    
+
+
     /**
      * Constructor
      */
     public SectionManager() {
-        // Does nothing        
+        // Does nothing
     }
-    
+
+
     /**
+     * Getter method for name BST.
      * 
-     * @return
+     * @return the name BST
      */
-    public BST<Student> getTreeName(){
+    public BST<Student> getTreeName() {
         return name;
     }
-    
+
+
     /**
+     * Getter method for the PID BST
      * 
-     * @return
+     * @return the tree for PID
      */
-    public BST<String> getTreePID(){
+    public BST<String> getTreePID() {
         return pid;
     }
-    
+
+
     /**
+     * Getter method for the Score BST
      * 
-     * @return
+     * @return the tree score
      */
-    public BST<Score> getTreeScore(){
+    public BST<Score> getTreeScore() {
         return score;
     }
-    
+
+
     /**
+     * Getter method for the Array of a section.
      * 
-     * @return
+     * @return the array list for a section.
      */
-    public ArrayList<Student> getSectionList(){
+    public ArrayList<Student> getSectionList() {
         return sectionList;
-    }
-    
-    public boolean isEmpty() {
-        return sectionList.size() <= 0;
     }
 
 }

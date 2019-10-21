@@ -28,8 +28,7 @@ import java.util.Scanner;
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
- * @version 2019.24.21
- *
+ * @version 2019.10.20
  */
 public class Parser {
 
@@ -42,8 +41,8 @@ public class Parser {
 
 
     /**
-     * Readfile is responsible for all the commands. The three tree
-     * sections are stored inside an ArrayList.
+     * Readfile is responsible for all the commands. The course 
+     * database and the student database are in this class.
      * 
      * @param fileName
      *            input file

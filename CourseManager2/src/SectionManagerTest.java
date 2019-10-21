@@ -21,16 +21,18 @@ import java.util.ArrayList;
 // during the discussion. I have violated neither the spirit nor
 // letter of this restriction.
 /**
- * The parser class takes care of all the commands in the input
- * file. It also takes care of printing.
+ * Test class for section manager.
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
- * @version 2019.24.21
+ * @version 2019.10.20
  *
  */
 public class SectionManagerTest extends student.TestCase{
 
+    /**
+     * fields
+     */
     private SectionManager manager;
     private CourseManager courseManager;
     private StudentManager studentManager;
@@ -46,7 +48,7 @@ public class SectionManagerTest extends student.TestCase{
     }
 
     /**
-     * 
+     * Test case for getter method of name BST.
      */
     public void testGetTreeName() {
         BST<Student> name = manager.getTreeName();
@@ -56,8 +58,7 @@ public class SectionManagerTest extends student.TestCase{
     }
     
     /**
-     * @throws IOException 
-     * 
+     * Test case for getter method of PID BST.
      */
     public void testGetTreePid() {
         BST<String> name = manager.getTreePID();
@@ -68,8 +69,9 @@ public class SectionManagerTest extends student.TestCase{
     
     
     /**
-     * @throws IOException
+     * Test case for getter method of score BST.
      * 
+     * @throws IOException
      */
     public void testGetTreeScore() throws IOException {
         BST<Score> name = manager.getTreeScore();
@@ -82,8 +84,9 @@ public class SectionManagerTest extends student.TestCase{
     }
     
     /**
-     * @throws IOException 
+     * Test case for getter method of sectionList.
      * 
+     * @throws IOException 
      */
     public void testGetTreeSectionList() throws IOException {
         studentManager.readsStudentFile("students_ajay.csv");
@@ -93,6 +96,5 @@ public class SectionManagerTest extends student.TestCase{
         Student student = new Student("2324234", "Ajay", "Dalmia");
         sectionList.add(student);
         assertTrue(manager.getSectionList().get(0).getFirstName().equals("Ajay"));
-        
     }
 }

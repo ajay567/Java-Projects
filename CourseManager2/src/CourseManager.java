@@ -206,8 +206,6 @@ public class CourseManager {
         }
 
         int offsetPos = 14;
-        // loop over sections
-        System.out.println("Reading "+secCount+ " sections");
         for (int i = 1; i <= secCount; i++) {
             int sectionId = i;
 
@@ -217,7 +215,6 @@ public class CourseManager {
             offsetPos += 4;
 
             // loop over students
-            System.out.println("Reading "+studentCount+ " students");
             for (int j = 0; j < studentCount; j++) {
                 // get pid
                 wrapped = ByteBuffer.wrap(fileContents, offsetPos, 8);
@@ -267,7 +264,6 @@ public class CourseManager {
                 student.setScore(score);
                 student.setGrade(grade);
                 
-                System.out.println(pid+": "+fName+" "+lName);
 
                 // checking student database
                 for (int k = 0; k < studentDatabaseList.size(); k++) {

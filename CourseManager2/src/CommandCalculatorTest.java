@@ -1,4 +1,3 @@
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -23,14 +22,11 @@ import java.util.ArrayList;
 // letter of this restriction.
 
 /**
- * Binary Search Tree (BST) Implementation
+ * Test Class for command calculator.
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
- * @version 2019.24.21
- *
- * @param <E>
- *            The type of element to be stored in the BST
+ * @version 2019.10.20
  */
 public class CommandCalculatorTest extends student.TestCase {
 
@@ -52,69 +48,76 @@ public class CommandCalculatorTest extends student.TestCase {
         courseManager = new CourseManager();
         studentManager = new StudentManager();
     }
-    
+
+
     /**
-     * 
+     * Testing for grade and stat methods.
      */
     public void testGradeStat() {
         ArrayList<SectionManager> manager = new ArrayList<SectionManager>();
         ArrayList<Student> studentList = new ArrayList<Student>();
         int id = 983057537;
         int score = 100;
-        for (int i =0; i < 35; i++) {
+        for (int i = 0; i < 35; i++) {
             id = id - 5;
-            score = score -2;
+            score = score - 2;
             String newId = Integer.toString(id);
             Student student = new Student(newId, "Ajay", "Dalmia");
             student.setScore(score);
             studentList.add(student);
         }
         manager.add(new SectionManager());
-        for(int i =0; i<studentList.size();i++) {
+        for (int i = 0; i < studentList.size(); i++) {
             manager.get(0).getSectionList().add(studentList.get(i));
         }
-        
+
         manager = command.grade(manager, 0);
         command.stat(manager, 0);
-        assertTrue(manager.get(0).getSectionList().get(0).getGrade().equals("A"));
+        assertTrue(manager.get(0).getSectionList().get(0).getGrade().equals(
+            "A"));
     }
-    
+
+
     /**
-     * 
+     * Testing for list methods.
      */
     public void testList() {
         ArrayList<SectionManager> manager = new ArrayList<SectionManager>();
         ArrayList<Student> studentList = new ArrayList<Student>();
         int id = 983057537;
         int score = 100;
-        for (int i =0; i < 35; i++) {
+        for (int i = 0; i < 35; i++) {
             id = id - 5;
-            score = score -2;
+            score = score - 2;
             String newId = Integer.toString(id);
             Student student = new Student(newId, "Ajay", "Dalmia");
             student.setScore(score);
             studentList.add(student);
         }
         manager.add(new SectionManager());
-        for(int i =0; i<studentList.size();i++) {
+        for (int i = 0; i < studentList.size(); i++) {
             manager.get(0).getSectionList().add(studentList.get(i));
         }
         manager = command.grade(manager, 0);
         command.list(manager, 0, "A");
         command.list(manager, 0, "A*");
-        assertTrue(manager.get(0).getSectionList().get(0).getGrade().equals("A"));
+        assertTrue(manager.get(0).getSectionList().get(0).getGrade().equals(
+            "A"));
     }
 
 
+    /**
+     * Testing for score helper method
+     * 
+     * @throws IOException
+     */
     public void testScoreHelper() throws IOException {
         studentManager.readsStudentFile("students_ajay.csv");
         ArrayList<Student> studentDatabaseList = studentManager.studentList();
         courseManager.readsCourseFile("CS3114_ajay.csv", studentDatabaseList);
         ArrayList<SectionManager> course = courseManager.courseList();
         parser.readsFile("SampleInput2.txt");
-        courseManager.readsCourseDataFile("cs3114_ajay.data", studentDatabaseList);
-        studentManager.readsStudentDataFile("students_ajay.data");
-        Student student = new Student("983057537","Ajay","Dalmia");
+        Student student = new Student("983057537", "Ajay", "Dalmia");
         assertTrue(student.getFirstName().equals("Ajay"));
     }
 
