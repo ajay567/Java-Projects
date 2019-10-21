@@ -67,7 +67,7 @@ public class StudentManager {
         File input = new File(fileName);
         Scanner scan = new Scanner(input);
 
-        String currentLine[] = null;
+        String[] currentLine = null;
         while (scan.hasNext()) {
             String newLine = scan.nextLine();
             currentLine = newLine.split(",");
@@ -81,7 +81,11 @@ public class StudentManager {
         scan.close();
     }
 
-
+    /**
+     * Reads Student Input files in binary format
+     * @param fileName Binary File to read
+     * @throws IOException
+     */
     public void readsStudentDataFile(String fileName) throws IOException {
         Path path = Paths.get(fileName);
         byte[] fileContents = Files.readAllBytes(path);
@@ -140,17 +144,27 @@ public class StudentManager {
 
 
     /**
-     * 
-     * @return
+     * Provides student list
+     * @return ArrayList of all student objects read in
      */
     public ArrayList<Student> studentList() {
         return list;
     }
 
-
-    public void writeStudentDataFile(String filename, ArrayList<Student> studentDatabaseList) throws IOException {
-        DataOutputStream os = new DataOutputStream(new FileOutputStream(
-            filename, false));
+    /**
+     * Writes student data to a binary file
+     * @param filename Output file name
+     * @param studentDatabaseList List of all students
+     * @throws IOException
+     */
+    public void writeStudentDataFile(
+        String filename,
+        ArrayList<Student> studentDatabaseList) 
+            throws IOException {
+        DataOutputStream os = new DataOutputStream(
+            new FileOutputStream(
+                filename, false));
+        
         os.writeBytes("VTSTUDENTS");
         os.writeInt(studentDatabaseList.size());
         
