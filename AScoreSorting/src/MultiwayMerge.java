@@ -1,6 +1,3 @@
-import java.io.IOException;
-import java.util.ArrayList;
-
 // On my honor:
 //
 // - I have not used source code obtained from another student,
@@ -20,24 +17,21 @@ import java.util.ArrayList;
 // anything during the discussion or modifies any computer file
 // during the discussion. I have violated neither the spirit nor
 // letter of this restriction.
-public class Ascoresorting {
-
+/**
+ * 
+ * @author <Ajay Dalmia> <ajay99>
+ * @author <Amit Ramesh> <amitr>
+ * @version 2019.09.11
+ */
+public class MultiwayMerge {
+    
     /**
      * 
-     * @param args
-     * @throws IOException
      */
-    public static void main(String[] args) throws IOException {
-        StudentFileParser parser = new StudentFileParser();
-        parser.readsStudentDataFile("sample_vtstudents.data");
-        ArrayList<Student> studentList = parser.studentList();
-        System.out.println(studentList.size());
-        for (int i = 0; i < studentList.size(); i++) {
-            System.out.println(studentList.get(i).getID() + " " + studentList
-                .get(i).getFirstName() + " " + studentList.get(i)
-                    .getMiddleName() + " " + studentList.get(i).getLastName());
-        }
-        System.out.println("a"+ "b");
+    public MultiwayMerge() {
+        
     }
+    
+    
 
 }
