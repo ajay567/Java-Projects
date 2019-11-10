@@ -1,6 +1,3 @@
-import java.io.IOException;
-import java.util.ArrayList;
-
 // On my honor:
 //
 // - I have not used source code obtained from another student,
@@ -20,24 +17,60 @@ import java.util.ArrayList;
 // anything during the discussion or modifies any computer file
 // during the discussion. I have violated neither the spirit nor
 // letter of this restriction.
-public class Ascoresorting {
+/**
+ * 
+ * @author <Ajay Dalmia> <ajay99>
+ * @author <Amit Ramesh> <amitr>
+ * @version 2019.09.11
+ */
+public class Apple implements Comparable<Apple> {
+
+    /**
+     * fields
+     */
+    private long pid;
+    private double score;
+
 
     /**
      * 
-     * @param args
-     * @throws IOException
+     * @param pid
+     * @param score
      */
-    public static void main(String[] args) throws IOException {
-        StudentFileParser parser = new StudentFileParser();
-        parser.readsStudentDataFile("sample_vtstudents.data");
-        ArrayList<Student> studentList = parser.studentList();
-        System.out.println(studentList.size());
-        for (int i = 0; i < studentList.size(); i++) {
-            System.out.println(studentList.get(i).getID() + " " + studentList
-                .get(i).getFirstName() + " " + studentList.get(i)
-                    .getMiddleName() + " " + studentList.get(i).getLastName());
-        }
-        System.out.println("a"+ "b");
+    public Apple(long pid, double score) {
+        this.pid = pid;
+        this.score = score;
+    }
+
+
+    /**
+     * 
+     * @return
+     */
+    public long getPid() {
+        return pid;
+    }
+
+
+    /**
+     * 
+     * @return
+     */
+    public double getScore() {
+        return score;
+    }
+
+
+    /**
+     * Defines how to compare Apple objects to implement Comparable
+     * 
+     * @param other
+     *            score object
+     * @return returns an integer
+     */
+    @Override
+    public int compareTo(Apple other) {
+        return Double.compare(this.score, other.score);
     }
 
 }
