@@ -38,8 +38,11 @@ public class StudentFileParser {
      */
     private ArrayList<Student> list = new ArrayList<Student>();
 
+    /**
+     * Constructor
+     */
     public StudentFileParser() {
-        
+        //Does Nothing
     }
     
     /**

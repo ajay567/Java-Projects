@@ -1,3 +1,8 @@
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.ArrayList;
+
 // On my honor:
 //
 // - I have not used source code obtained from another student,
@@ -25,8 +30,46 @@
  */
 public class AppleFileParser {
 
-    
+    /**
+     * fields
+     */
+    private ArrayList<Apple> list = new ArrayList<Apple>();
+
+
+    /**
+     * Constructor
+     */
     public AppleFileParser() {
+        // Does Nothing
+    }
+
+
+    /**
+     * Reads Student Input files in binary format
+     * 
+     * @param fileName
+     *            Binary File to read
+     * @throws IOException
+     */
+    public void readsAppleDataFile(String fileName) throws IOException {
         
+        FileInputStream fileIs = new FileInputStream(fileName);
+        ObjectInputStream is = new ObjectInputStream(fileIs);
+        long pid = is.readLong();
+        double score = is.readDouble();
+        System.out.println(pid);
+        System.out.println(score);
+        is.close();
+
+    }
+
+
+    /**
+     * Provides student list
+     * 
+     * @return ArrayList of all student objects read in
+     */
+    public ArrayList<Apple> appleList() {
+        return list;
     }
 }
