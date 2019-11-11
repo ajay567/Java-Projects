@@ -1,7 +1,7 @@
-import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.util.ArrayList;
+import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 
 // On my honor:
 //
@@ -33,14 +33,18 @@ public class AppleFileParser {
     /**
      * fields
      */
-    private ArrayList<Apple> list = new ArrayList<Apple>();
+    private int offsetPosNull;
+    private RandomAccessFile fil;
 
 
     /**
      * Constructor
+     * 
+     * @throws FileNotFoundException
      */
-    public AppleFileParser() {
-        // Does Nothing
+    public AppleFileParser(String fileName) throws FileNotFoundException {
+        fil = new RandomAccessFile(fileName, "r");
+        offsetPosNull = 0;
     }
 
 
@@ -51,25 +55,30 @@ public class AppleFileParser {
      *            Binary File to read
      * @throws IOException
      */
-    public void readsAppleDataFile(String fileName) throws IOException {
-        
-        FileInputStream fileIs = new FileInputStream(fileName);
-        ObjectInputStream is = new ObjectInputStream(fileIs);
-        long pid = is.readLong();
-        double score = is.readDouble();
-        System.out.println(pid);
-        System.out.println(score);
-        is.close();
+    public Apple getNextRecord() throws IOException {
 
+        long fileLength = fil.length();
+        byte[] buffer;
+
+        if (offsetPosNull + 16 <= fileLength) {
+            buffer = new byte[16];
+        }
+        else {
+            return null;
+        }
+
+        int offsetPos = 0;
+        fil.readFully(buffer, offsetPos, 16);
+        offsetPosNull += 16;
+
+        ByteBuffer wrapped = ByteBuffer.wrap(buffer, 0, 8);
+        long pid = wrapped.getLong();
+
+        wrapped = ByteBuffer.wrap(buffer, 8, 8);
+        double score = wrapped.getDouble();
+
+        Apple apple = new Apple(pid, score);
+        return apple;
     }
 
-
-    /**
-     * Provides student list
-     * 
-     * @return ArrayList of all student objects read in
-     */
-    public ArrayList<Apple> appleList() {
-        return list;
-    }
 }
