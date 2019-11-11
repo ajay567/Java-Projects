@@ -103,8 +103,8 @@ public class MaxHeap<E extends Comparable<E>>{
         E max = heap[size];
         heap[size] = null;
         
-        printHeap();
-        printHeapArray();
+//        printHeap();
+//        printHeapArray();
         
         return max;
     }
@@ -129,8 +129,8 @@ public class MaxHeap<E extends Comparable<E>>{
         if ((pos < 0) || (pos >= capacity)) return; // Illegal heap position
         heap[pos] = newVal;
         
-        System.out.println("MOD:");
-        printHeapArray();
+//        System.out.println("MOD:");
+//        printHeapArray();
 //        update(pos);
     }
 

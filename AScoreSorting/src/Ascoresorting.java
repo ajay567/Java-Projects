@@ -31,15 +31,16 @@ public class Ascoresorting {
         StudentFileParser studentParser = new StudentFileParser();
         studentParser.readsStudentDataFile("sample_vtstudents.data");
 
-        AppleFileParser appleParser = new AppleFileParser("sample8k.bin");
+//        AppleFileParser appleParser = new AppleFileParser("sample8k.bin");
+//
+//        for (int i = 0; i < 8193; i++) {
+//            if (appleParser.hasNextRecord()) {
+//                Apple apple = appleParser.getNextRecord();
+//                System.out.println(apple.getPid() + " " + apple.getScore());
+//            }
+//        }
 
-        for (int i = 0; i < 8193; i++) {
-            Apple apple = appleParser.getNextRecord();
-            if (apple != null) {
-                System.out.println(apple.getPid() + " " + apple.getScore());
-            }
-        }
-
+        new ExternalSort("sample8k.bin");
     }
 
 }

@@ -1,6 +1,8 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.RandomAccessFile;
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 
 // On my honor:
@@ -35,16 +37,21 @@ public class AppleFileParser {
      */
     private int offsetPosNull;
     private RandomAccessFile fil;
+    private PrintWriter writer;
+    private long fileLength;
 
 
     /**
      * Constructor
      * 
      * @throws FileNotFoundException
+     * @throws UnsupportedEncodingException
      */
-    public AppleFileParser(String fileName) throws FileNotFoundException {
+    public AppleFileParser(String fileName) throws IOException {
         fil = new RandomAccessFile(fileName, "r");
         offsetPosNull = 0;
+        fileLength = 0;
+        writer = new PrintWriter("runFile.txt", "UTF-8");
     }
 
 
@@ -57,7 +64,7 @@ public class AppleFileParser {
      */
     public Apple getNextRecord() throws IOException {
 
-        long fileLength = fil.length();
+        fileLength = fil.length();
         byte[] buffer;
 
         if (offsetPosNull + 16 <= fileLength) {
@@ -79,6 +86,35 @@ public class AppleFileParser {
 
         Apple apple = new Apple(pid, score);
         return apple;
+    }
+
+
+    /**
+     * 
+     * @return
+     * @throws IOException
+     */
+    public boolean hasNextRecord() throws IOException {
+        fileLength = fil.length();
+        if (offsetPosNull + 16 <= fileLength) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+
+    /**
+     * @throws UnsupportedEncodingException
+     * @throws FileNotFoundException
+     * 
+     */
+    public void writeRunFile(Apple[] outputBuffer, int outPos) {
+        for (int i = 0; i < outPos; i++) {
+            writer.println(outputBuffer[i].getPid() + " " + outputBuffer[i]
+                .getScore());
+        }
     }
 
 }
