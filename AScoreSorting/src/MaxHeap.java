@@ -25,6 +25,11 @@ public class MaxHeap<E extends Comparable<E>>{
         return this.size;
     }
     
+    public void reset() {
+        this.size = capacity;
+        buildHeap();
+    }
+    
     private boolean isLeaf(int pos) {
         return ( pos >= size/2) && (pos < size);
     }
@@ -94,7 +99,14 @@ public class MaxHeap<E extends Comparable<E>>{
         }
         swapPos(0, --size); // Swap maximum with last value
         siftdown(0);   // Put new heap root val in correct place
-        return heap[size];
+        
+        E max = heap[size];
+        heap[size] = null;
+        
+        printHeap();
+        printHeapArray();
+        
+        return max;
     }
 
     // Remove and return element at specified position
@@ -113,10 +125,13 @@ public class MaxHeap<E extends Comparable<E>>{
     }
 
     // Modify the value at the given position
-    private void modify(int pos, E newVal) {
-        if ((pos < 0) || (pos >= size)) return; // Illegal heap position
+    public void modify(int pos, E newVal) {
+        if ((pos < 0) || (pos >= capacity)) return; // Illegal heap position
         heap[pos] = newVal;
-        update(pos);
+        
+        System.out.println("MOD:");
+        printHeapArray();
+//        update(pos);
     }
 
     // The value at pos has been changed, restore the heap property
@@ -138,7 +153,14 @@ public class MaxHeap<E extends Comparable<E>>{
     
     private void printHeap() {
         for(int i=0; i<size; i++) {
-            System.out.print(heap[i]);
+            System.out.print(heap[i] + " ");
+        }
+        System.out.println();
+    }
+    
+    private void printHeapArray() {
+        for(int i=0; i<capacity; i++) {
+            System.out.print(heap[i] + " ");
         }
         System.out.println();
     }
