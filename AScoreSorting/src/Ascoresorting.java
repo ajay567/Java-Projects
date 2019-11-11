@@ -28,16 +28,18 @@ public class Ascoresorting {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-        StudentFileParser parser = new StudentFileParser();
-        parser.readsStudentDataFile("sample_vtstudents.data");
-        ArrayList<Student> studentList = parser.studentList();
-        System.out.println(studentList.size());
-        for (int i = 0; i < studentList.size(); i++) {
-            System.out.println(studentList.get(i).getID() + " " + studentList
-                .get(i).getFirstName() + " " + studentList.get(i)
-                    .getMiddleName() + " " + studentList.get(i).getLastName());
+        StudentFileParser studentParser = new StudentFileParser();
+        studentParser.readsStudentDataFile("sample_vtstudents.data");
+
+        AppleFileParser appleParser = new AppleFileParser("sample8k.bin");
+
+        for (int i = 0; i < 8193; i++) {
+            Apple apple = appleParser.getNextRecord();
+            if (apple != null) {
+                System.out.println(apple.getPid() + " " + apple.getScore());
+            }
         }
-        System.out.println("a"+ "b");
+
     }
 
 }

@@ -1,3 +1,8 @@
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+
 // On my honor:
 //
 // - I have not used source code obtained from another student,
@@ -25,8 +30,55 @@
  */
 public class AppleFileParser {
 
-    
-    public AppleFileParser() {
-        
+    /**
+     * fields
+     */
+    private int offsetPosNull;
+    private RandomAccessFile fil;
+
+
+    /**
+     * Constructor
+     * 
+     * @throws FileNotFoundException
+     */
+    public AppleFileParser(String fileName) throws FileNotFoundException {
+        fil = new RandomAccessFile(fileName, "r");
+        offsetPosNull = 0;
     }
+
+
+    /**
+     * Reads Student Input files in binary format
+     * 
+     * @param fileName
+     *            Binary File to read
+     * @throws IOException
+     */
+    public Apple getNextRecord() throws IOException {
+
+        long fileLength = fil.length();
+        byte[] buffer;
+
+        if (offsetPosNull + 16 <= fileLength) {
+            buffer = new byte[16];
+        }
+        else {
+            return null;
+        }
+
+        int offsetPos = 0;
+        fil.readFully(buffer, offsetPos, 16);
+        offsetPosNull += 16;
+
+        ByteBuffer wrapped = ByteBuffer.wrap(buffer, 0, 8);
+        long pid = wrapped.getLong();
+
+        wrapped = ByteBuffer.wrap(buffer, 8, 8);
+        double score = wrapped.getDouble();
+
+        Apple apple = new Apple(pid, score);
+        return apple;
+    }
+
 }

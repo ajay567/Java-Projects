@@ -38,8 +38,11 @@ public class StudentFileParser {
      */
     private ArrayList<Student> list = new ArrayList<Student>();
 
+    /**
+     * Constructor
+     */
     public StudentFileParser() {
-        
+        //Does Nothing
     }
     
     /**
@@ -53,7 +56,6 @@ public class StudentFileParser {
 
         ByteBuffer wrapped = ByteBuffer.wrap(fileContents, 10, 4);
         int count = wrapped.getInt();
-        System.out.println(count);
         int offsetPos = 14;
         for (int i = 0; i < count; i++) {
             // get pid
