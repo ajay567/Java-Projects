@@ -107,7 +107,7 @@ public class AppleFileParser {
 
     /**
      * @throws UnsupportedEncodingException
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException 
      * 
      */
     public void writeRunFile(Apple[] outputBuffer, int outPos) {

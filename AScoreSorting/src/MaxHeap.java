@@ -151,17 +151,17 @@ public class MaxHeap<E extends Comparable<E>>{
          
     }
     
-    private void printHeap() {
-        for(int i=0; i<size; i++) {
-            System.out.print(heap[i] + " ");
-        }
-        System.out.println();
-    }
-    
-    private void printHeapArray() {
-        for(int i=0; i<capacity; i++) {
-            System.out.print(heap[i] + " ");
-        }
-        System.out.println();
-    }
+//    private void printHeap() {
+//        for(int i=0; i<size; i++) {
+//            System.out.print(heap[i] + " ");
+//        }
+//        System.out.println();
+//    }
+//    
+//    private void printHeapArray() {
+//        for(int i=0; i<capacity; i++) {
+//            System.out.print(heap[i] + " ");
+//        }
+//        System.out.println();
+//    }
 }

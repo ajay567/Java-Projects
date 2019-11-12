@@ -33,11 +33,11 @@ public class ExternalSort {
     /**
      * fields
      */
-    MaxHeap<Apple> heap;
-    Apple[] outputBuffer = new Apple[1024];
-    int outPos = 0;
-
-    ArrayList<Integer> runLengths = new ArrayList<Integer>();
+    private MaxHeap<Apple> heap;
+    private Apple[] outputBuffer;
+    private int outPos;
+    private ArrayList<Integer> runLengths;
+    private AppleFileParser parser;
 
 
     /**
@@ -47,8 +47,14 @@ public class ExternalSort {
      * @throws IOException
      */
     public ExternalSort(String fileName) throws IOException {
+        outputBuffer = new Apple[1024];
+        runLengths = new ArrayList<Integer>();
+        parser = new AppleFileParser(fileName);
+        outPos = 0;
+    }
 
-        AppleFileParser parser = new AppleFileParser(fileName);
+
+    public ArrayList<Integer> performExternalSort() throws IOException {
         Apple[] heapArr = new Apple[8 * 1024];
 
         for (int i = 0; i < 8 * 1024; i++) {
@@ -57,12 +63,13 @@ public class ExternalSort {
 
         heap = new MaxHeap<Apple>(heapArr, 8 * 1024, 8 * 1024);
         while (parser.hasNextRecord()) {
-            
+
             int runLength = 0;
             outPos = 0;
             while (heap.getSize() > 0) {
                 // remove max
-                outputBuffer[outPos++] = heap.removemax();
+                outputBuffer[outPos] = heap.removemax();
+                outPos += 1;
 
                 // insert next element
                 if (parser.hasNextRecord()) {
@@ -90,5 +97,6 @@ public class ExternalSort {
             System.out.println(runLength);
             heap.reset();
         }
+        return runLengths;
     }
 }
