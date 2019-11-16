@@ -1,4 +1,6 @@
+import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
@@ -37,6 +39,7 @@ public class AppleFileParser {
      */
     private int offsetPosNull;
     private RandomAccessFile fil;
+    private DataOutputStream os; 
     private PrintWriter writer;
     private long fileLength;
 
@@ -51,6 +54,7 @@ public class AppleFileParser {
         fil = new RandomAccessFile(fileName, "r");
         offsetPosNull = 0;
         fileLength = 0;
+        os = new DataOutputStream(new FileOutputStream("runFile.data", false));
         writer = new PrintWriter("runFile.txt", "UTF-8");
     }
 
@@ -106,14 +110,15 @@ public class AppleFileParser {
 
 
     /**
+     * @throws IOException 
      * @throws UnsupportedEncodingException
      * @throws FileNotFoundException 
      * 
      */
-    public void writeRunFile(Apple[] outputBuffer, int outPos) {
+    public void writeRunFile(Apple[] outputBuffer, int outPos) throws IOException {
         for (int i = 0; i < outPos; i++) {
-            writer.println(outputBuffer[i].getPid() + " " + outputBuffer[i]
-                .getScore());
+            os.writeLong(outputBuffer[i].getPid());
+            os.writeDouble(outputBuffer[i].getScore());
         }
     }
 
