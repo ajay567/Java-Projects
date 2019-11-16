@@ -40,8 +40,10 @@ public class Ascoresorting {
 
       ExternalSort sort =  new ExternalSort("sample8k.bin");
       ArrayList<Integer> runLengths = sort.performExternalSort();
-      RunManager runManager = new RunManager(runLengths);
-      runManager.mergeAllRuns();
+      Temp temp = new Temp();
+      temp.loadNextBlock(2048*16);
+  //    RunManager runManager = new RunManager(runLengths);
+  //    runManager.mergeAllRuns();
     }
 
 }

@@ -1,3 +1,6 @@
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,53 +33,64 @@ import java.util.ArrayList;
  * @version 2019.09.11
  */
 public class RunManager {
-    
+
     private ArrayList<Integer> runLengths;
     private Apple[] outputBuffer;
     int outPos;
-    
+    private RandomAccessFile fil;
     byte[][] runContents;
     int[] offsetPos;
-    
+
+
     /**
+     * @throws FileNotFoundException
      * 
      */
-    public RunManager(ArrayList<Integer> runLengths) {
+    public RunManager(ArrayList<Integer> runLengths)
+        throws FileNotFoundException {
         this.runLengths = runLengths;
         this.outputBuffer = new Apple[1024];
         this.outPos = 0;
+        fil = new RandomAccessFile("runFile.data", "r");
     }
-    
+
+
     public void mergeAllRuns() {
-        String[] fileNames = {"runfile.txt", "runfile2.txt"};
-        
+        String[] fileNames = { "runfile.txt", "runfile2.txt" };
+
         int mergePassNum = 0;
-        while(runLengths.size() > 1) {
+        while (runLengths.size() > 1) {
             ArrayList<Integer> newRunLengths = new ArrayList<Integer>();
-            for(int i=0; i<runLengths.size(); i+=8) {
+            for (int i = 0; i < runLengths.size(); i += 8) {
                 int runCount = 8;
-                if(runLengths.size() - i < 8){
+                if (runLengths.size() - i < 8) {
                     runCount = runLengths.size() - i;
                 }
-                int runLen = mergeRuns(fileNames[mergePassNum % 2], fileNames[(mergePassNum+1) % 2], i, runCount);
+                int runLen = mergeRuns(fileNames[mergePassNum % 2],
+                    fileNames[(mergePassNum + 1) % 2], i, runCount);
                 newRunLengths.add(runLen);
             }
             runLengths = newRunLengths;
             mergePassNum++;
         }
     }
-    
-    private int mergeRuns(String inFile, String outFile, int startRun, int numRuns) {
+
+
+    private int mergeRuns(
+        String inFile,
+        String outFile,
+        int startRun,
+        int numRuns) {
         loadRuns(inFile, startRun, numRuns);
-        
+
         int newRunLength = 0;
-        while(runNotFinished()) {
-            Apple max = new Apple(0,0);
+        while (runNotFinished()) {
+            Apple max = new Apple(0, 0);
             int maxRun = -1;
-            for(int i=0; i< numRuns; i++) {
+            for (int i = 0; i < numRuns; i++) {
                 Apple tempApple = getNextRecord(i);
-                if(tempApple != null) {
-                    if(tempApple.compareTo(max) > 0) {
+                if (tempApple != null) {
+                    if (tempApple.compareTo(max) > 0) {
                         max = tempApple;
                         maxRun = i;
                     }
@@ -86,60 +100,71 @@ public class RunManager {
             offsetPos[maxRun]++;
             newRunLength++;
         }
-        
+
         return newRunLength;
     }
-    
+
+
     private void loadRuns(String inFile, int startNum, int numRuns) {
         offsetPos = new int[numRuns]; // all zeros
         runContents = new byte[numRuns][1024];
-        
-        for(int i=0; i<numRuns; i++) {
+
+        for (int i = 0; i < numRuns; i++) {
             loadNextBlock(i);
         }
     }
-    
-    
-    private void loadNextBlock(int runNum) {
-//        todo: runContents[runNum] = next 1024 records starting from offsetPos[runNum]
-    }
-    
-    private Apple getNextRecord(int runNum) {
-//        if end of block load more records
-        
-        if(offsetPos[runNum] < runLengths.get(runNum)) {
-            
-            int startPos = offsetPos[runNum]*16;
-            ByteBuffer wrapped = ByteBuffer.wrap(runContents[runNum], startPos, 8);
-            long pid = wrapped.getLong();
-            
-            wrapped = ByteBuffer.wrap(runContents[runNum], startPos+8, 8);
-            double score = wrapped.getDouble();
-            
-            return new Apple(pid, score);
-            
+
+
+    private void loadNextBlock(int runNum) throws IOException {
+        if (runLengths.get(runNum) > offsetPos[runNum] + 1024) {
+            fil.seek(offsetPos[runNum] * 16);
+            fil.readFully(runContents[runNum], 0, 1024 * 16);
         }
-        
+        else {
+            fil.seek(offsetPos[runNum] * 16);
+            fil.readFully(runContents[runNum], 0, (runLengths.get(runNum) - offsetPos[runNum])*16 );
+        }
+    }
+
+
+    private Apple getNextRecord(int runNum) {
+// if end of block load more records
+
+        if (offsetPos[runNum] < runLengths.get(runNum)) {
+
+            int startPos = offsetPos[runNum] * 16;
+            ByteBuffer wrapped = ByteBuffer.wrap(runContents[runNum], startPos,
+                8);
+            long pid = wrapped.getLong();
+
+            wrapped = ByteBuffer.wrap(runContents[runNum], startPos + 8, 8);
+            double score = wrapped.getDouble();
+
+            return new Apple(pid, score);
+
+        }
+
         return null;
     }
-    
+
+
     private boolean runNotFinished() {
-        for(int i=0; i<runLengths.size(); i++) {
-            if(offsetPos[i] < runLengths.get(i)) {
+        for (int i = 0; i < runLengths.size(); i++) {
+            if (offsetPos[i] < runLengths.get(i)) {
                 return true;
             }
         }
         return false;
     }
-    
+
+
     private void writeOutputBuffer(String outFile, Apple record) {
         outputBuffer[outPos++] = record;
-        
-        if(outPos >= outputBuffer.length) {
-//            todo: write to outFile
+
+        if (outPos >= outputBuffer.length) {
+// todo: write to outFile
             outPos = 0;
         }
     }
-    
 
 }
