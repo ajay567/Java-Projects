@@ -38,8 +38,10 @@ public class Ascoresorting {
 //            System.out.println(apple.getPid() + " " + apple.getScore());
 //        }
 
-      ExternalSort sort =  new ExternalSort("sample128k.bin");
-      sort.performExternalSort();
+      ExternalSort sort =  new ExternalSort("sample8k.bin");
+      ArrayList<Integer> runLengths = sort.performExternalSort();
+      RunManager runManager = new RunManager(runLengths);
+      runManager.mergeAllRuns();
     }
 
 }

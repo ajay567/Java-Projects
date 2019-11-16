@@ -72,5 +72,9 @@ public class Apple implements Comparable<Apple> {
     public int compareTo(Apple other) {
         return Double.compare(this.score, other.score);
     }
+    
+    public String toString() {
+        return Double.toString(score);
+    }
 
 }

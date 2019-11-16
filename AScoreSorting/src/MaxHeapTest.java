@@ -12,20 +12,32 @@ public class MaxHeapTest {
     }
 
 
-//    @Test
-//    public final void testMaxHeap1() {
-//        Integer[] myList = {1,2,3,4,5,6,7,8,9,0};
-//        myHeap = new MaxHeap<Integer>(myList, 10, 10);
-//        
-//        assertEquals(myHeap.getSize(), 10);
-//        
-//        for(int i=9; i>=0; i--) {
-//            assertEquals(myHeap.removemax(), (Integer)i);
-//        }
-//        
-//        assertNull(myHeap.removemax());
-//        
-//    }
+    @Test
+    public final void testMaxHeap1() {
+        Integer[] myList = {1,2,3,4,5,6,7};
+        myHeap = new MaxHeap<Integer>(myList, 7, 7);
+        
+        assertEquals(myHeap.getSize(), 7);
+        
+        for(int i=7; i>0; i--) {
+            assertEquals(myHeap.removemax(), (Integer)i);
+        }
+        
+        assertNull(myHeap.removemax());
+        
+    }
+    
+    @Test
+    public final void testMaxHeap2() {
+        MaxHeap<Double> myHeap;
+        Double[] myList = {999.4230041825355, 995.4062495543849, 683.1607533366878, 914.7365202614727, 897.2117099894964, 520.3444159730717, 670.6172357122157, 790.6492469424579, 833.7961470055732, 344.4436816511985, 716.7725202075407, 73.67314349762633, 416.85667013589034, 84.68124583566772, 613.249016195168, 256.4353357479768, 448.96459699672164, 240.89273013166402, 248.20771128183972, 167.04988242860753};
+        myHeap = new MaxHeap<Double>(myList, 20, 20);
+        
+        assertEquals(myHeap.getSize(), 20);
+        for(int i=0; i<20; i++) {
+            System.out.println(myHeap.removemax());
+        }
+    }
     
     @Test
     public final void testInsert() {

@@ -55,14 +55,16 @@ public class ExternalSort {
 
 
     public ArrayList<Integer> performExternalSort() throws IOException {
-        Apple[] heapArr = new Apple[8 * 1024];
+        
+        int heapSize = 8*1024;
+        Apple[] heapArr = new Apple[heapSize];
 
-        for (int i = 0; i < 8 * 1024; i++) {
+        for (int i = 0; i < heapSize; i++) {
             heapArr[i] = parser.getNextRecord();
         }
 
-        heap = new MaxHeap<Apple>(heapArr, 8 * 1024, 8 * 1024);
-        while (parser.hasNextRecord()) {
+        heap = new MaxHeap<Apple>(heapArr, heapSize, heapSize);
+        do {
 
             int runLength = 0;
             outPos = 0;
@@ -74,29 +76,32 @@ public class ExternalSort {
                 // insert next element
                 if (parser.hasNextRecord()) {
                     Apple nextRecord = parser.getNextRecord();
-                    if (nextRecord.compareTo(outputBuffer[outPos - 1]) < 0) {
+                    if (nextRecord.compareTo(outputBuffer[outPos - 1]) > 0) {
                         heap.modify(heap.getSize(), nextRecord);
                     }
                     else {
                         heap.insert(nextRecord);
                     }
                 }
+                else {
+                    heap.incrementNullCount();
+                }
 
                 // output buffer full
-                if (outPos >= outputBuffer.length) {
+                if (outPos >= outputBuffer.length) {                    
                     parser.writeRunFile(outputBuffer, outPos);
                     runLength += outPos;
                     outPos = 0;
                 }
             }
 
-            // run complete
+            // run complete            
             parser.writeRunFile(outputBuffer, outPos);
             runLength += outPos;
             runLengths.add(runLength);
-            System.out.println(runLength);
+            System.out.println(runLength);            
             heap.reset();
-        }
+        } while (parser.hasNextRecord());
         return runLengths;
     }
 }
