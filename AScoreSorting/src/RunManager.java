@@ -1,4 +1,6 @@
+import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
@@ -40,6 +42,7 @@ public class RunManager {
     private RandomAccessFile fil;
     byte[][] runContents;
     int[] offsetPos;
+    private DataOutputStream os; 
 
 
     /**
@@ -55,8 +58,8 @@ public class RunManager {
     }
 
 
-    public void mergeAllRuns() {
-        String[] fileNames = { "runfile.txt", "runfile2.txt" };
+    public void mergeAllRuns() throws IOException {
+        String[] fileNames = { "runfile.data", "runfile1.data" };
 
         int mergePassNum = 0;
         while (runLengths.size() > 1) {
@@ -80,9 +83,9 @@ public class RunManager {
         String inFile,
         String outFile,
         int startRun,
-        int numRuns) {
+        int numRuns) throws IOException {
         loadRuns(inFile, startRun, numRuns);
-
+        os = new DataOutputStream(new FileOutputStream(outFile, false));
         int newRunLength = 0;
         while (runNotFinished()) {
             Apple max = new Apple(0, 0);
@@ -96,7 +99,7 @@ public class RunManager {
                     }
                 }
             }
-            writeOutputBuffer(outFile, max);
+            writeOutputBuffer(os, max);
             offsetPos[maxRun]++;
             newRunLength++;
         }
@@ -105,7 +108,7 @@ public class RunManager {
     }
 
 
-    private void loadRuns(String inFile, int startNum, int numRuns) {
+    private void loadRuns(String inFile, int startNum, int numRuns) throws IOException {
         offsetPos = new int[numRuns]; // all zeros
         runContents = new byte[numRuns][1024];
 
@@ -158,11 +161,13 @@ public class RunManager {
     }
 
 
-    private void writeOutputBuffer(String outFile, Apple record) {
+    private void writeOutputBuffer(DataOutputStream outFile, Apple record)
+        throws IOException {
         outputBuffer[outPos++] = record;
 
         if (outPos >= outputBuffer.length) {
-// todo: write to outFile
+            outFile.writeLong(record.getPid());
+            outFile.writeDouble(record.getScore());
             outPos = 0;
         }
     }
