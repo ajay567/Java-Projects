@@ -42,7 +42,7 @@ public class RunManager {
     private RandomAccessFile fil;
     byte[][] runContents;
     int[] offsetPos;
-    private DataOutputStream os; 
+    private DataOutputStream os;
 
 
     /**
@@ -58,7 +58,7 @@ public class RunManager {
     }
 
 
-    public void mergeAllRuns() throws IOException {
+    public String mergeAllRuns() throws IOException {
         String[] fileNames = { "runfile.data", "runfile1.data" };
 
         int mergePassNum = 0;
@@ -76,6 +76,7 @@ public class RunManager {
             runLengths = newRunLengths;
             mergePassNum++;
         }
+        return fileNames[mergePassNum % 2];
     }
 
 
@@ -83,7 +84,8 @@ public class RunManager {
         String inFile,
         String outFile,
         int startRun,
-        int numRuns) throws IOException {
+        int numRuns)
+        throws IOException {
         loadRuns(inFile, startRun, numRuns);
         os = new DataOutputStream(new FileOutputStream(outFile, false));
         int newRunLength = 0;
@@ -108,7 +110,8 @@ public class RunManager {
     }
 
 
-    private void loadRuns(String inFile, int startNum, int numRuns) throws IOException {
+    private void loadRuns(String inFile, int startNum, int numRuns)
+        throws IOException {
         offsetPos = new int[numRuns]; // all zeros
         runContents = new byte[numRuns][1024];
 
@@ -125,7 +128,8 @@ public class RunManager {
         }
         else {
             fil.seek(offsetPos[runNum] * 16);
-            fil.readFully(runContents[runNum], 0, (runLengths.get(runNum) - offsetPos[runNum])*16 );
+            fil.readFully(runContents[runNum], 0, (runLengths.get(runNum)
+                - offsetPos[runNum]) * 16);
         }
     }
 
@@ -164,10 +168,12 @@ public class RunManager {
     private void writeOutputBuffer(DataOutputStream outFile, Apple record)
         throws IOException {
         outputBuffer[outPos++] = record;
-
+        
         if (outPos >= outputBuffer.length) {
-            outFile.writeLong(record.getPid());
-            outFile.writeDouble(record.getScore());
+            for (int i = 0; i < outPos; i++) {
+                outFile.writeLong(outputBuffer[i].getPid());
+                outFile.writeDouble(outputBuffer[i].getScore());
+            }
             outPos = 0;
         }
     }
