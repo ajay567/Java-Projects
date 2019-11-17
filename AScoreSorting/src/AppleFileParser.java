@@ -117,6 +117,7 @@ public class AppleFileParser {
      */
     public void writeRunFile(Apple[] outputBuffer, int outPos) throws IOException {
         for (int i = 0; i < outPos; i++) {
+//            System.out.println("output: "+outputBuffer[i].getScore());
             os.writeLong(outputBuffer[i].getPid());
             os.writeDouble(outputBuffer[i].getScore());
         }
