@@ -54,7 +54,7 @@ public class AppleFileParser {
     public AppleFileParser(String fileName) throws IOException {
         fil = new RandomAccessFile(fileName, "r");
         offsetPosNull = 0;
-        fileLength = 0;
+        fileLength = fil.length();
         os = new DataOutputStream(new FileOutputStream("runFile.data", false));
         
         storedBuffer = new byte[1024*16];
@@ -72,9 +72,7 @@ public class AppleFileParser {
      * @throws IOException
      */
     public Apple getNextRecord() throws IOException {
-        
-        fileLength = fil.length();
-        
+             
         
         if (startPos + 16 > 1024*16) {
             fil.seek(bytesTaken);
@@ -106,7 +104,6 @@ public class AppleFileParser {
      * @throws IOException
      */
     public boolean hasNextRecord() throws IOException {
-        fileLength = fil.length();
         if (offsetPosNull + 16 <= fileLength) {
             return true;
         }
