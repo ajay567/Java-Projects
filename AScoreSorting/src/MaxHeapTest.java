@@ -64,36 +64,7 @@ public class MaxHeapTest {
         
         myHeap.removemax();
         myHeap.modify(myHeap.getSize(), 300);
-        
-        
-        
-        
-        
-        assertEquals(myHeap.getSize(), 10);
-        
-        assertEquals(myHeap.getSize(), 6);
-        
-        
-        assertEquals(myHeap.removemax(), (Integer)40);
-        
-        assertEquals(myHeap.removemax(), (Integer)29);
-        assertEquals(myHeap.removemax(), (Integer)25);
-        
-        assertEquals(myHeap.getSize(), 2);
-        
-        myHeap.modify(myHeap.getSize(), 50);
-        
-        assertEquals(myHeap.removemax(), (Integer)25);
-        
-        myHeap.insert(21);
-        
-        assertEquals(myHeap.removemax(), (Integer)25);
-        myHeap.insert(31);
-        assertEquals(myHeap.removemax(), (Integer)25);
-        myHeap.insert(25);
-        
-        assertEquals(myHeap.removemax(), (Integer)31);
-        
+              
     }
 
 }
