@@ -39,12 +39,12 @@ public class Ascoresorting {
 //            System.out.println(apple.getPid() + " " + apple.getScore());
 //        }
       
-      ExternalSort sort =  new ExternalSort("sample128k.bin");
+      ExternalSort sort =  new ExternalSort("sample128ktest.bin");
       ArrayList<Integer> runLengths = sort.performExternalSort();
       
       
       RunManager runManager = new RunManager(runLengths);
-      String outputFile = runManager.mergeAllRuns();
+      runManager.mergeAllRuns("sample128ktest.bin");
       
       
       VTStudentsManager test = new VTStudentsManager();

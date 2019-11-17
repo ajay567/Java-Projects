@@ -55,7 +55,7 @@ public class RunManager {
     }
 
 
-    public String mergeAllRuns() throws IOException {
+    public void mergeAllRuns(String finalOutputFile) throws IOException {
      //   System.out.println("Merging all "+runLengths.size()+ " runs");
         String[] fileNames = { "runfile.data", "runfile1.data" };
 
@@ -64,18 +64,20 @@ public class RunManager {
             ArrayList<Integer> newRunLengths = new ArrayList<Integer>();
             for (int i = 0; i < runLengths.size(); i += 8) {
                 int runCount = 8;
-                if (runLengths.size() - i < 8) {
+                String outFile = fileNames[(mergePassNum + 1) % 2];
+                
+                if (runLengths.size() - i <= 8) {
                     runCount = runLengths.size() - i;
+                    outFile = finalOutputFile;
                 }
                 int runLen = mergeRuns(fileNames[mergePassNum % 2],
-                    fileNames[(mergePassNum + 1) % 2], i, runCount);
+                    outFile, i, runCount);
             //    System.out.println("Created run len:" + runLen);
                 newRunLengths.add(runLen);
             }
             runLengths = newRunLengths;
             mergePassNum++;
         }
-        return fileNames[(mergePassNum) % 2];
     }
 
 
@@ -85,7 +87,7 @@ public class RunManager {
         int startRun,
         int numRuns)
         throws IOException {
-  //      System.out.println("Merging runs " + startRun + " to "+ (startRun+numRuns) + " from " + inFile+" to "+ outFile);
+//        System.out.println("Merging runs " + startRun + " to "+ (startRun+numRuns) + " from " + inFile+" to "+ outFile);
         runComplete = new boolean[numRuns];
         fil = new RandomAccessFile(inFile, "r");
         loadRuns(inFile, startRun, numRuns);
