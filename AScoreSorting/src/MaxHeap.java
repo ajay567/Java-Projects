@@ -44,12 +44,12 @@ public class MaxHeap<E extends Comparable<E>>{
         return 2*pos + 1;
     }
     
-    private int rightchild(int pos) {
-        if(pos >= (size-1)/2) {
-            return -1;
-        }
-        return 2*pos + 2;
-    }
+//    private int rightchild(int pos) {
+//        if(pos >= (size-1)/2) {
+//            return -1;
+//        }
+//        return 2*pos + 2;
+//    }
     
     private int parent(int pos) {
         if(pos <= 0) {
@@ -114,20 +114,20 @@ public class MaxHeap<E extends Comparable<E>>{
         return max;
     }
 
-    // Remove and return element at specified position
-    private E remove(int pos) {
-        if ((pos < 0) || (pos >= size)) {
-            return null; // Illegal heap position
-        }
-        if (pos == (size-1)) {
-            size--; // Last element, no work to be done
-        }
-        else {
-            swapPos(pos, --size); // Swap with last value
-            update(pos);
-        }
-        return heap[size];
-    }
+//    // Remove and return element at specified position
+//    private E remove(int pos) {
+//        if ((pos < 0) || (pos >= size)) {
+//            return null; // Illegal heap position
+//        }
+//        if (pos == (size-1)) {
+//            size--; // Last element, no work to be done
+//        }
+//        else {
+//            swapPos(pos, --size); // Swap with last value
+//            update(pos);
+//        }
+//        return heap[size];
+//    }
 
     // Modify the value at the given position
     public void modify(int pos, E newVal) {
@@ -135,15 +135,15 @@ public class MaxHeap<E extends Comparable<E>>{
         heap[pos] = newVal;
     }
 
-    // The value at pos has been changed, restore the heap property
-    private void update(int pos) {
-        // If it is a big value, push it up
-        while ((pos > 0) && (heap[pos].compareTo(heap[parent(pos)]) > 0)) {
-            swapPos(pos, parent(pos));
-            pos = parent(pos);
-        }
-        siftdown(pos); // If it is little, push down
-    }
+//    // The value at pos has been changed, restore the heap property
+//    private void update(int pos) {
+//        // If it is a big value, push it up
+//        while ((pos > 0) && (heap[pos].compareTo(heap[parent(pos)]) > 0)) {
+//            swapPos(pos, parent(pos));
+//            pos = parent(pos);
+//        }
+//        siftdown(pos); // If it is little, push down
+//    }
     
     private void swapPos(int a, int b) {
         E temp = heap[a];

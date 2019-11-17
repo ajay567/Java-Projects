@@ -4,9 +4,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
 // On my honor:
@@ -59,11 +56,11 @@ public class RunManager {
 
 
     public String mergeAllRuns() throws IOException {
-        System.out.println("Merging all "+runLengths.size()+ " runs");
+     //   System.out.println("Merging all "+runLengths.size()+ " runs");
         String[] fileNames = { "runfile.data", "runfile1.data" };
 
         int mergePassNum = 0;
-        while (runLengths.size() > 1) {
+        while (runLengths.size() > 1) { 
             ArrayList<Integer> newRunLengths = new ArrayList<Integer>();
             for (int i = 0; i < runLengths.size(); i += 8) {
                 int runCount = 8;
@@ -72,7 +69,7 @@ public class RunManager {
                 }
                 int runLen = mergeRuns(fileNames[mergePassNum % 2],
                     fileNames[(mergePassNum + 1) % 2], i, runCount);
-                System.out.println("Created run len:" + runLen);
+            //    System.out.println("Created run len:" + runLen);
                 newRunLengths.add(runLen);
             }
             runLengths = newRunLengths;
@@ -88,7 +85,7 @@ public class RunManager {
         int startRun,
         int numRuns)
         throws IOException {
-        System.out.println("Merging runs " + startRun + " to "+ (startRun+numRuns) + " from " + inFile+" to "+ outFile);
+  //      System.out.println("Merging runs " + startRun + " to "+ (startRun+numRuns) + " from " + inFile+" to "+ outFile);
         runComplete = new boolean[numRuns];
         fil = new RandomAccessFile(inFile, "r");
         loadRuns(inFile, startRun, numRuns);
@@ -112,13 +109,13 @@ public class RunManager {
                     }
                 }
             }
-            System.out.println("From run: "+maxRun+" pos: "+offsetPos[maxRun]);
+        //    System.out.println("From run: "+maxRun+" pos: "+offsetPos[maxRun]);
             writeOutputBuffer(os, max);
             offsetPos[maxRun]++;
             
             if(offsetPos[maxRun] >= runLengths.get(maxRun)) {
                 runComplete[maxRun] = true;
-                System.out.println("run complete:"+ maxRun);
+            //    System.out.println("run complete:"+ maxRun);
             }
             
             if(offsetPos[maxRun] % 1024 == 0) {
@@ -133,7 +130,7 @@ public class RunManager {
 
     private void loadRuns(String inFile, int startNum, int numRuns)
         throws IOException {
-        System.out.println("Load runs");
+   //     System.out.println("Load runs");
         offsetPos = new int[numRuns]; // all zeros
         runContents = new byte[numRuns][1024*16];
 
@@ -146,7 +143,7 @@ public class RunManager {
 
 
     private void loadNextBlock(int runNum) throws IOException {
-        System.out.println("loadNextBlock: "+ runNum);
+     //   System.out.println("loadNextBlock: "+ runNum);
         int fileOffset = 0;
         
         for(int i=0; i<runNum; i++) {
@@ -205,7 +202,7 @@ public class RunManager {
     private void writeOutputBuffer(DataOutputStream outFile, Apple record)
         throws IOException {
         outputBuffer[outPos++] = record;
-        System.out.println(outPos+ " Outputting: " + record.getScore() + ", "+ record.getPid());
+  //      System.out.println(outPos+ " Outputting: " + record.getScore() + ", "+ record.getPid());
         
         if (outPos >= outputBuffer.length) {
             for (int i = 0; i < outPos; i++) {

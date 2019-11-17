@@ -34,9 +34,9 @@ public class MaxHeapTest {
         myHeap = new MaxHeap<Double>(myList, 20, 20);
         
         assertEquals(myHeap.getSize(), 20);
-        for(int i=0; i<20; i++) {
-            System.out.println(myHeap.removemax());
-        }
+//        for(int i=0; i<20; i++) {
+//            System.out.println(myHeap.removemax());
+//        }
     }
     
     @Test
@@ -55,10 +55,9 @@ public class MaxHeapTest {
         
         assertEquals(myHeap.removemax(), (Integer)99);
         myHeap.insert(51);
-        
+        myHeap.incrementNullCount();
         myHeap.removemax();
         myHeap.modify(myHeap.getSize(), 200);
-        
         myHeap.removemax();
         myHeap.insert(88);
         

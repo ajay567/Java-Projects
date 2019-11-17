@@ -23,6 +23,17 @@
  * @author <Amit Ramesh> <amitr>
  * @version 2019.09.11
  */
-public class AppleFileParserTest {
+public class AppleFileParserTest extends student.TestCase{
+    
+    /**
+     * fields
+     */
+    
+    /**
+     * Set up variables for testing
+     */
+    public void setUp() {
+       
+    }
 
 }

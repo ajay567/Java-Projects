@@ -47,7 +47,7 @@ public class VTStudentsManager {
      * @throws IOException
      */
     public void printOutStudents(String fileName, String studentFileName) throws IOException {
-        System.out.println("printing: "+fileName);
+       // System.out.println("printing: "+fileName);
         fil = new RandomAccessFile(fileName, "r");
 
         StudentFileParser parse = new StudentFileParser();
@@ -104,7 +104,8 @@ public class VTStudentsManager {
             wrapped = ByteBuffer.wrap(buffer200, printingPos, 8);
             double score = wrapped.getDouble();
             printingPos += 8;
-            System.out.println("Line:" + i + " Pid:" + pid + " Score:" + score);
+            //System.out.println("Line:" + i + " Pid:" + pid + " Score:" + score);
+            System.out.println(pid + " " + score);
         }
 
     }

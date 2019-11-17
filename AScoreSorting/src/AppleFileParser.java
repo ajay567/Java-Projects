@@ -2,7 +2,6 @@ import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
@@ -40,9 +39,11 @@ public class AppleFileParser {
     private int offsetPosNull;
     private RandomAccessFile fil;
     private DataOutputStream os; 
-    private PrintWriter writer;
     private long fileLength;
-
+    
+    private byte[] storedBuffer;
+    private int bytesTaken;
+    int startPos;
 
     /**
      * Constructor
@@ -55,7 +56,11 @@ public class AppleFileParser {
         offsetPosNull = 0;
         fileLength = 0;
         os = new DataOutputStream(new FileOutputStream("runFile.data", false));
-        writer = new PrintWriter("runFile.txt", "UTF-8");
+        
+        storedBuffer = new byte[1024*16];
+        startPos = 0;
+        bytesTaken = 1024*16;
+        fil.readFully(storedBuffer, 0, 1024*16);
     }
 
 
@@ -67,26 +72,28 @@ public class AppleFileParser {
      * @throws IOException
      */
     public Apple getNextRecord() throws IOException {
-
+        
         fileLength = fil.length();
-        byte[] buffer;
-
-        if (offsetPosNull + 16 <= fileLength) {
-            buffer = new byte[16];
+        
+        
+        if (startPos + 16 > 1024*16) {
+            fil.seek(bytesTaken);
+            storedBuffer = new byte[1024*16];
+            fil.readFully(storedBuffer, 0, 1024*16);
+            bytesTaken += 1024*16;
+            startPos = 0;
         }
-        else {
-            return null;
-        }
-
-        int offsetPos = 0;
-        fil.readFully(buffer, offsetPos, 16);
+        
         offsetPosNull += 16;
+        
 
-        ByteBuffer wrapped = ByteBuffer.wrap(buffer, 0, 8);
+        ByteBuffer wrapped = ByteBuffer.wrap(storedBuffer, startPos, 8);
         long pid = wrapped.getLong();
+        startPos += 8;
 
-        wrapped = ByteBuffer.wrap(buffer, 8, 8);
+        wrapped = ByteBuffer.wrap(storedBuffer, startPos, 8);
         double score = wrapped.getDouble();
+        startPos += 8;
 
         Apple apple = new Apple(pid, score);
         return apple;

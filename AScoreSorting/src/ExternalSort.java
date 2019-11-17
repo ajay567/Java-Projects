@@ -97,7 +97,7 @@ public class ExternalSort {
             parser.writeRunFile(outputBuffer, outPos);
             runLength += outPos;
             runLengths.add(runLength);
-            System.out.println(runLength);            
+        //    System.out.println(runLength);            
             heap.reset();
         } while (parser.hasNextRecord());
         return runLengths;

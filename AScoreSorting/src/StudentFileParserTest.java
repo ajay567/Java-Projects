@@ -52,7 +52,7 @@ public class StudentFileParserTest extends student.TestCase {
         os.writeLong(983057537);
         os.writeBytes("Ajay");
         os.writeBytes("$");
-        os.writeBytes("Ashok");
+        os.writeBytes("temp");
         os.writeBytes("$");
         os.writeBytes("Dalmia");
         os.writeBytes("$");
