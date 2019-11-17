@@ -38,13 +38,13 @@ public class Ascoresorting {
 //            System.out.println(apple.getPid() + " " + apple.getScore());
 //        }
 
-//      ExternalSort sort =  new ExternalSort("sample128k.bin");
-//      ArrayList<Integer> runLengths = sort.performExternalSort();
-//      RunManager runManager = new RunManager(runLengths);
-//      String outputFile = runManager.mergeAllRuns();
+      ExternalSort sort =  new ExternalSort("sample128k.bin");
+      ArrayList<Integer> runLengths = sort.performExternalSort();
+      RunManager runManager = new RunManager(runLengths);
+      String outputFile = runManager.mergeAllRuns();
       VTStudentsManager test = new VTStudentsManager();
-//      test.printOutStudents(outputFile, "sample_vtstudents.data");
-      test.printOutStudents("runFile.data", "sample_vtstudents.data");
+      test.printOutStudents(outputFile, "sample_vtstudents.data");
+//      test.printOutStudents("runFile.data", "sample_vtstudents.data");
     }
 
 }

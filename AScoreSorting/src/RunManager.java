@@ -78,7 +78,7 @@ public class RunManager {
             runLengths = newRunLengths;
             mergePassNum++;
         }
-        return fileNames[(mergePassNum + 1) % 2];
+        return fileNames[(mergePassNum) % 2];
     }
 
 
@@ -88,7 +88,7 @@ public class RunManager {
         int startRun,
         int numRuns)
         throws IOException {
-        System.out.println("Merging runs " + startRun + " to "+ (startRun+numRuns));
+        System.out.println("Merging runs " + startRun + " to "+ (startRun+numRuns) + " from " + inFile+" to "+ outFile);
         runComplete = new boolean[numRuns];
         fil = new RandomAccessFile(inFile, "r");
         loadRuns(inFile, startRun, numRuns);
@@ -147,14 +147,19 @@ public class RunManager {
 
     private void loadNextBlock(int runNum) throws IOException {
         System.out.println("loadNextBlock: "+ runNum);
+        int fileOffset = 0;
+        
+        for(int i=0; i<runNum; i++) {
+            fileOffset += runLengths.get(i);
+        }
         if (runLengths.get(runNum) > offsetPos[runNum] + 1024) {
-            fil.seek(offsetPos[runNum] * 16);
+            fil.seek((fileOffset+offsetPos[runNum]) * 16);
             fil.readFully(runContents[runNum], 0, 1024 * 16);
         }
         else {
             int numRecords = (runLengths.get(runNum) - offsetPos[runNum]);
             if(numRecords > 0) {
-                fil.seek(offsetPos[runNum] * 16);
+                fil.seek((fileOffset+offsetPos[runNum]) * 16);
                 fil.readFully(runContents[runNum], 0, numRecords * 16);
             }
             else {

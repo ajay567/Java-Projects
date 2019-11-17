@@ -47,6 +47,7 @@ public class VTStudentsManager {
      * @throws IOException
      */
     public void printOutStudents(String fileName, String studentFileName) throws IOException {
+        System.out.println("printing: "+fileName);
         fil = new RandomAccessFile(fileName, "r");
 
         StudentFileParser parse = new StudentFileParser();
