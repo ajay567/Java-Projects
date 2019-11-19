@@ -44,6 +44,7 @@ public class RunManager {
     private DataOutputStream os;
     private boolean[] runComplete;
     private boolean[] fileExists;
+    
 
 
     /**
@@ -74,24 +75,35 @@ public class RunManager {
                 int runCount = 8;
                 int outFileNum = (mergePassNum + 1) % 2;
                 String outFile = fileNames[outFileNum];
+                
+                boolean append = fileExists[outFileNum];
                 if (runLengths.size() - i <= 8) {
                     runCount = runLengths.size() - i;
                     if (runLengths.size() <= 8) {
                         outFile = finalOutputFile;
-
+                        append = false;
                     }
                 }
 // System.out.println("Writing run: " +i+" "+ runCount + " "+outFile+ "
 // exists:"+fileExists[outFileNum]);
                 int runLen = mergeRuns(fileNames[mergePassNum % 2], outFile, i,
-                    runCount, fileExists[outFileNum]);
+                    runCount, append);
                 fileExists[outFileNum] = true;
 //                System.out.println("Created run len:" + runLen);
                 newRunLengths.add(runLen);
             }
-// System.out.println("Run lengths:" + newRunLengths.toString());
+//            int sumNewRun = 0;
+//            int sumOldRun = 0;
+//            for (int i = 0; i < newRunLengths.size(); i++) {
+//                sumNewRun += newRunLengths.get(i);
+//            }
+//            for (int i = 0; i < runLengths.size(); i++) {
+//                sumOldRun += runLengths.get(i);
+//            }
+//            System.out.println("Run lengths:" + sumOldRun + " NewRunLengths:" + sumNewRun);
             runLengths = newRunLengths;
             mergePassNum++;
+
         }
         while (runLengths.size() > 1);
     }
@@ -139,15 +151,15 @@ public class RunManager {
                     }
                 }
             }
-//            System.out.println("From run: " + maxRun + " pos: "
-//                + offsetPos[maxRun]);
+// System.out.println("From run: " + maxRun + " pos: "
+// + offsetPos[maxRun]);
             writeOutputBuffer(os, max);
             offsetPos[maxRun]++;
 
             if (offsetPos[maxRun] >= runLengths.get(startRun + maxRun)) {
                 runComplete[maxRun] = true;
-//                System.out.println("RunBUmber complete loadNextBlock"
-//                    + " MAxRun:" + maxRun + " OffsetPos:" + offsetPos[maxRun]);
+// System.out.println("RunBUmber complete loadNextBlock"
+// + " MAxRun:" + maxRun + " OffsetPos:" + offsetPos[maxRun]);
             }
 
             if (offsetPos[maxRun] % 1024 == 0 && !runComplete[maxRun]) {
@@ -203,12 +215,12 @@ public class RunManager {
                 fil.readFully(runContents[pos], 0, numRecords * 16);
             }
             else {
-//                System.out.println("RunBUmber complete loadNextBlock"
-//                    + " RunNUm:" + runNum + " OffsetPos:" + offsetPos[runNum]);
+// System.out.println("RunBUmber complete loadNextBlock"
+// + " RunNUm:" + runNum + " OffsetPos:" + offsetPos[runNum]);
                 runComplete[pos] = true;
-//                for (int i = 0; i < runComplete.length; i++) {
-//                    System.out.println(runComplete[i]);
-//                }
+// for (int i = 0; i < runComplete.length; i++) {
+// System.out.println(runComplete[i]);
+// }
             }
         }
     }
@@ -221,8 +233,7 @@ public class RunManager {
 
             int startPos = (offsetPos[pos] % 1024) * 16;
 // System.out.println("getNextRecord("+runNum+"):"+offsetPos[runNum]);
-            ByteBuffer wrapped = ByteBuffer.wrap(runContents[pos], startPos,
-                8);
+            ByteBuffer wrapped = ByteBuffer.wrap(runContents[pos], startPos, 8);
             long pid = wrapped.getLong();
 
             wrapped = ByteBuffer.wrap(runContents[pos], startPos + 8, 8);
@@ -233,12 +244,12 @@ public class RunManager {
         }
 
         runComplete[runNum] = true;
-//        System.out.println("RunBUmber complete getNextRecord" + " RunNUm:"
-//            + runNum + " OffsetPos:" + offsetPos[runNum] + " New:" + runLengths
-//                .get(runNum));
-//        for (int i = 0; i < runComplete.length; i++) {
-//            System.out.println(runComplete[i]);
-//        }
+// System.out.println("RunBUmber complete getNextRecord" + " RunNUm:"
+// + runNum + " OffsetPos:" + offsetPos[runNum] + " New:" + runLengths
+// .get(runNum));
+// for (int i = 0; i < runComplete.length; i++) {
+// System.out.println(runComplete[i]);
+// }
         return null;
     }
 

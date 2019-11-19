@@ -18,11 +18,12 @@
 // during the discussion. I have violated neither the spirit nor
 // letter of this restriction.
 /**
- * Student Class contains each student's information
+ * Student Class contains each student's information as an
+ * object.
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
- * @version 2019.10.20
+ * @version 2019.11.19
  *
  */
 public class Student {
@@ -34,7 +35,6 @@ public class Student {
     private String lastName; // Last name
     private String middleName; // Middle name
     private String name; // Full name (First and last name concatenated)
-    private int score; // Student score
     private long id; // Student id
 
 
@@ -114,26 +114,5 @@ public class Student {
      */
     public String getName() {
         return name;
-    }
-
-
-    /**
-     * Setter method for score
-     * 
-     * @param newScore
-     *            Score to be set
-     */
-    public void setScore(int newScore) {
-        score = newScore;
-    }
-
-
-    /**
-     * Getter method for score
-     * 
-     * @return Student's score
-     */
-    public int getScore() {
-        return score;
     }
 }

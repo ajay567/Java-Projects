@@ -28,7 +28,7 @@ import java.util.Random;
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
- * @version 2019.09.11
+ * @version 2019.11.19
  */
 public class StudentFileParserTest extends student.TestCase {
 
@@ -48,6 +48,11 @@ public class StudentFileParserTest extends student.TestCase {
     }
 
 
+    /**
+     * Tests the readStudentDataFIle method
+     * 
+     * @throws IOException
+     */
     public void testReadsStudentDataFile() throws IOException {
         DataOutputStream os = new DataOutputStream(new FileOutputStream(
             "test1_Ajay.data", false));
@@ -69,8 +74,13 @@ public class StudentFileParserTest extends student.TestCase {
     }
 
 
+    /**
+     * Tests the method present in VT manager to print out the
+     * top 100 vt students
+     * 
+     * @throws IOException
+     */
     public void testVTManager() throws IOException {
-
         DataOutputStream os1 = new DataOutputStream(new FileOutputStream(
             "VTManager.data", false));
         os1.writeBytes("VTSTUDENTS");
@@ -104,6 +114,7 @@ public class StudentFileParserTest extends student.TestCase {
         studentFileParser.readsStudentDataFile("test1_Ajay.data");
 
         ArrayList<Student> student = studentFileParser.studentList();
+        output.close();
         assertTrue(student.get(0).getFirstName().equals("ajay"));
 
     }

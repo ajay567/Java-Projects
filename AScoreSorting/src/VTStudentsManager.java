@@ -23,18 +23,19 @@ import java.util.ArrayList;
 // during the discussion. I have violated neither the spirit nor
 // letter of this restriction.
 /**
+ * The final part of the program is completed using this class.
+ * It takes the sorted file and then prints out the top 100
+ * students of vt to the console. If there are less than 100
+ * then it prints out all of them.
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
- * @version 2019.09.11
+ * @version 2019.11.19
  */
 public class VTStudentsManager {
 
-    private RandomAccessFile fil;
-
-
     /**
-     * 
+     * Constructor
      */
     public VTStudentsManager() {
         // Does Nothing
@@ -42,14 +43,19 @@ public class VTStudentsManager {
 
 
     /**
+     * Method to print out the top 100 vt students
+     * from the sorted binary file.
      * 
      * @param fileName
+     *            sorted file
+     * @param studentFileName
+     *            vt student database file
      * @throws IOException
      */
     public void printOutStudents(String fileName, String studentFileName)
         throws IOException {
         // System.out.println("printing: "+fileName);
-        fil = new RandomAccessFile(fileName, "r");
+        RandomAccessFile fil = new RandomAccessFile(fileName, "r");
 
         StudentFileParser parse = new StudentFileParser();
         parse.readsStudentDataFile(studentFileName);
@@ -70,13 +76,14 @@ public class VTStudentsManager {
                 long pid = wrapped.getLong();
                 startPos += 8;
                 countLines++;
-                if (matches(String.valueOf(pid)) && countStudents < 100) {
+                if (matches(String.valueOf(pid))) {
                     wrapped = ByteBuffer.wrap(buffer, startPos, 8);
                     double score = wrapped.getDouble();
                     startPos += 8;
 
                     for (int j = 0; j < student.size(); j++) {
-                        if (pid == student.get(j).getID()) {
+                        if (pid == student.get(j).getID()
+                            && countStudents < 100) {
                             System.out.println(pid + ", " + student.get(j)
                                 .getName() + " at rank " + countLines
                                 + " with Ascore " + score);
@@ -91,32 +98,39 @@ public class VTStudentsManager {
             }
 
         }
-        fil.seek(0);
-        int printingPos = 0;
-        byte[] buffer200 = new byte[(int)fil.length()];
-        fil.read(buffer200);
-        for (int i = 0; i < fil.length() / 16; i++) {
-            ByteBuffer wrapped = ByteBuffer.wrap(buffer200, printingPos, 8);
-            printingPos += 8;
-            long pid = wrapped.getLong();
-
-            wrapped = ByteBuffer.wrap(buffer200, printingPos, 8);
-            double score = wrapped.getDouble();
-            printingPos += 8;
-            // System.out.println("Line:" + i + " Pid:" + pid + " Score:" +
-            // score);
-            System.out.println(i + " " + pid + " " + score);
-        }
+// fil.seek(0);
+// int printingPos = 0;
+// byte[] buffer200 = new byte[(int)fil.length()];
+// fil.read(buffer200);
+// for (int i = 0; i < fil.length() / 16; i++) {
+// ByteBuffer wrapped = ByteBuffer.wrap(buffer200, printingPos, 8);
+// printingPos += 8;
+// long pid = wrapped.getLong();
+//
+// wrapped = ByteBuffer.wrap(buffer200, printingPos, 8);
+// double score = wrapped.getDouble();
+// printingPos += 8;
+// // System.out.println("Line:" + i + " Pid:" + pid + " Score:" +
+// // score);
+// System.out.println(i + " " + pid + " " + score);
+// }
 
     }
 
 
     /**
+     * Helper method to print out the top 100 vt student.
+     * It gives the print out method a block of bytes at
+     * a time
      * 
      * @param bytesTaken
+     *            amount of records in the file that
+     *            have been used
      * @param fileLength
+     *            length of the file
      * @param fil
-     * @return
+     *            sorted file
+     * @return a block of bytes
      * @throws IOException
      */
     public byte[] readbytes(
@@ -140,9 +154,12 @@ public class VTStudentsManager {
 
 
     /**
+     * Check if a particular record in a file is for
+     * a vt student or not
      * 
      * @param pid
-     * @return
+     *            the record to identify a student
+     * @return true or false
      */
     public boolean matches(String pid) {
         int count = 0;

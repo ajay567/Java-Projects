@@ -24,18 +24,20 @@ import java.util.Random;
 // during the discussion. I have violated neither the spirit nor
 // letter of this restriction.
 /**
+ * Replacement selection is done in this class with the help of
+ * the heap created.
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
- * @version 2019.09.11
+ * @version 2019.11.19
  */
 public class ExternalSortTest extends student.TestCase {
-    
+
     /**
      * fields
      */
-    DataOutputStream output1;
-    DataOutputStream output;
+    private DataOutputStream output1;
+    private DataOutputStream output;
 
 
     /**
@@ -46,38 +48,52 @@ public class ExternalSortTest extends student.TestCase {
     public void setUp() throws IOException {
         output1 = new DataOutputStream(new FileOutputStream("testing_Ajay1.bin",
             false));
-        output = new DataOutputStream(new FileOutputStream("testing_Ajay189.bin",
-            false));
+        output = new DataOutputStream(new FileOutputStream(
+            "testing_Ajay189.bin", false));
     }
-    
-    public void testAppleFileParser() throws IOException {
+
+
+    /**
+     * Tests the externalSort method with the right number
+     * of records in the file.
+     * 
+     * @throws IOException
+     */
+    public void testPerformExternalSort() throws IOException {
         Apple[] temp = new Apple[9216];
         Apple apple = null;
         Random rand = new Random();
         for (int i = 0; i < 9216; i++) {
             apple = new Apple(2345678, rand.nextDouble());
             temp[i] = apple;
-        } 
+        }
         for (int i = 0; i < 9216; i++) {
             output1.writeLong(temp[i].getPid());
             output1.writeDouble(temp[i].getScore());
         }
 
         ExternalSort parser = new ExternalSort("testing_Ajay1.bin");
-        
+
         parser.performExternalSort();
         assertEquals(temp[0].getPid(), 2345678);
     }
-    
-    public void testAppleFileParserLessBlocks() throws IOException {
-        
+
+
+    /**
+     * Tests the externalSort method with the wrong number
+     * of records in the file.
+     * 
+     * @throws IOException
+     */
+    public void testPerformExternalSortLessBlocks() throws IOException {
+
         Apple[] temp = new Apple[8192];
         Apple apple = null;
         Random rand = new Random();
         for (int i = 0; i < 8192; i++) {
             apple = new Apple(2345678, rand.nextDouble());
             temp[i] = apple;
-        } 
+        }
         for (int i = 0; i < 8192; i++) {
             output.writeLong(temp[i].getPid());
             output.writeDouble(temp[i].getScore());

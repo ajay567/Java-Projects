@@ -23,17 +23,18 @@ import java.util.Random;
 // during the discussion. I have violated neither the spirit nor
 // letter of this restriction.
 /**
+ * Test class for AppleFileParser
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
- * @version 2019.09.11
+ * @version 2019.11.19
  */
 public class AppleFileParserTest extends student.TestCase {
 
     /**
      * fields
      */
-    DataOutputStream output;
+    private DataOutputStream output;
 
 
     /**
@@ -46,7 +47,12 @@ public class AppleFileParserTest extends student.TestCase {
             false));
     }
 
-
+    /**
+     * Tests all the methods present in the AppleFile parser class
+     * which includes getNextRecord, hasNextRecord and writeRunFIle.
+     * 
+     * @throws IOException
+     */
     public void testAppleFileParser() throws IOException {
         Apple[] temp = new Apple[2048];
         Apple apple = null;

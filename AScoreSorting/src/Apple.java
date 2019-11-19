@@ -18,10 +18,11 @@
 // during the discussion. I have violated neither the spirit nor
 // letter of this restriction.
 /**
+ * Apple Object class for score and pid of all the students.
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
- * @version 2019.09.11
+ * @version 2019.11.19
  */
 public class Apple implements Comparable<Apple> {
 
@@ -33,9 +34,12 @@ public class Apple implements Comparable<Apple> {
 
 
     /**
+     * Constructor that takes in two parameters
      * 
      * @param pid
+     *            the pid of a student
      * @param score
+     *            the score of a student
      */
     public Apple(long pid, double score) {
         this.pid = pid;
@@ -44,8 +48,9 @@ public class Apple implements Comparable<Apple> {
 
 
     /**
+     * Getter method for pid
      * 
-     * @return
+     * @return pid value
      */
     public long getPid() {
         return pid;
@@ -53,8 +58,9 @@ public class Apple implements Comparable<Apple> {
 
 
     /**
+     * Getter method for score
      * 
-     * @return
+     * @return score value
      */
     public double getScore() {
         return score;
@@ -62,20 +68,16 @@ public class Apple implements Comparable<Apple> {
 
 
     /**
-     * Defines how to compare Apple objects to implement Comparable
+     * Method to compare the two apple objects based on the score
+     * of the students.
      * 
      * @param other
-     *            score object
+     *            apple object
      * @return returns an integer
      */
     @Override
     public int compareTo(Apple other) {
         return Double.compare(this.score, other.score);
     }
-    
-//    public String toString() {
-//        return score+"";
-//    }
-    
 
 }

@@ -22,7 +22,7 @@
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
- * @version 2019.10.20
+ * @version 2019.11.19
  *
  */
 public class StudentTest extends student.TestCase {
@@ -54,12 +54,11 @@ public class StudentTest extends student.TestCase {
 
 
     /**
-     * Tests getter and setter methods for ID, Grade, and Score
+     * Tests getter and setter methods for ID.
      */
-    public void testIdScoreGrade() {
-        student.setScore(100);
+    public void testGetIDMethod() {
+
         assertEquals(student.getID(), 983057537);
-        assertEquals(student.getScore(), 100);
     }
 
 }

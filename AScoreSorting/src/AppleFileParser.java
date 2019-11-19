@@ -26,10 +26,14 @@ import java.nio.ByteBuffer;
 // during the discussion. I have violated neither the spirit nor
 // letter of this restriction.
 /**
+ * This class is a helper class for replacement selection. It
+ * reads the initial binary file in blocks, converts a record
+ * to an apple object and sends to to the external sort class.
+ * It also writes the apple records back to a binary file.
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
- * @version 2019.09.11
+ * @version 2019.11.19
  */
 public class AppleFileParser {
 
@@ -38,16 +42,21 @@ public class AppleFileParser {
      */
     private int offsetPosNull;
     private RandomAccessFile fil;
-    private DataOutputStream os; 
+    private DataOutputStream os;
     private long fileLength;
-    
     private byte[] storedBuffer;
     private int bytesTaken;
-    int startPos;
+    private int startPos;
+    private int readCount = 0;
+    private int writeCount = 0;
+
 
     /**
-     * Constructor
+     * Constructor that takes in a file name that is suppossed
+     * to be read
      * 
+     * @param fileName
+     *            the file to be processed
      * @throws FileNotFoundException
      * @throws UnsupportedEncodingException
      */
@@ -56,34 +65,32 @@ public class AppleFileParser {
         offsetPosNull = 0;
         fileLength = fil.length();
         os = new DataOutputStream(new FileOutputStream("runfile.bin", false));
-        
-        storedBuffer = new byte[1024*16];
+
+        storedBuffer = new byte[1024 * 16];
         startPos = 0;
-        bytesTaken = 1024*16;
-        fil.readFully(storedBuffer, 0, 1024*16);
+        bytesTaken = 1024 * 16;
+        fil.readFully(storedBuffer, 0, 1024 * 16);
     }
 
 
     /**
-     * Reads Student Input files in binary format
+     * Passes a record as an apple object to the
+     * external sort class.
      * 
-     * @param fileName
-     *            Binary File to read
+     * @return apple object
      * @throws IOException
      */
     public Apple getNextRecord() throws IOException {
-             
-        
-        if (startPos + 16 > 1024*16) {
+
+        if (startPos + 16 > 1024 * 16) {
             fil.seek(bytesTaken);
-            storedBuffer = new byte[1024*16];
-            fil.readFully(storedBuffer, 0, 1024*16);
-            bytesTaken += 1024*16;
+            storedBuffer = new byte[1024 * 16];
+            fil.readFully(storedBuffer, 0, 1024 * 16);
+            bytesTaken += 1024 * 16;
             startPos = 0;
         }
-        
+
         offsetPosNull += 16;
-        
 
         ByteBuffer wrapped = ByteBuffer.wrap(storedBuffer, startPos, 8);
         long pid = wrapped.getLong();
@@ -94,40 +101,53 @@ public class AppleFileParser {
         startPos += 8;
 
         Apple apple = new Apple(pid, score);
+        readCount++;
         return apple;
     }
 
 
     /**
+     * Checks if there are any more records to be processed
+     * as apple objects.
      * 
-     * @return
+     * @return true or false
      * @throws IOException
      */
     public boolean hasNextRecord() throws IOException {
-        if (offsetPosNull + 16 <= fileLength) {
-            return true;
-        }
-        else {
-            return false;
-        }
+
+        return (offsetPosNull + 16 <= fileLength);
     }
 
 
     /**
-     * @throws IOException 
-     * @throws UnsupportedEncodingException
-     * @throws FileNotFoundException 
+     * The apple objects in the output buffer are written as
+     * bytes into the binary file.
      * 
+     * @param outputBuffer
+     *            the array to be written to a field
+     * @param outPos
+     *            the size of the array
+     * @throws IOException
+     * @throws UnsupportedEncodingException
+     * @throws FileNotFoundException
      */
-    public void writeRunFile(Apple[] outputBuffer, int outPos) throws IOException {
+    public void writeRunFile(Apple[] outputBuffer, int outPos)
+        throws IOException {
         for (int i = 0; i < outPos; i++) {
-//            System.out.println("output: "+outputBuffer[i].getScore());
             os.writeLong(outputBuffer[i].getPid());
             os.writeDouble(outputBuffer[i].getScore());
         }
+        writeCount += outPos;
     }
-    
+
+
+    /**
+     * Closing the two files that were opened in this class.
+     * 
+     * @throws IOException
+     */
     public void closingFiles() throws IOException {
+//        System.out.println("Read:" + readCount + " Write:" + writeCount);
         os.close();
         fil.close();
     }

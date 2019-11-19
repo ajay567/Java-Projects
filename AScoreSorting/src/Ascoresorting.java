@@ -39,7 +39,7 @@ public class Ascoresorting {
         ExternalSort sort;
         ArrayList<Integer> runLengths = null;
         try {
-            sort = new ExternalSort("testing_Ajay.bin");
+            sort = new ExternalSort(args[0]);
             runLengths = sort.performExternalSort();
         }
         catch (IOException e1) {
@@ -50,7 +50,7 @@ public class Ascoresorting {
  
         try {
             RunManager runManager = new RunManager(runLengths);
-            runManager.mergeAllRuns("output.bin");
+            runManager.mergeAllRuns(args[0]);
         }
         catch (FileNotFoundException e) {
             System.out.print("Merge all Runs FileNotFoundException " + e.getMessage());
@@ -69,7 +69,7 @@ public class Ascoresorting {
       //  long startTime = System.currentTimeMillis();
         VTStudentsManager test = new VTStudentsManager();
         try {
-            test.printOutStudents("output.bin", "sample_vtstudents.data");
+            test.printOutStudents(args[0], args[1]);
         }
         catch (IOException e) {
             // TODO Auto-generated catch block

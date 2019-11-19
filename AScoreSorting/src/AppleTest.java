@@ -22,11 +22,11 @@
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
- * @version 2019.10.20
+ * @version 2019.11.19
  *
  */
-public class AppleTest extends student.TestCase{
-    
+public class AppleTest extends student.TestCase {
+
     /**
      * Variable stubs for testing
      */
@@ -39,29 +39,32 @@ public class AppleTest extends student.TestCase{
     public void setUp() {
         apple = new Apple(983057537, 301.456);
     }
-    
+
+
     /**
      * Tests getter method for pid
      */
     public void testGetPid() {
-        assertEquals(apple.getPid(),983057537);
+        assertEquals(apple.getPid(), 983057537);
     }
-    
+
+
     /**
      * Tests getter method for Score
      */
     public void testGetScore() {
-        assertEquals(apple.getScore(),301.456,1);
+        assertEquals(apple.getScore(), 301.456, 1);
     }
-    
+
+
     /**
      * Tests getter method for compareTo
      */
     public void testCompareTo() {
-        Apple apple1 = new Apple(983057538,302.456);
-        Apple apple2 = new Apple(983057536,300.456);
-        assertEquals(apple.compareTo(apple1),-1);
-        assertEquals(apple.compareTo(apple2),1);
+        Apple apple1 = new Apple(983057538, 302.456);
+        Apple apple2 = new Apple(983057536, 300.456);
+        assertEquals(apple.compareTo(apple1), -1);
+        assertEquals(apple.compareTo(apple2), 1);
     }
 
 }

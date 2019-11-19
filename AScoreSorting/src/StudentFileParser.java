@@ -26,28 +26,35 @@ import java.util.ArrayList;
 // during the discussion. I have violated neither the spirit nor
 // letter of this restriction.
 /**
+ * This class manages the reading of a binary file of a
+ * vtstudent database and storing it as a array list
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
- * @version 2019.09.11
+ * @version 2019.11.19
  */
 public class StudentFileParser {
-    
+
     /**
      * fields
      */
     private ArrayList<Student> list = new ArrayList<Student>();
 
+
     /**
      * Constructor
      */
     public StudentFileParser() {
-        //Does Nothing
+        // Does Nothing
     }
-    
+
+
     /**
-     * Reads Student Input files in binary format
-     * @param fileName Binary File to read
+     * Reads Student Input files in binary format to an array
+     * list
+     * 
+     * @param fileName
+     *            Binary File to read
      * @throws IOException
      */
     public void readsStudentDataFile(String fileName) throws IOException {
@@ -110,10 +117,11 @@ public class StudentFileParser {
 
     /**
      * Provides student list
+     * 
      * @return ArrayList of all student objects read in
      */
     public ArrayList<Student> studentList() {
         return list;
     }
-    
+
 }
