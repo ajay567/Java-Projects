@@ -62,7 +62,8 @@ public class RunManager {
         String[] fileNames = { "runfile.data", "runfile1.data" };
 
         int mergePassNum = 0;
-        while (runLengths.size() > 1) { 
+        //todo:handle size 1
+        do { 
             ArrayList<Integer> newRunLengths = new ArrayList<Integer>();
             for (int i = 0; i < runLengths.size(); i += 8) {
                 int runCount = 8;
@@ -74,16 +75,17 @@ public class RunManager {
                         outFile = finalOutputFile;
                     }
                 }
-//                System.out.println("Creating run: " +i+" "+ runCount);
+//                System.out.println("Writing run: " +i+" "+ runCount + " "+outFile+ " exists:"+fileExists[outFileNum]);
                 int runLen = mergeRuns(fileNames[mergePassNum % 2],
                     outFile, i, runCount, fileExists[outFileNum]);
                 fileExists[outFileNum] = true;
 //                System.out.println("Created run len:" + runLen);
                 newRunLengths.add(runLen);
             }
+//            System.out.println("Run lengths:" + newRunLengths.toString());
             runLengths = newRunLengths;
             mergePassNum++;
-        }
+        } while (runLengths.size() > 1);
     }
 
 
