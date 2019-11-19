@@ -21,17 +21,18 @@ import java.util.ArrayList;
 // during the discussion. I have violated neither the spirit nor
 // letter of this restriction.
 /**
+ * This class performs the replacement selection by using the
+ * max heap created by us.
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
- * @version 2019.09.11
+ * @version 2019.11.19
  */
-public class ExternalSort {
+public class ReplacementSelection {
 
     /**
      * fields
      */
-    private MaxHeap<Apple> heap;
     private Apple[] outputBuffer;
     private int outPos;
     private ArrayList<Integer> runLengths;
@@ -39,12 +40,13 @@ public class ExternalSort {
 
 
     /**
+     * Constructor which takes a file Name
      * 
-     * @param parser
      * @param fileName
+     *            name of the file
      * @throws IOException
      */
-    public ExternalSort(String fileName) throws IOException {
+    public ReplacementSelection(String fileName) throws IOException {
         outputBuffer = new Apple[1024];
         runLengths = new ArrayList<Integer>();
         parser = new AppleFileParser(fileName);
@@ -52,25 +54,23 @@ public class ExternalSort {
     }
 
 
+    /**
+     * Method to implement external sort
+     * 
+     * @return an arraylist of run lengths
+     * @throws IOException
+     */
     public ArrayList<Integer> performExternalSort() throws IOException {
-        int readCount = 0;
-        int writeCount = 0;
-        
-        
-        int heapCap = 8*1024;
+
+        int heapCap = 8 * 1024;
         int heapSize = 0;
         Apple[] heapArr = new Apple[heapCap];
-        
-        while(parser.hasNextRecord() && heapSize < heapCap) {
+
+        while (parser.hasNextRecord() && heapSize < heapCap) {
             heapArr[heapSize++] = parser.getNextRecord();
-            readCount++;
         }
 
-//        for (int i = 0; i < heapCap; i++) {
-//            heapArr[i] = parser.getNextRecord();
-//        }
-
-        heap = new MaxHeap<Apple>(heapArr, heapSize, heapCap);
+        MaxHeap<Apple> heap = new MaxHeap<Apple>(heapArr, heapSize, heapCap);
         do {
 
             int runLength = 0;
@@ -83,7 +83,6 @@ public class ExternalSort {
                 // insert next element
                 if (parser.hasNextRecord()) {
                     Apple nextRecord = parser.getNextRecord();
-                    readCount++;
                     if (nextRecord.compareTo(outputBuffer[outPos - 1]) > 0) {
                         heap.modify(heap.getSize(), nextRecord);
                     }
@@ -96,30 +95,22 @@ public class ExternalSort {
                 }
 
                 // output buffer full
-                if (outPos >= outputBuffer.length) {                    
+                if (outPos >= outputBuffer.length) {
                     parser.writeRunFile(outputBuffer, outPos);
                     runLength += outPos;
-                    writeCount += outPos;
                     outPos = 0;
                 }
             }
 
-            // run complete            
+            // run complete
             parser.writeRunFile(outputBuffer, outPos);
             runLength += outPos;
-            writeCount += outPos;
             runLengths.add(runLength);
-//            System.out.println(runLength);            
             heap.reset();
-        } while (parser.hasNextRecord() || heap.getSize() > 0);
-        
-//        System.out.println("Read count:"+readCount);
-//        System.out.println("Write count:"+writeCount);
-//        
-//        System.out.println("Heap insert count:"+heap.getInsertCount());
-//        System.out.println("Heap remove:"+heap.getRemoveCount());
+        }
+        while (parser.hasNextRecord() || heap.getSize() > 0);
+
         parser.closingFiles();
-//        System.out.println(runLengths.toString());
         return runLengths;
     }
 }

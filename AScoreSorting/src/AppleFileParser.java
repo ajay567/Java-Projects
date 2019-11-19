@@ -28,7 +28,7 @@ import java.nio.ByteBuffer;
 /**
  * This class is a helper class for replacement selection. It
  * reads the initial binary file in blocks, converts a record
- * to an apple object and sends to to the external sort class.
+ * to an apple object and sends to to the Replacement class.
  * It also writes the apple records back to a binary file.
  * 
  * @author <Ajay Dalmia> <ajay99>
@@ -47,8 +47,6 @@ public class AppleFileParser {
     private byte[] storedBuffer;
     private int bytesTaken;
     private int startPos;
-    private int readCount = 0;
-    private int writeCount = 0;
 
 
     /**
@@ -101,7 +99,6 @@ public class AppleFileParser {
         startPos += 8;
 
         Apple apple = new Apple(pid, score);
-        readCount++;
         return apple;
     }
 
@@ -137,7 +134,6 @@ public class AppleFileParser {
             os.writeLong(outputBuffer[i].getPid());
             os.writeDouble(outputBuffer[i].getScore());
         }
-        writeCount += outPos;
     }
 
 
@@ -147,7 +143,6 @@ public class AppleFileParser {
      * @throws IOException
      */
     public void closingFiles() throws IOException {
-//        System.out.println("Read:" + readCount + " Write:" + writeCount);
         os.close();
         fil.close();
     }

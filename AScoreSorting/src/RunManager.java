@@ -1,6 +1,4 @@
 import java.io.DataOutputStream;
-import java.io.EOFException;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -28,6 +26,10 @@ import java.util.ArrayList;
 // during the discussion. I have violated neither the spirit nor
 // letter of this restriction.
 /**
+ * This class performs the Multiway Merge operation by taking help
+ * from the Replacement Selection class. It takes 8 runs at a time
+ * and merges them into a single run. This process takes place
+ * recursively.
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
@@ -35,21 +37,25 @@ import java.util.ArrayList;
  */
 public class RunManager {
 
+    /**
+     * fields
+     */
     private ArrayList<Integer> runLengths;
     private Apple[] outputBuffer;
-    int outPos;
+    private int outPos;
     private RandomAccessFile fil;
-    byte[][] runContents;
-    int[] offsetPos;
-    private DataOutputStream os;
+    private byte[][] runContents;
+    private int[] offsetPos;
     private boolean[] runComplete;
     private boolean[] fileExists;
-    
 
 
     /**
-     * @throws FileNotFoundException
+     * Constructor with a list parameter.
      * 
+     * @param runLengths
+     *            array list of the runlengths
+     * @throws FileNotFoundException
      */
     public RunManager(ArrayList<Integer> runLengths)
         throws FileNotFoundException {
@@ -60,11 +66,15 @@ public class RunManager {
     }
 
 
-    public void mergeAllRuns(String finalOutputFile)
-        throws FileNotFoundException,
-        EOFException,
-        IOException {
-// System.out.println("Merging all "+runLengths.size()+ " runs");
+    /**
+     * It merges all the runs from replacement selection and
+     * writes it to the final output file.
+     * 
+     * @param finalOutputFile
+     *            the final file
+     * @throws IOException
+     */
+    public void mergeAllRuns(String finalOutputFile) throws IOException {
         String[] fileNames = { "runfile.bin", "runfile1.bin" };
 
         int mergePassNum = 0;
@@ -75,7 +85,7 @@ public class RunManager {
                 int runCount = 8;
                 int outFileNum = (mergePassNum + 1) % 2;
                 String outFile = fileNames[outFileNum];
-                
+
                 boolean append = fileExists[outFileNum];
                 if (runLengths.size() - i <= 8) {
                     runCount = runLengths.size() - i;
@@ -84,23 +94,11 @@ public class RunManager {
                         append = false;
                     }
                 }
-// System.out.println("Writing run: " +i+" "+ runCount + " "+outFile+ "
-// exists:"+fileExists[outFileNum]);
                 int runLen = mergeRuns(fileNames[mergePassNum % 2], outFile, i,
                     runCount, append);
                 fileExists[outFileNum] = true;
-//                System.out.println("Created run len:" + runLen);
                 newRunLengths.add(runLen);
             }
-//            int sumNewRun = 0;
-//            int sumOldRun = 0;
-//            for (int i = 0; i < newRunLengths.size(); i++) {
-//                sumNewRun += newRunLengths.get(i);
-//            }
-//            for (int i = 0; i < runLengths.size(); i++) {
-//                sumOldRun += runLengths.get(i);
-//            }
-//            System.out.println("Run lengths:" + sumOldRun + " NewRunLengths:" + sumNewRun);
             runLengths = newRunLengths;
             mergePassNum++;
 
@@ -109,22 +107,30 @@ public class RunManager {
     }
 
 
+    /**
+     * Helper method for merge runs that merges 8 runs at
+     * a time.
+     * 
+     * @param inFile
+     *            the input file
+     * @param outFile
+     *            the output file
+     * @param startRun
+     *            the run number
+     * @param numRuns
+     *            the number of runs to merge
+     * @param appendFile
+     *            a boolean variable
+     * @return the length of the merged run
+     * @throws IOException
+     */
     private int mergeRuns(
         String inFile,
         String outFile,
         int startRun,
         int numRuns,
-        boolean fileExists)
-        throws FileNotFoundException,
-        EOFException,
-        IOException {
-//        System.out.println("Merging runs " + startRun + " to " + (startRun
-//            + numRuns) + " from " + inFile + " to " + outFile);
-//
-//        System.out.println("Run lengths:");
-//        for (int i = 0; i < numRuns; i++) {
-//            System.out.println(runLengths.get(startRun + i));
-//        }
+        boolean appendFile)
+        throws IOException {
 
         int runTotal = 0;
         for (int i = 0; i < numRuns; i++) {
@@ -134,7 +140,8 @@ public class RunManager {
         runComplete = new boolean[numRuns];
         fil = new RandomAccessFile(inFile, "r");
         loadRuns(inFile, startRun, numRuns);
-        os = new DataOutputStream(new FileOutputStream(outFile, fileExists));
+        DataOutputStream os = new DataOutputStream(new FileOutputStream(outFile,
+            appendFile));
 
         int newRunLength = 0;
         while (newRunLength < runTotal) {
@@ -151,19 +158,14 @@ public class RunManager {
                     }
                 }
             }
-// System.out.println("From run: " + maxRun + " pos: "
-// + offsetPos[maxRun]);
             writeOutputBuffer(os, max);
             offsetPos[maxRun]++;
 
             if (offsetPos[maxRun] >= runLengths.get(startRun + maxRun)) {
                 runComplete[maxRun] = true;
-// System.out.println("RunBUmber complete loadNextBlock"
-// + " MAxRun:" + maxRun + " OffsetPos:" + offsetPos[maxRun]);
             }
 
             if (offsetPos[maxRun] % 1024 == 0 && !runComplete[maxRun]) {
-// System.out.println("Input buffer "+(startRun+maxRun));
                 loadNextBlock(startRun + maxRun);
             }
             newRunLength++;
@@ -174,11 +176,19 @@ public class RunManager {
     }
 
 
+    /**
+     * It populates the byte array initially.
+     * 
+     * @param inFile
+     *            the input file
+     * @param startNum
+     *            the run number to start from
+     * @param numRuns
+     *            the number of runs to merge
+     * @throws IOException
+     */
     private void loadRuns(String inFile, int startNum, int numRuns)
-        throws FileNotFoundException,
-        EOFException,
-        IOException {
-        // System.out.println("Load runs");
+        throws IOException {
         offsetPos = new int[numRuns]; // all zeros
         runContents = new byte[numRuns][1024 * 16];
 
@@ -190,13 +200,15 @@ public class RunManager {
     }
 
 
-    private void loadNextBlock(int runNum)
-        throws FileNotFoundException,
-        EOFException,
-        IOException {
-// System.out.println("loadNextBlock: "+ runNum);
+    /**
+     * The method to load the next block of data
+     * 
+     * @param runNum
+     *            the run number to be loaded
+     * @throws IOException
+     */
+    private void loadNextBlock(int runNum) throws IOException {
         int pos = runNum % 8;
-// System.out.println("offset: "+ offsetPos[pos]);
 
         int fileOffset = 0;
 
@@ -210,29 +222,28 @@ public class RunManager {
         else {
             int numRecords = (runLengths.get(runNum) - offsetPos[pos]);
             if (numRecords > 0) {
-// System.out.println("Last block for run: "+ numRecords);
                 fil.seek((fileOffset + offsetPos[pos]) * 16);
                 fil.readFully(runContents[pos], 0, numRecords * 16);
             }
             else {
-// System.out.println("RunBUmber complete loadNextBlock"
-// + " RunNUm:" + runNum + " OffsetPos:" + offsetPos[runNum]);
                 runComplete[pos] = true;
-// for (int i = 0; i < runComplete.length; i++) {
-// System.out.println(runComplete[i]);
-// }
             }
         }
     }
 
 
+    /**
+     * Method to get the next record as an apple object
+     * 
+     * @param runNum
+     *            the run number
+     * @return the apple record
+     */
     private Apple getNextRecord(int runNum) {
-// if end of block load more records
         int pos = runNum % 8;
         if (offsetPos[pos] < runLengths.get(runNum)) {
 
             int startPos = (offsetPos[pos] % 1024) * 16;
-// System.out.println("getNextRecord("+runNum+"):"+offsetPos[runNum]);
             ByteBuffer wrapped = ByteBuffer.wrap(runContents[pos], startPos, 8);
             long pid = wrapped.getLong();
 
@@ -244,34 +255,22 @@ public class RunManager {
         }
 
         runComplete[runNum] = true;
-// System.out.println("RunBUmber complete getNextRecord" + " RunNUm:"
-// + runNum + " OffsetPos:" + offsetPos[runNum] + " New:" + runLengths
-// .get(runNum));
-// for (int i = 0; i < runComplete.length; i++) {
-// System.out.println(runComplete[i]);
-// }
         return null;
     }
 
 
-    private boolean runNotFinished() {
-        for (int i = 0; i < runComplete.length; i++) {
-            if (!runComplete[i]) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
+    /**
+     * This method writes to a binary file.
+     * 
+     * @param outFile
+     *            the file to be written to
+     * @param record
+     *            the record to append to the buffer
+     * @throws IOException
+     */
     private void writeOutputBuffer(DataOutputStream outFile, Apple record)
-        throws FileNotFoundException,
-        EOFException,
-        IOException {
+        throws IOException {
         outputBuffer[outPos++] = record;
-        // System.out.println(outPos+ " Outputting: " + record.getScore() + ",
-        // "+ record.getPid());
-
         if (outPos >= outputBuffer.length) {
             for (int i = 0; i < outPos; i++) {
                 outFile.writeLong(outputBuffer[i].getPid());

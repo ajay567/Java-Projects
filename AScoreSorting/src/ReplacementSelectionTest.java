@@ -31,7 +31,7 @@ import java.util.Random;
  * @author <Amit Ramesh> <amitr>
  * @version 2019.11.19
  */
-public class ExternalSortTest extends student.TestCase {
+public class ReplacementSelectionTest extends student.TestCase {
 
     /**
      * fields
@@ -72,7 +72,8 @@ public class ExternalSortTest extends student.TestCase {
             output1.writeDouble(temp[i].getScore());
         }
 
-        ExternalSort parser = new ExternalSort("testing_Ajay1.bin");
+        ReplacementSelection parser = new ReplacementSelection(
+            "testing_Ajay1.bin");
 
         parser.performExternalSort();
         assertEquals(temp[0].getPid(), 2345678);
@@ -99,7 +100,8 @@ public class ExternalSortTest extends student.TestCase {
             output.writeDouble(temp[i].getScore());
         }
 
-        ExternalSort parser = new ExternalSort("testing_Ajay189.bin");
+        ReplacementSelection parser = new ReplacementSelection(
+            "testing_Ajay189.bin");
         ArrayList<Integer> list = parser.performExternalSort();
         RunManager test = new RunManager(list);
         test.mergeAllRuns("testing_Ajay189.bin");

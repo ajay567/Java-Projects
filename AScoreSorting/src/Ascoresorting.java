@@ -1,5 +1,3 @@
-import java.io.EOFException;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -22,63 +20,41 @@ import java.util.ArrayList;
 // anything during the discussion or modifies any computer file
 // during the discussion. I have violated neither the spirit nor
 // letter of this restriction.
+/**
+ * This class contains the main method. It just has to create the
+ * objects of the required classes and call methods that perform
+ * external sorting. The methods are passed the names of the
+ * files that have to be sorted.
+ * 
+ * @author <Ajay Dalmia> <ajay99>
+ * @author <Amit Ramesh> <amitr>
+ * @version 2019.11.19
+ */
 public class Ascoresorting {
 
-    private static long startTime = System.currentTimeMillis();
-
-
+    // Compiler - Eclipse (Java version 10.0.2)
+    // Operating System - Windows 10
+    // Date completed - 19th of November 2019
     /**
+     * The main method creates an object for ReplacementSelection,
+     * RunManager and VTStudentsManager. Their methods
+     * are called and passed the arguments as names of
+     * files.
      * 
      * @param args
+     *            input files
      * @throws IOException
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
-//        args[0] = "sample128k.bin";
-//        args[1] = "sample_vtstudents.data";
-        ExternalSort sort;
-        ArrayList<Integer> runLengths = null;
-        try {
-            sort = new ExternalSort(args[0]);
-            runLengths = sort.performExternalSort();
-        }
-        catch (IOException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-        
- 
-        try {
-            RunManager runManager = new RunManager(runLengths);
-            runManager.mergeAllRuns(args[0]);
-        }
-        catch (FileNotFoundException e) {
-            System.out.print("Merge all Runs FileNotFoundException " + e.getMessage());
-            e.printStackTrace();
-        }
-        catch (EOFException e){
-            System.out.print(" Merge all Runs EOFException " + e.getMessage());
-            e.printStackTrace();
-        }
-        catch (IOException f){
-            System.out.print("Merge all Runs IOEException " + f.getMessage());
-            f.printStackTrace();
-        }
+        ReplacementSelection sort = new ReplacementSelection(args[0]);
+        ArrayList<Integer> runLengths = sort.performExternalSort();
 
-        
-      //  long startTime = System.currentTimeMillis();
+        RunManager runManager = new RunManager(runLengths);
+        runManager.mergeAllRuns(args[0]);
+
         VTStudentsManager test = new VTStudentsManager();
-        try {
-            test.printOutStudents(args[0], args[1]);
-        }
-        catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        
-//        long endTime = System.currentTimeMillis();
-//        System.out.println("It took " + (endTime - startTime)
-//            + " milliseconds");
+        test.printOutStudents(args[0], args[1]);
 
     }
 
