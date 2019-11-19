@@ -59,7 +59,7 @@ public class RunManager {
 
     public void mergeAllRuns(String finalOutputFile) throws IOException {
 //        System.out.println("Merging all "+runLengths.size()+ " runs");
-        String[] fileNames = { "runfile.data", "runfile1.data" };
+        String[] fileNames = { "runfile.bin", "runfile1.bin" };
 
         int mergePassNum = 0;
         //todo:handle size 1
@@ -140,7 +140,6 @@ public class RunManager {
             }
             newRunLength++;
         }
-        
         return newRunLength;
     }
 

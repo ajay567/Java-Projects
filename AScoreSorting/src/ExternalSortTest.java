@@ -28,8 +28,8 @@ import java.util.Random;
  * @author <Amit Ramesh> <amitr>
  * @version 2019.09.11
  */
-public class AppleFileParserTest extends student.TestCase {
-
+public class ExternalSortTest extends student.TestCase {
+    
     /**
      * fields
      */
@@ -42,33 +42,46 @@ public class AppleFileParserTest extends student.TestCase {
      * @throws IOException
      */
     public void setUp() throws IOException {
-        output = new DataOutputStream(new FileOutputStream("testing_Ajay",
+        output = new DataOutputStream(new FileOutputStream("testing_Ajay1",
             false));
     }
-
-
+    
     public void testAppleFileParser() throws IOException {
-        Apple[] temp = new Apple[2048];
+        Apple[] temp = new Apple[9216];
         Apple apple = null;
         Random rand = new Random();
-        for (int i = 0; i < 2048; i++) {
+        for (int i = 0; i < 9216; i++) {
             apple = new Apple(2345678, rand.nextDouble());
             temp[i] = apple;
-        }
-        for (int i = 0; i < 2048; i++) {
+        } 
+        for (int i = 0; i < 9216; i++) {
             output.writeLong(temp[i].getPid());
             output.writeDouble(temp[i].getScore());
         }
 
-        Apple check = null;
-        AppleFileParser parser = new AppleFileParser("testing_Ajay");
-        parser.hasNextRecord();
-        for (int i = 0; i < 2048; i++) {
-            check = parser.getNextRecord();
+        ExternalSort parser = new ExternalSort("testing_Ajay1");
+        
+        parser.performExternalSort();
+        assertEquals(2345678, 2345678);
+    }
+    
+    public void testAppleFileParserLessBlocks() throws IOException {
+        Apple[] temp = new Apple[8192];
+        Apple apple = null;
+        Random rand = new Random();
+        for (int i = 0; i < 8192; i++) {
+            apple = new Apple(2345678, rand.nextDouble());
+            temp[i] = apple;
+        } 
+        for (int i = 0; i < 8192; i++) {
+            output.writeLong(temp[i].getPid());
+            output.writeDouble(temp[i].getScore());
         }
-        parser.writeRunFile(temp, 5);
-        assertEquals(check.getPid(), 2345678);
-        assertFalse(parser.hasNextRecord());
+
+        ExternalSort parser = new ExternalSort("testing_Ajay1");
+        
+        parser.performExternalSort();
+        assertEquals(2345678, 2345678);
     }
 
 }

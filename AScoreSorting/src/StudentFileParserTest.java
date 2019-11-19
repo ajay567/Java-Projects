@@ -1,7 +1,9 @@
 import java.io.DataOutputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 // On my honor:
 //
@@ -34,12 +36,15 @@ public class StudentFileParserTest extends student.TestCase {
      * fields
      */
     private StudentFileParser studentFileParser;
+    
 
-
+    
     /**
      * Set up variables for testing
+     * 
+     * @throws FileNotFoundException
      */
-    public void setUp() {
+    public void setUp() throws FileNotFoundException {
         studentFileParser = new StudentFileParser();
     }
 
@@ -63,5 +68,39 @@ public class StudentFileParserTest extends student.TestCase {
         ArrayList<Student> student = studentFileParser.studentList();
         assertTrue(student.get(0).getFirstName().equals("ajay"));
     }
+    
+    public void testVTManager() throws IOException {
+        
+        DataOutputStream os1 = new DataOutputStream(new FileOutputStream(
+            "VTManager.bin", false));
+        os1.writeBytes("VTSTUDENTS");
+        os1.writeInt(1);
+        os1.writeLong(983057);
+        os1.writeBytes("Ajay");
+        os1.writeBytes("$");
+        os1.writeBytes("temp");
+        os1.writeBytes("$");
+        os1.writeBytes("Dalmia");
+        os1.writeBytes("$");
+        os1.writeBytes("GOHOKIES");
+        os1.close();
+        VTStudentsManager manage = new VTStudentsManager();
+        DataOutputStream output = new DataOutputStream(new FileOutputStream("testing_Ajay2.bin",
+            false));
+        Apple[] temp = new Apple[8192];
+        Apple apple = null;
+        Random rand = new Random();
+        for (int i = 0; i < 8191; i++) {
+            apple = new Apple(rand.nextLong(), rand.nextDouble());
+            temp[i] = apple;
+        } 
 
+        temp[8191] = new Apple(909983057, 4.32);
+        for (int i = 0; i < 8192; i++) {
+            output.writeLong(temp[i].getPid());
+            output.writeDouble(temp[i].getScore());
+        }
+        manage.printOutStudents("testing_Ajay2.bin", "VTManager.bin");
+    }
+    
 }

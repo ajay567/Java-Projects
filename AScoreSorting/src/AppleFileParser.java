@@ -55,7 +55,7 @@ public class AppleFileParser {
         fil = new RandomAccessFile(fileName, "r");
         offsetPosNull = 0;
         fileLength = fil.length();
-        os = new DataOutputStream(new FileOutputStream("runFile.data", false));
+        os = new DataOutputStream(new FileOutputStream("runFile.bin", false));
         
         storedBuffer = new byte[1024*16];
         startPos = 0;

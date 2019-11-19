@@ -92,21 +92,21 @@ public class VTStudentsManager {
 
         }
         
-        fil.seek(0);
-        int printingPos = 0;
-        byte[] buffer200 = new byte[(int)fil.length()];
-        fil.read(buffer200);
-        for (int i = 0; i < fil.length()/16; i++ ) {
-            ByteBuffer wrapped = ByteBuffer.wrap(buffer200, printingPos, 8);
-            printingPos += 8;
-            long pid = wrapped.getLong();
-            
-            wrapped = ByteBuffer.wrap(buffer200, printingPos, 8);
-            double score = wrapped.getDouble();
-            printingPos += 8;
-            //System.out.println("Line:" + i + " Pid:" + pid + " Score:" + score);
-            System.out.println(pid + " " + score);
-        }
+//        fil.seek(0);
+//        int printingPos = 0;
+//        byte[] buffer200 = new byte[(int)fil.length()];
+//        fil.read(buffer200);
+//        for (int i = 0; i < fil.length()/16; i++ ) {
+//            ByteBuffer wrapped = ByteBuffer.wrap(buffer200, printingPos, 8);
+//            printingPos += 8;
+//            long pid = wrapped.getLong();
+//            
+//            wrapped = ByteBuffer.wrap(buffer200, printingPos, 8);
+//            double score = wrapped.getDouble();
+//            printingPos += 8;
+//            //System.out.println("Line:" + i + " Pid:" + pid + " Score:" + score);
+//            System.out.println(pid + " " + score);
+//        }
 
     }
 

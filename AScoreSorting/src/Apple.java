@@ -73,9 +73,9 @@ public class Apple implements Comparable<Apple> {
         return Double.compare(this.score, other.score);
     }
     
-    public String toString() {
-        return score+"";
-    }
+//    public String toString() {
+//        return score+"";
+//    }
     
 
 }
