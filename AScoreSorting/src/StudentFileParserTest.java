@@ -36,9 +36,8 @@ public class StudentFileParserTest extends student.TestCase {
      * fields
      */
     private StudentFileParser studentFileParser;
-    
 
-    
+
     /**
      * Set up variables for testing
      * 
@@ -54,7 +53,7 @@ public class StudentFileParserTest extends student.TestCase {
             "test1_Ajay.data", false));
         os.writeBytes("VTSTUDENTS");
         os.writeInt(1);
-        os.writeLong(983057537);
+        os.writeLong(983057);
         os.writeBytes("Ajay");
         os.writeBytes("$");
         os.writeBytes("temp");
@@ -64,18 +63,19 @@ public class StudentFileParserTest extends student.TestCase {
         os.writeBytes("GOHOKIES");
         os.close();
         studentFileParser.readsStudentDataFile("test1_Ajay.data");
-        
+
         ArrayList<Student> student = studentFileParser.studentList();
         assertTrue(student.get(0).getFirstName().equals("ajay"));
     }
-    
+
+
     public void testVTManager() throws IOException {
-        
+
         DataOutputStream os1 = new DataOutputStream(new FileOutputStream(
-            "VTManager.bin", false));
+            "VTManager.data", false));
         os1.writeBytes("VTSTUDENTS");
         os1.writeInt(1);
-        os1.writeLong(983057);
+        os1.writeLong(5);
         os1.writeBytes("Ajay");
         os1.writeBytes("$");
         os1.writeBytes("temp");
@@ -85,25 +85,27 @@ public class StudentFileParserTest extends student.TestCase {
         os1.writeBytes("GOHOKIES");
         os1.close();
         VTStudentsManager manage = new VTStudentsManager();
-        DataOutputStream output = new DataOutputStream(new FileOutputStream("testing_Ajay2.bin",
-            false));
-        Apple[] temp = new Apple[16384];
+        DataOutputStream output = new DataOutputStream(new FileOutputStream(
+            "testing_Ajay2.data", false));
+        Apple[] temp = new Apple[8192];
         Apple apple = null;
         Random rand = new Random();
         for (int i = 0; i < 8191; i++) {
             apple = new Apple(rand.nextLong(), rand.nextDouble());
             temp[i] = apple;
-        } 
-
-        temp[8191] = new Apple(909983057, 4.32);
-        for (int i=8192; i < 16384; i++) {
-            
         }
+        String s = "909000983057";
+        temp[8191] = new Apple(Long.parseLong(s), rand.nextDouble());
         for (int i = 0; i < 8192; i++) {
             output.writeLong(temp[i].getPid());
             output.writeDouble(temp[i].getScore());
         }
-        manage.printOutStudents("testing_Ajay2.bin", "VTManager.bin");
+        manage.printOutStudents("testing_Ajay2.data", "test1_Ajay.data");
+        studentFileParser.readsStudentDataFile("test1_Ajay.data");
+
+        ArrayList<Student> student = studentFileParser.studentList();
+        assertTrue(student.get(0).getFirstName().equals("ajay"));
+
     }
-    
+
 }

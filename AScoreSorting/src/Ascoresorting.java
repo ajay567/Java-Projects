@@ -1,3 +1,5 @@
+import java.io.EOFException;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -21,39 +23,63 @@ import java.util.ArrayList;
 // during the discussion. I have violated neither the spirit nor
 // letter of this restriction.
 public class Ascoresorting {
-    
+
     private static long startTime = System.currentTimeMillis();
+
 
     /**
      * 
      * @param args
      * @throws IOException
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
+
+//        args[0] = "sample128k.bin";
+//        args[1] = "sample_vtstudents.data";
+        ExternalSort sort;
+        ArrayList<Integer> runLengths = null;
+        try {
+            sort = new ExternalSort("testing_Ajay.bin");
+            runLengths = sort.performExternalSort();
+        }
+        catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
         
+ 
+        try {
+            RunManager runManager = new RunManager(runLengths);
+            runManager.mergeAllRuns("output.bin");
+        }
+        catch (FileNotFoundException e) {
+            System.out.print("Merge all Runs FileNotFoundException " + e.getMessage());
+            e.printStackTrace();
+        }
+        catch (EOFException e){
+            System.out.print(" Merge all Runs EOFException " + e.getMessage());
+            e.printStackTrace();
+        }
+        catch (IOException f){
+            System.out.print("Merge all Runs IOEException " + f.getMessage());
+            f.printStackTrace();
+        }
+
         
-//        AppleFileParser appleParser = new AppleFileParser("sample128k.bin");
-//
-//        while(appleParser.hasNextRecord()) {
-//            Apple apple = appleParser.getNextRecord();
-//            System.out.println(apple.getPid() + " " + apple.getScore());
-//        }
-      
-      ExternalSort sort =  new ExternalSort("sample128ktest.bin");
-      ArrayList<Integer> runLengths = sort.performExternalSort();
-      
-      
-      RunManager runManager = new RunManager(runLengths);
-      runManager.mergeAllRuns("sample128ktest.bin");
-      
-      
-      VTStudentsManager test = new VTStudentsManager();
-//      test.printOutStudents(outputFile, "sample_vtstudents.data");
-      test.printOutStudents("runFile1.data", "sample_vtstudents.data");
-      
-//      long endTime = System.currentTimeMillis();
-//      System.out.println("It took " + (endTime - startTime) + " milliseconds");
-      
+      //  long startTime = System.currentTimeMillis();
+        VTStudentsManager test = new VTStudentsManager();
+        try {
+            test.printOutStudents("output.bin", "sample_vtstudents.data");
+        }
+        catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+//        long endTime = System.currentTimeMillis();
+//        System.out.println("It took " + (endTime - startTime)
+//            + " milliseconds");
+
     }
 
 }

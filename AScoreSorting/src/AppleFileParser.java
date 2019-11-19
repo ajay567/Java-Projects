@@ -55,7 +55,7 @@ public class AppleFileParser {
         fil = new RandomAccessFile(fileName, "r");
         offsetPosNull = 0;
         fileLength = fil.length();
-        os = new DataOutputStream(new FileOutputStream("runFile.bin", false));
+        os = new DataOutputStream(new FileOutputStream("runfile.bin", false));
         
         storedBuffer = new byte[1024*16];
         startPos = 0;
@@ -125,6 +125,11 @@ public class AppleFileParser {
             os.writeLong(outputBuffer[i].getPid());
             os.writeDouble(outputBuffer[i].getScore());
         }
+    }
+    
+    public void closingFiles() throws IOException {
+        os.close();
+        fil.close();
     }
 
 }

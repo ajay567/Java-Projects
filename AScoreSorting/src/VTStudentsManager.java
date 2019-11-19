@@ -46,21 +46,21 @@ public class VTStudentsManager {
      * @param fileName
      * @throws IOException
      */
-    public void printOutStudents(String fileName, String studentFileName) throws IOException {
-       // System.out.println("printing: "+fileName);
+    public void printOutStudents(String fileName, String studentFileName)
+        throws IOException {
+        // System.out.println("printing: "+fileName);
         fil = new RandomAccessFile(fileName, "r");
 
         StudentFileParser parse = new StudentFileParser();
         parse.readsStudentDataFile(studentFileName);
         ArrayList<Student> student = parse.studentList();
-        
-        
+
         int countLines = 0;
         int countStudents = 0;
         int bytesTaken = 0;
         long fileLength = fil.length();
 
-        while (bytesTaken < fileLength && countStudents <= 100) {
+        while (bytesTaken < fileLength && countStudents < 100) {
             byte[] buffer = readbytes(bytesTaken, fileLength, fil);
             bytesTaken += buffer.length;
 
@@ -70,11 +70,11 @@ public class VTStudentsManager {
                 long pid = wrapped.getLong();
                 startPos += 8;
                 countLines++;
-                if (matches(String.valueOf(pid))) {
+                if (matches(String.valueOf(pid)) && countStudents < 100) {
                     wrapped = ByteBuffer.wrap(buffer, startPos, 8);
                     double score = wrapped.getDouble();
                     startPos += 8;
- 
+
                     for (int j = 0; j < student.size(); j++) {
                         if (pid == student.get(j).getID()) {
                             System.out.println(pid + ", " + student.get(j)
@@ -91,22 +91,22 @@ public class VTStudentsManager {
             }
 
         }
-        
-//        fil.seek(0);
-//        int printingPos = 0;
-//        byte[] buffer200 = new byte[(int)fil.length()];
-//        fil.read(buffer200);
-//        for (int i = 0; i < fil.length()/16; i++ ) {
-//            ByteBuffer wrapped = ByteBuffer.wrap(buffer200, printingPos, 8);
-//            printingPos += 8;
-//            long pid = wrapped.getLong();
-//            
-//            wrapped = ByteBuffer.wrap(buffer200, printingPos, 8);
-//            double score = wrapped.getDouble();
-//            printingPos += 8;
-//            //System.out.println("Line:" + i + " Pid:" + pid + " Score:" + score);
-//            System.out.println(pid + " " + score);
-//        }
+        fil.seek(0);
+        int printingPos = 0;
+        byte[] buffer200 = new byte[(int)fil.length()];
+        fil.read(buffer200);
+        for (int i = 0; i < fil.length() / 16; i++) {
+            ByteBuffer wrapped = ByteBuffer.wrap(buffer200, printingPos, 8);
+            printingPos += 8;
+            long pid = wrapped.getLong();
+
+            wrapped = ByteBuffer.wrap(buffer200, printingPos, 8);
+            double score = wrapped.getDouble();
+            printingPos += 8;
+            // System.out.println("Line:" + i + " Pid:" + pid + " Score:" +
+            // score);
+            System.out.println(i + " " + pid + " " + score);
+        }
 
     }
 

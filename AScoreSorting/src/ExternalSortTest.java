@@ -1,6 +1,7 @@
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 
 // On my honor:
@@ -33,6 +34,7 @@ public class ExternalSortTest extends student.TestCase {
     /**
      * fields
      */
+    DataOutputStream output1;
     DataOutputStream output;
 
 
@@ -42,7 +44,9 @@ public class ExternalSortTest extends student.TestCase {
      * @throws IOException
      */
     public void setUp() throws IOException {
-        output = new DataOutputStream(new FileOutputStream("testing_Ajay1",
+        output1 = new DataOutputStream(new FileOutputStream("testing_Ajay1.bin",
+            false));
+        output = new DataOutputStream(new FileOutputStream("testing_Ajay189.bin",
             false));
     }
     
@@ -55,17 +59,18 @@ public class ExternalSortTest extends student.TestCase {
             temp[i] = apple;
         } 
         for (int i = 0; i < 9216; i++) {
-            output.writeLong(temp[i].getPid());
-            output.writeDouble(temp[i].getScore());
+            output1.writeLong(temp[i].getPid());
+            output1.writeDouble(temp[i].getScore());
         }
 
-        ExternalSort parser = new ExternalSort("testing_Ajay1");
+        ExternalSort parser = new ExternalSort("testing_Ajay1.bin");
         
         parser.performExternalSort();
-        assertEquals(2345678, 2345678);
+        assertEquals(temp[0].getPid(), 2345678);
     }
     
     public void testAppleFileParserLessBlocks() throws IOException {
+        
         Apple[] temp = new Apple[8192];
         Apple apple = null;
         Random rand = new Random();
@@ -78,10 +83,11 @@ public class ExternalSortTest extends student.TestCase {
             output.writeDouble(temp[i].getScore());
         }
 
-        ExternalSort parser = new ExternalSort("testing_Ajay1");
-        
-        parser.performExternalSort();
-        assertEquals(2345678, 2345678);
+        ExternalSort parser = new ExternalSort("testing_Ajay189.bin");
+        ArrayList<Integer> list = parser.performExternalSort();
+        RunManager test = new RunManager(list);
+        test.mergeAllRuns("testing_Ajay189.bin");
+        assertEquals(temp[0].getPid(), 2345678);
     }
 
 }

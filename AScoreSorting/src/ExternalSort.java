@@ -118,7 +118,7 @@ public class ExternalSort {
 //        
 //        System.out.println("Heap insert count:"+heap.getInsertCount());
 //        System.out.println("Heap remove:"+heap.getRemoveCount());
-        
+        parser.closingFiles();
         return runLengths;
     }
 }
