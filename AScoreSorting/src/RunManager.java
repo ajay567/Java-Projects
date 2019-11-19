@@ -78,14 +78,6 @@ public class RunManager {
                     runCount = runLengths.size() - i;
                     if (runLengths.size() <= 8) {
                         outFile = finalOutputFile;
-                        File f = new File(outFile);
-
-//                        if (f.delete()) {
-//                            System.out.println("Deleting");
-//                        }
-//                        else {
-//                            System.out.println("Not Deleting");
-//                        }
 
                     }
                 }
@@ -94,7 +86,7 @@ public class RunManager {
                 int runLen = mergeRuns(fileNames[mergePassNum % 2], outFile, i,
                     runCount, fileExists[outFileNum]);
                 fileExists[outFileNum] = true;
-// System.out.println("Created run len:" + runLen);
+//                System.out.println("Created run len:" + runLen);
                 newRunLengths.add(runLen);
             }
 // System.out.println("Run lengths:" + newRunLengths.toString());
@@ -114,12 +106,17 @@ public class RunManager {
         throws FileNotFoundException,
         EOFException,
         IOException {
-// System.out.println("Merging runs " + startRun + " to "+ (startRun+numRuns) +
-// " from " + inFile+" to "+ outFile);
+//        System.out.println("Merging runs " + startRun + " to " + (startRun
+//            + numRuns) + " from " + inFile + " to " + outFile);
+//
+//        System.out.println("Run lengths:");
+//        for (int i = 0; i < numRuns; i++) {
+//            System.out.println(runLengths.get(startRun + i));
+//        }
 
-// System.out.println("Run lengths:");
+        int runTotal = 0;
         for (int i = 0; i < numRuns; i++) {
-// System.out.println(runLengths.get(startRun+i));
+            runTotal += runLengths.get(startRun + i);
         }
 
         runComplete = new boolean[numRuns];
@@ -128,12 +125,12 @@ public class RunManager {
         os = new DataOutputStream(new FileOutputStream(outFile, fileExists));
 
         int newRunLength = 0;
-        while (runNotFinished()) {
+        while (newRunLength < runTotal) {
             Apple max = new Apple(0, -1.0);
             int maxRun = -1;
             for (int i = 0; i < numRuns; i++) {
                 if (!runComplete[i]) {
-                    Apple tempApple = getNextRecord(i);
+                    Apple tempApple = getNextRecord(startRun + i);
                     if (tempApple != null) {
                         if (tempApple.compareTo(max) > 0) {
                             max = tempApple;
@@ -142,13 +139,15 @@ public class RunManager {
                     }
                 }
             }
-// System.out.println("From run: "+maxRun+" pos: "+offsetPos[maxRun]);
+//            System.out.println("From run: " + maxRun + " pos: "
+//                + offsetPos[maxRun]);
             writeOutputBuffer(os, max);
             offsetPos[maxRun]++;
 
             if (offsetPos[maxRun] >= runLengths.get(startRun + maxRun)) {
                 runComplete[maxRun] = true;
-// System.out.println("run complete:"+ maxRun);
+//                System.out.println("RunBUmber complete loadNextBlock"
+//                    + " MAxRun:" + maxRun + " OffsetPos:" + offsetPos[maxRun]);
             }
 
             if (offsetPos[maxRun] % 1024 == 0 && !runComplete[maxRun]) {
@@ -204,8 +203,12 @@ public class RunManager {
                 fil.readFully(runContents[pos], 0, numRecords * 16);
             }
             else {
-// System.out.println("No more records "+ numRecords);
+//                System.out.println("RunBUmber complete loadNextBlock"
+//                    + " RunNUm:" + runNum + " OffsetPos:" + offsetPos[runNum]);
                 runComplete[pos] = true;
+//                for (int i = 0; i < runComplete.length; i++) {
+//                    System.out.println(runComplete[i]);
+//                }
             }
         }
     }
@@ -213,16 +216,16 @@ public class RunManager {
 
     private Apple getNextRecord(int runNum) {
 // if end of block load more records
+        int pos = runNum % 8;
+        if (offsetPos[pos] < runLengths.get(runNum)) {
 
-        if (offsetPos[runNum] < runLengths.get(runNum)) {
-
-            int startPos = (offsetPos[runNum] % 1024) * 16;
+            int startPos = (offsetPos[pos] % 1024) * 16;
 // System.out.println("getNextRecord("+runNum+"):"+offsetPos[runNum]);
-            ByteBuffer wrapped = ByteBuffer.wrap(runContents[runNum], startPos,
+            ByteBuffer wrapped = ByteBuffer.wrap(runContents[pos], startPos,
                 8);
             long pid = wrapped.getLong();
 
-            wrapped = ByteBuffer.wrap(runContents[runNum], startPos + 8, 8);
+            wrapped = ByteBuffer.wrap(runContents[pos], startPos + 8, 8);
             double score = wrapped.getDouble();
 
             return new Apple(pid, score);
@@ -230,6 +233,12 @@ public class RunManager {
         }
 
         runComplete[runNum] = true;
+//        System.out.println("RunBUmber complete getNextRecord" + " RunNUm:"
+//            + runNum + " OffsetPos:" + offsetPos[runNum] + " New:" + runLengths
+//                .get(runNum));
+//        for (int i = 0; i < runComplete.length; i++) {
+//            System.out.println(runComplete[i]);
+//        }
         return null;
     }
 
