@@ -41,6 +41,7 @@ public class RunManager {
     int[] offsetPos;
     private DataOutputStream os;
     private boolean[] runComplete;
+    private boolean[] fileExists;
 
 
     /**
@@ -52,11 +53,12 @@ public class RunManager {
         this.runLengths = runLengths;
         this.outputBuffer = new Apple[1024];
         this.outPos = 0;
+        this.fileExists = new boolean[2];
     }
 
 
     public void mergeAllRuns(String finalOutputFile) throws IOException {
-     //   System.out.println("Merging all "+runLengths.size()+ " runs");
+//        System.out.println("Merging all "+runLengths.size()+ " runs");
         String[] fileNames = { "runfile.data", "runfile1.data" };
 
         int mergePassNum = 0;
@@ -64,15 +66,19 @@ public class RunManager {
             ArrayList<Integer> newRunLengths = new ArrayList<Integer>();
             for (int i = 0; i < runLengths.size(); i += 8) {
                 int runCount = 8;
-                String outFile = fileNames[(mergePassNum + 1) % 2];
-                
+                int outFileNum = (mergePassNum + 1) % 2;
+                String outFile = fileNames[outFileNum];
                 if (runLengths.size() - i <= 8) {
                     runCount = runLengths.size() - i;
-                    outFile = finalOutputFile;
+                    if(runLengths.size() <= 8) {
+                        outFile = finalOutputFile;
+                    }
                 }
+//                System.out.println("Creating run: " +i+" "+ runCount);
                 int runLen = mergeRuns(fileNames[mergePassNum % 2],
-                    outFile, i, runCount);
-            //    System.out.println("Created run len:" + runLen);
+                    outFile, i, runCount, fileExists[outFileNum]);
+                fileExists[outFileNum] = true;
+//                System.out.println("Created run len:" + runLen);
                 newRunLengths.add(runLen);
             }
             runLengths = newRunLengths;
@@ -85,13 +91,20 @@ public class RunManager {
         String inFile,
         String outFile,
         int startRun,
-        int numRuns)
+        int numRuns,
+        boolean fileExists)
         throws IOException {
 //        System.out.println("Merging runs " + startRun + " to "+ (startRun+numRuns) + " from " + inFile+" to "+ outFile);
+        
+//        System.out.println("Run lengths:");
+        for(int i=0; i<numRuns; i++) {
+//            System.out.println(runLengths.get(startRun+i));
+        }
+        
         runComplete = new boolean[numRuns];
         fil = new RandomAccessFile(inFile, "r");
         loadRuns(inFile, startRun, numRuns);
-        os = new DataOutputStream(new FileOutputStream(outFile, false));
+        os = new DataOutputStream(new FileOutputStream(outFile, fileExists));
         
         
         
@@ -101,7 +114,6 @@ public class RunManager {
             int maxRun = -1;
             for (int i = 0; i < numRuns; i++) {
                 if(!runComplete[i]) {
-//                    System.out.println()
                     Apple tempApple = getNextRecord(i);
                     if (tempApple != null) {
                         if (tempApple.compareTo(max) > 0) {
@@ -111,17 +123,18 @@ public class RunManager {
                     }
                 }
             }
-        //    System.out.println("From run: "+maxRun+" pos: "+offsetPos[maxRun]);
+//            System.out.println("From run: "+maxRun+" pos: "+offsetPos[maxRun]);
             writeOutputBuffer(os, max);
             offsetPos[maxRun]++;
             
-            if(offsetPos[maxRun] >= runLengths.get(maxRun)) {
+            if(offsetPos[maxRun] >= runLengths.get(startRun+maxRun)) {
                 runComplete[maxRun] = true;
-            //    System.out.println("run complete:"+ maxRun);
+//                System.out.println("run complete:"+ maxRun);
             }
             
-            if(offsetPos[maxRun] % 1024 == 0) {
-                loadNextBlock(maxRun);
+            if(offsetPos[maxRun] % 1024 == 0 && !runComplete[maxRun]) {
+//                System.out.println("Input buffer "+(startRun+maxRun));
+                loadNextBlock(startRun+maxRun);
             }
             newRunLength++;
         }
@@ -138,31 +151,36 @@ public class RunManager {
 
         for (int i = 0; i < numRuns; i++) {
             if(!runComplete[i]) {
-                loadNextBlock(i);
+                loadNextBlock(startNum+i);
             }
         }
     }
 
 
     private void loadNextBlock(int runNum) throws IOException {
-     //   System.out.println("loadNextBlock: "+ runNum);
+//        System.out.println("loadNextBlock: "+ runNum);
+        int pos = runNum % 8;
+//        System.out.println("offset: "+ offsetPos[pos]);
+        
         int fileOffset = 0;
         
         for(int i=0; i<runNum; i++) {
             fileOffset += runLengths.get(i);
         }
-        if (runLengths.get(runNum) > offsetPos[runNum] + 1024) {
-            fil.seek((fileOffset+offsetPos[runNum]) * 16);
-            fil.readFully(runContents[runNum], 0, 1024 * 16);
+        if (runLengths.get(runNum) > offsetPos[pos] + 1024) {
+            fil.seek((fileOffset+offsetPos[pos]) * 16);
+            fil.readFully(runContents[pos], 0, 1024 * 16);
         }
         else {
-            int numRecords = (runLengths.get(runNum) - offsetPos[runNum]);
+            int numRecords = (runLengths.get(runNum) - offsetPos[pos]);
             if(numRecords > 0) {
-                fil.seek((fileOffset+offsetPos[runNum]) * 16);
-                fil.readFully(runContents[runNum], 0, numRecords * 16);
+//                System.out.println("Last block for run: "+ numRecords);
+                fil.seek((fileOffset+offsetPos[pos]) * 16);
+                fil.readFully(runContents[pos], 0, numRecords * 16);
             }
             else {
-                runComplete[runNum] = true;
+//                System.out.println("No more records "+ numRecords);
+                runComplete[pos] = true;
             }
         }
     }

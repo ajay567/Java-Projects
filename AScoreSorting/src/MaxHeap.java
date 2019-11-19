@@ -4,6 +4,16 @@ public class MaxHeap<E extends Comparable<E>>{
     private int size; // current number of elements
     private int capacity; // max size
     private int nullCount; // number of null values at the end
+    int heapInsertCount = 0;
+    int heapRemoveCount = 0;
+    
+    public int getInsertCount() {
+        return heapInsertCount;
+    }
+    
+    public int getRemoveCount() {
+        return heapRemoveCount;
+    }
     
     // Constructor for empty heap
     @SuppressWarnings("unchecked")
@@ -21,6 +31,7 @@ public class MaxHeap<E extends Comparable<E>>{
         this.capacity = capacity;
         this.nullCount = 0;
         buildHeap();
+        heapInsertCount+=size;
     }
     
     // Get current number of elements in the heap
@@ -70,6 +81,8 @@ public class MaxHeap<E extends Comparable<E>>{
             swapPos(curr, parent(curr));
             curr = parent(curr);
         }
+        
+        heapInsertCount++;
     }
     
     public void buildHeap() {
@@ -111,6 +124,7 @@ public class MaxHeap<E extends Comparable<E>>{
         E max = heap[size];
         heap[size] = null;
         
+        heapRemoveCount++;
         return max;
     }
 
@@ -133,6 +147,7 @@ public class MaxHeap<E extends Comparable<E>>{
     public void modify(int pos, E newVal) {
         if ((pos < 0) || (pos >= capacity)) return; // Illegal heap position
         heap[pos] = newVal;
+        heapInsertCount++;
     }
 
 //    // The value at pos has been changed, restore the heap property
@@ -156,17 +171,17 @@ public class MaxHeap<E extends Comparable<E>>{
         nullCount++;
     }
     
-//    private void printHeap() {
-//        for(int i=0; i<size; i++) {
-//            System.out.print(heap[i] + " ");
-//        }
-//        System.out.println();
-//    }
-//    
-//    private void printHeapArray() {
-//        for(int i=0; i<capacity; i++) {
-//            System.out.print(heap[i] + " ");
-//        }
-//        System.out.println();
-//    }
+    public void printHeap() {
+        for(int i=0; i<size; i++) {
+            System.out.print(heap[i] + " ");
+        }
+        System.out.println();
+    }
+    
+    public void printHeapArray() {
+        for(int i=0; i<capacity; i++) {
+            System.out.print(heap[i] + " ");
+        }
+        System.out.println();
+    }
 }

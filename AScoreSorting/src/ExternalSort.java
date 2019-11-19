@@ -53,15 +53,24 @@ public class ExternalSort {
 
 
     public ArrayList<Integer> performExternalSort() throws IOException {
+        int readCount = 0;
+        int writeCount = 0;
         
-        int heapSize = 8*1024;
-        Apple[] heapArr = new Apple[heapSize];
-
-        for (int i = 0; i < heapSize; i++) {
-            heapArr[i] = parser.getNextRecord();
+        
+        int heapCap = 8*1024;
+        int heapSize = 0;
+        Apple[] heapArr = new Apple[heapCap];
+        
+        while(parser.hasNextRecord() && heapSize < heapCap) {
+            heapArr[heapSize++] = parser.getNextRecord();
+            readCount++;
         }
 
-        heap = new MaxHeap<Apple>(heapArr, heapSize, heapSize);
+//        for (int i = 0; i < heapCap; i++) {
+//            heapArr[i] = parser.getNextRecord();
+//        }
+
+        heap = new MaxHeap<Apple>(heapArr, heapSize, heapCap);
         do {
 
             int runLength = 0;
@@ -74,6 +83,7 @@ public class ExternalSort {
                 // insert next element
                 if (parser.hasNextRecord()) {
                     Apple nextRecord = parser.getNextRecord();
+                    readCount++;
                     if (nextRecord.compareTo(outputBuffer[outPos - 1]) > 0) {
                         heap.modify(heap.getSize(), nextRecord);
                     }
@@ -89,6 +99,7 @@ public class ExternalSort {
                 if (outPos >= outputBuffer.length) {                    
                     parser.writeRunFile(outputBuffer, outPos);
                     runLength += outPos;
+                    writeCount += outPos;
                     outPos = 0;
                 }
             }
@@ -96,10 +107,18 @@ public class ExternalSort {
             // run complete            
             parser.writeRunFile(outputBuffer, outPos);
             runLength += outPos;
+            writeCount += outPos;
             runLengths.add(runLength);
-        //    System.out.println(runLength);            
+//            System.out.println(runLength);            
             heap.reset();
-        } while (parser.hasNextRecord());
+        } while (parser.hasNextRecord() || heap.getSize() > 0);
+        
+//        System.out.println("Read count:"+readCount);
+//        System.out.println("Write count:"+writeCount);
+//        
+//        System.out.println("Heap insert count:"+heap.getInsertCount());
+//        System.out.println("Heap remove:"+heap.getRemoveCount());
+        
         return runLengths;
     }
 }
