@@ -87,7 +87,7 @@ public class StudentFileParserTest extends student.TestCase {
         VTStudentsManager manage = new VTStudentsManager();
         DataOutputStream output = new DataOutputStream(new FileOutputStream("testing_Ajay2.bin",
             false));
-        Apple[] temp = new Apple[8192];
+        Apple[] temp = new Apple[16384];
         Apple apple = null;
         Random rand = new Random();
         for (int i = 0; i < 8191; i++) {
@@ -96,6 +96,9 @@ public class StudentFileParserTest extends student.TestCase {
         } 
 
         temp[8191] = new Apple(909983057, 4.32);
+        for (int i=8192; i < 16384; i++) {
+            
+        }
         for (int i = 0; i < 8192; i++) {
             output.writeLong(temp[i].getPid());
             output.writeDouble(temp[i].getScore());

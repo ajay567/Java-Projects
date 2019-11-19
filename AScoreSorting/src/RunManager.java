@@ -140,6 +140,8 @@ public class RunManager {
             }
             newRunLength++;
         }
+        os.close();
+        fil.close();
         return newRunLength;
     }
 
