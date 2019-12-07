@@ -64,6 +64,17 @@ public class HashTable<K,V> {
         return null;
     }
     
+    public boolean remove(K key) {
+        int pos = getEntryPos(key);
+        
+        if(table[pos] != null) {
+            table[pos] = null;
+            return true;
+        }
+        
+        return false;
+    }
+    
     /**
      * Get the table index corresponding to a key
      * @param key Key to check
