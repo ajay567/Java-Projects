@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.Scanner;
 
 // On my honor:
@@ -32,26 +33,53 @@ import java.util.Scanner;
  * @author <Amit Ramesh> <amitr>
  * @version 2019.12.09
  */
-public class Studentmanager {
+public class CommandCalculator {
 
-    // Compiler - Eclipse (Java version 10.0.2)
-    // Operating System - Windows 10
-    // Date completed - 19th of November 2019
-    /**
-     * The main method creates an object for ReplacementSelection,
-     * RunManager and VTStudentsManager. Their methods
-     * are called and passed the arguments as names of
-     * files.
-     * 
-     * @param args
-     *            input files
-     * @throws IOException
-     */
-    public static void main(String[] args) throws IOException {
+    public CommandCalculator() {
+
+    }
+
+
+    public void loadStudentData(String fileName, RandomAccessFile fil)
+        throws IOException {
+
+        File input = new File(fileName);
+        Scanner scan = new Scanner(input);
+
+        String[] currentLine = null;
+        while (scan.hasNext()) {
+            String newLine = scan.nextLine();
+            currentLine = newLine.split(",");
+            String name = "";
+            if (currentLine[2].length() != 0) {
+                name = currentLine[1] + " " + currentLine[2] + " "
+                    + currentLine[3];
+            }
+            else {
+                name = currentLine[1] + " " + currentLine[3];
+            }
+            fil.writeBytes(name);
+        }
+        scan.close();
+    }
+    
+    public void insert(String pid, String name,RandomAccessFile fil) {
+                
+    }
+    
+    public void remove(String pid, RandomAccessFile fil) {
         
-        CommandFileParser parser = new CommandFileParser();
-        parser.readFile("SampleInput.txt");
+    }
+    
+    public void clear(String pid, RandomAccessFile fil) {
         
+    }
+    
+    public void search(String pid, RandomAccessFile fil) {
+        
+    }
+    
+    public void print(RandomAccessFile fil) {
         
     }
 
