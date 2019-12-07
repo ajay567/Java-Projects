@@ -27,6 +27,100 @@
  * @author <Amit Ramesh> <amitr>
  * @version 2019.12.09
  */
-public class HashTable {
+public class HashTable<K,V> {
+    // key: String pid
+    // value: StudentRecord
+    private HashEntry<K,V>[] table;
+    private int capacity;
+    private int bucketSize = 32;
+    
+    @SuppressWarnings("unchecked")
+    public HashTable(int capacity) {
+        this.capacity = capacity;
+        table = new HashEntry[capacity];
+    }
+    
+    public boolean put(K key, V value) {
+        HashEntry<K,V> newEntry = new HashEntry<K,V>(key, value);
+        
+        // get first free pos for key
+        int pos = getEntryPos(key);
+        if(pos >= 0) {
+            table[pos] = newEntry;
+            return true;  
+        }
+        
+        // bucket full
+        return false;
+    }
+    
+    public V get(K key) {
+        int pos = getEntryPos(key);
+        HashEntry<K,V> entry = table[pos]; 
+        
+        if(entry != null) {
+            return entry.getValue();
+        }
+        return null;
+    }
+    
+    /**
+     * Get the table index corresponding to a key
+     * @param key Key to check
+     * @return Index of the key if present in the hash table or 
+     * the index of the first free slot if it is not. Returns -1
+     * if there is no room in the table to insert.
+     */
+    private int getEntryPos(K key) {
+        int pos = sfold(key.toString());
+        int bucketStart = (pos/32) * 32;
+        int bucketEnd = bucketStart + 32;
+        boolean found = false;
+        
+        int i=0;
+        int checkPos = pos;
+        while(!found && i<bucketSize) {
+            if(checkPos >= bucketEnd) {
+                checkPos = bucketStart;
+            }
+            
+            HashEntry<K, V> tempEntry = table[checkPos];
+            if(tempEntry == null) {
+                return checkPos;
+            }
+            else {
+                if(tempEntry.matchesKey(key)) {
+                    return checkPos;
+                }
+            }
+            
+            checkPos++;
+            i++;
+        }
+        
+        return -1;
+    }
+    
+    private int sfold(String s) {
+        int intLength = s.length() / 4;
+        long sum = 0;
+        for (int j = 0; j < intLength; j++) {
+          char c[] = s.substring(j * 4, (j * 4) + 4).toCharArray();
+          long mult = 1;
+          for (int k = 0; k < c.length; k++) {
+            sum += c[k] * mult;
+            mult *= 256;
+          }
+        }
 
+        char c[] = s.substring(intLength * 4).toCharArray();
+        long mult = 1;
+        for (int k = 0; k < c.length; k++) {
+          sum += c[k] * mult;
+          mult *= 256;
+        }
+
+        sum = (sum * sum) >> 8;
+        return (int)(Math.abs(sum) % this.capacity);
+      }
 }
