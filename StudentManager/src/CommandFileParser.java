@@ -1,3 +1,11 @@
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.Scanner;
+
 // On my honor:
 //
 // - I have not used source code obtained from another student,
@@ -28,5 +36,69 @@
  * @version 2019.12.09
  */
 public class CommandFileParser {
+
+    /**
+     * 
+     */
+    public CommandFileParser() {
+        // Does Nothing
+    }
+
+
+    /**
+     * 
+     * @param fileName
+     * @throws IOException 
+     */
+    public void readFile(String fileName) throws IOException {
+        
+        String memoryFileName = "ajay.bin";
+        DataOutputStream os = new DataOutputStream(new FileOutputStream(memoryFileName, false));
+        os.close();
+        RandomAccessFile fil = new RandomAccessFile(memoryFileName, "rw");
+        
+        CommandCalculator calculator = new CommandCalculator();
+        
+        File file = new File(fileName);
+        Scanner scan = new Scanner(file);
+        
+        while (scan.hasNext()) {
+            String command = scan.next();
+//            if (command.equals("loadstudentdata")) {
+//                String studentFileName = scan.next();
+//                calculator.loadStudentData(studentFileName, fil);
+//            }
+            if (command.equals("insert")){
+                String pid = scan.next();
+                String fullName = scan.next() + " " + scan.next();
+                calculator.insert(pid, fullName, fil);
+            }
+            if (command.equals("remove")){
+                String pid = scan.next();
+                calculator.remove(pid, fil);
+            }
+            if (command.equals("clear")) {
+                String pid = scan.next();
+                calculator.clear(pid, fil);
+            }
+            if (command.equals("search")) {
+                String pid = scan.next();
+                calculator.search(pid, fil);
+            }
+            if (command.equals("print")) {
+                calculator.print(fil);
+            }
+            if (command.equals("essay")) {
+                scan.next();
+                String essayVal = "";
+                while(!scan.hasNext("essay")) {
+                    essayVal = essayVal + scan.nextLine();
+                }
+                System.out.println(essayVal);
+                scan.next();
+                scan.next();
+            }
+        }
+    }
 
 }
