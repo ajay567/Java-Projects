@@ -131,17 +131,21 @@ public class HashTable<K,V> {
     }
     
     @SuppressWarnings("unchecked")
-    public ArrayList<StudentRecord> getValueArray() {
-        ArrayList<StudentRecord> valueArray = new ArrayList<StudentRecord>();
+    public ArrayList<V> getValueArray() {
+        ArrayList<V> valueArray = new ArrayList<V>();
         for(int i=0; i<capacity; i++) {
             if(table[i] != null) {
-                valueArray.add((StudentRecord)table[i].getValue());
+                valueArray.add((V)table[i].getValue());
             }
             else {
                 valueArray.add(null);
             }
         }
         return valueArray;
+    }
+    
+    public boolean[] getDeletedArray() {
+        return deleted;
     }
     
     private int sfold(String s) {
