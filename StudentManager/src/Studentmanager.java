@@ -49,9 +49,9 @@ public class Studentmanager {
      */
     public static void main(String[] args) throws IOException {
 
-        System.out.println("Created Hash Set with " + 64 + " slots.");
+        System.out.println("Created Hash Set with " + args[2] + " slots.");
         CommandFileParser parser = new CommandFileParser();
-        parser.readFile("SampleInput.txt", 64,"ajay.bin");
+        parser.readFile(args[0], Integer.parseInt(args[2]),args[3]);
 
     }
 

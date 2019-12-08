@@ -32,42 +32,47 @@ import java.util.ArrayList;
 public class MemoryManager {
     private ArrayList<MemoryHandle> freeList;
     private int numBytes;
-    
+
+
     public void printNumBytes() {
         System.out.println(numBytes);
     }
-    
+
+
     public MemoryManager() {
         freeList = new ArrayList<MemoryHandle>();
         numBytes = 0;
     }
-    
+
+
     public MemoryHandle getBlock(int length) {
-        for(int i=0; i<freeList.size(); i++) {
+        for (int i = 0; i < freeList.size(); i++) {
             int blockLength = freeList.get(i).getLength();
-            if(blockLength >= length) {
-                MemoryHandle handle = new MemoryHandle(freeList.get(i).getStart(), length);
+            if (blockLength >= length) {
+                MemoryHandle handle = new MemoryHandle(freeList.get(i)
+                    .getStart(), length);
                 // subtract size
                 freeList.get(i).setLength(blockLength - length);
                 freeList.get(i).setStart(freeList.get(i).getStart() + length);
                 
-                if(freeList.get(i).getLength() <= 0) {
+                if (freeList.get(i).getLength() == 0) {
                     freeList.remove(i);
                 }
-                
+//                printFreeList();
                 return handle;
             }
         }
-        
+
         // create new block at end
         MemoryHandle handle = new MemoryHandle(numBytes, length);
         numBytes += length;
-        
+//        printFreeList();
         return handle;
-        
+
     }
-    
-    public void removeBlock(MemoryHandle handle) {
+
+
+public void removeBlock(MemoryHandle handle) {
         
         // find first free block past handle
         int i = 0;
@@ -75,7 +80,7 @@ public class MemoryManager {
             i++;
         }
         freeList.add(i, handle);
-        
+
         if(i >= 1) {
 //          check for overlap
             MemoryHandle prev = freeList.get(i-1);
@@ -91,7 +96,7 @@ public class MemoryManager {
         if(i+1 < freeList.size()) {
             MemoryHandle curr = freeList.get(i);
             MemoryHandle next = freeList.get(i+1);
-            if(curr.getStart() + curr.getLength() >= next.getStart()) {
+            if(curr.getStart() + curr.getLength() >= next.getStart()) { 
 //                merge curr and i+1
                 curr.setLength(next.getLength() + next.getStart() - curr.getStart());
                 freeList.remove(i+1);
@@ -105,15 +110,17 @@ public class MemoryManager {
             numBytes -= last.getLength();
             freeList.remove(freeList.size()-1);
         }
-        
-        
+//        printFreeList();
     }
-    
+
+
     public void printFreeList() {
+
         System.out.println("Free Block List:");
-        
-        for(int i=0; i<freeList.size(); i++) {
-            System.out.println("Free Block "+ (i+1) + " starts from Byte "+ (freeList.get(i).getStart()+1) +" with length "+ freeList.get(i).getLength());
+        for (int i = 0; i < freeList.size(); i++) {
+            System.out.println("Free Block " + (i + 1) + " starts from Byte "
+                + (freeList.get(i).getStart() + 1) + " with length " + freeList
+                    .get(i).getLength());
         }
     }
 

@@ -1,0 +1,9 @@
+insert 000030822 Francisco Paco
+
+insert 022136196 Cassandra Witt 
+
+essay on
+FoxSports: Taylor set for senior Man U debut after chemotherapy
+essay off
+
+loadstudentdata SampleStudents.csv

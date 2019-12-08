@@ -3,6 +3,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 // On my honor:
@@ -49,7 +51,8 @@ public class CommandFileParser {
      * @param fileName
      * @throws IOException
      */
-    public void readFile(String fileName,int tableSize,String memoryFileName) throws IOException {
+    public void readFile(String fileName, int tableSize, String memoryFileName)
+        throws IOException {
 
         DataOutputStream os = new DataOutputStream(new FileOutputStream(
             memoryFileName, false));
@@ -86,7 +89,6 @@ public class CommandFileParser {
                     while (!scan.hasNext("essay")) {
                         essayVal = essayVal + scan.nextLine();
                     }
-                    ;
                     calculator.essayInsert(pid, fullName, essayVal, fil,
                         myTable, manager);
                     scan.next();
@@ -96,9 +98,9 @@ public class CommandFileParser {
             if (command.equals("update")) {
                 String pid = scan.next();
                 String name = scan.next() + " " + scan.next();
-                calculator.update(pid, name, fil, myTable, manager);
 
-                if (scan.hasNext("essay")) {
+                if (calculator.update(pid, name, fil, myTable, manager) && scan
+                    .hasNext("essay")) {
                     scan.next();
                     scan.next();
                     String essayVal = "";
@@ -107,7 +109,7 @@ public class CommandFileParser {
                     }
                     calculator.essayInsert(pid, name, essayVal, fil, myTable,
                         manager);
-                    scan.next();
+                    scan.next(); 
                     scan.next();
                 }
             }
@@ -138,8 +140,15 @@ public class CommandFileParser {
                     + "insert or update commands");
             }
         }
-//        System.out.println(fil.length());
-//        manager.printNumBytes();
+
+// for (int i = 0; i < fil.length(); i++) {
+// byte[] b = new byte[1];
+// fil.seek(i);
+// fil.readFully(b, 0, 1);
+// ByteBuffer wrapped = ByteBuffer.wrap(b);
+// String name = StandardCharsets.UTF_8.decode(wrapped).toString();
+// System.out.println("Number:" + i + " " + " Char:" + name);
+// }
     }
 
 }

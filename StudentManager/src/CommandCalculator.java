@@ -37,11 +37,22 @@ import java.util.Scanner;
  */
 public class CommandCalculator {
 
+    /**
+     * 
+     */
     public CommandCalculator() {
-
+        // Does Nothing
     }
 
 
+    /**
+     * 
+     * @param fileName
+     * @param fil
+     * @param myTable
+     * @param manager
+     * @throws IOException
+     */
     public void loadStudentData(
         String fileName,
         RandomAccessFile fil,
@@ -56,38 +67,48 @@ public class CommandCalculator {
             String newLine = scan.nextLine();
             currentLine = newLine.split(",");
             String name = "";
-// if (currentLine[2].length() != 0) {
-// name = currentLine[1] + " " + currentLine[2] + " "
-// + currentLine[3];
-// }
-// else {
-            name = currentLine[1] + " " + currentLine[3];
-// }
-            byte[] b = name.getBytes();
-            MemoryHandle hand = manager.getBlock(b.length);
-            if (myTable.get(currentLine[0]) != null) {
-                System.out.println("Warning: Student " + currentLine[0] + " "
-                    + currentLine[1] + " " + currentLine[3]
-                    + " is not loaded since a student "
-                    + "with the same pid exists.");
-            }
-            else if (!myTable.put(currentLine[0], new StudentRecord(hand))) {
-                System.out.println(
-                    "Warning: There is no free place in the bucket to "
-                        + "load student " + currentLine[0] + " "
-                        + currentLine[1] + " " + currentLine[3] + ".");
-            }
-            else {
-                fil.seek(hand.getStart());
-                fil.write(b);
-            }
+            if (!currentLine[0].equals("")) {
+                name = currentLine[1] + " " + currentLine[3];
+                byte[] b = name.getBytes();
+//                System.out.println(name + " Name:" + name.length() + " Bytes Size:" + b.length);
+                MemoryHandle hand = manager.getBlock(b.length);
+                if (myTable.get(currentLine[0]) != null) {
+                    manager.removeBlock(hand);
+                    System.out.println("Warning: Student " + currentLine[0]
+                        + " " + currentLine[1] + " " + currentLine[3]
+                        + " is not loaded since a student "
+                        + "with the same pid exists.");
+                }
+                else if (!myTable.put(currentLine[0], new StudentRecord(
+                    hand))) {
+                    manager.removeBlock(hand);
+                    System.out.println(
+                        "Warning: There is no free place in the bucket to "
+                            + "load student " + currentLine[0] + " "
+                            + currentLine[1] + " " + currentLine[3] + ".");
+                }
+                else {
+                    fil.seek(hand.getStart());
+                    fil.write(b);
+                }
 
+            }
         }
         scan.close();
 
     }
 
 
+    /**
+     * 
+     * @param pid
+     * @param name
+     * @param fil
+     * @param myTable
+     * @param manager
+     * @return
+     * @throws IOException
+     */
     public boolean insert(
         String pid,
         String name,
@@ -100,12 +121,14 @@ public class CommandCalculator {
         byte[] b = name.getBytes();
         MemoryHandle hand = manager.getBlock(b.length);
         if (myTable.get(pid) != null) {
+            manager.removeBlock(hand);
             System.out.println(name + " insertion failed since the pid " + pid
                 + " belongs to another student.");
         }
         else if (!myTable.put(pid, new StudentRecord(hand))) {
+            manager.removeBlock(hand);
             System.out.println(name
-                + " insertion failed. Attempt to insert in a full bucket. ");
+                + " insertion failed. Attempt to insert in a full bucket.");
         }
         else {
             System.out.println(name + " inserted.");
@@ -118,6 +141,14 @@ public class CommandCalculator {
     }
 
 
+    /**
+     * 
+     * @param pid
+     * @param fil
+     * @param myTable
+     * @param manager
+     * @throws IOException
+     */
     public void remove(
         String pid,
         RandomAccessFile fil,
@@ -148,6 +179,14 @@ public class CommandCalculator {
     }
 
 
+    /**
+     * 
+     * @param pid
+     * @param fil
+     * @param myTable
+     * @param manager
+     * @throws IOException
+     */
     public void clear(
         String pid,
         RandomAccessFile fil,
@@ -155,7 +194,7 @@ public class CommandCalculator {
         MemoryManager manager)
         throws IOException {
 
-        String name ="";
+        String name = "";
         if (myTable.get(pid) == null) {
             System.out.println(pid + " is not found in the database.");
         }
@@ -163,7 +202,7 @@ public class CommandCalculator {
             StudentRecord record = myTable.get(pid);
             if (record.getEssay() != null) {
                 manager.removeBlock(record.getEssay());
-                
+
                 byte[] b = new byte[record.getName().getLength()];
                 fil.seek(record.getName().getStart());
                 fil.readFully(b, 0, record.getName().getLength());
@@ -178,6 +217,13 @@ public class CommandCalculator {
     }
 
 
+    /**
+     * 
+     * @param pid
+     * @param fil
+     * @param myTable
+     * @throws IOException
+     */
     public void search(
         String pid,
         RandomAccessFile fil,
@@ -199,7 +245,7 @@ public class CommandCalculator {
             String name = StandardCharsets.UTF_8.decode(wrapped).toString();
 
             // essay
-            if (record.getEssay() != null) {
+            if (record.getEssay() != null) { 
                 b = new byte[record.getEssay().getLength()];
                 fil.seek(record.getEssay().getStart());
                 fil.readFully(b, 0, record.getEssay().getLength());
@@ -218,6 +264,13 @@ public class CommandCalculator {
     }
 
 
+    /**
+     * 
+     * @param fil
+     * @param myTable
+     * @param manager
+     * @throws IOException
+     */
     public void print(
         RandomAccessFile fil,
         HashTable<String, StudentRecord> myTable,
@@ -236,12 +289,39 @@ public class CommandCalculator {
                 ByteBuffer wrapped = ByteBuffer.wrap(b);
                 String name = StandardCharsets.UTF_8.decode(wrapped).toString();
                 System.out.println(name + " at slot " + i);
+                
+//                System.out.println("Start:" + studentRecords.get(i).getName()
+//                    .getStart() + " Length:" + studentRecords.get(i).getName()
+//                        .getLength());
+//
+//                if (studentRecords.get(i).getEssay() != null) {
+//                    b = new byte[studentRecords.get(i).getEssay().getLength()];
+//                    fil.seek(studentRecords.get(i).getEssay().getStart());
+//                    fil.readFully(b, 0, studentRecords.get(i).getEssay()
+//                        .getLength());
+//                    wrapped = ByteBuffer.wrap(b);
+//                    name = StandardCharsets.UTF_8.decode(wrapped).toString();
+//                    System.out.println(name);
+//                    System.out.println("Start:" + studentRecords.get(i)
+//                        .getEssay().getStart() + " Length:" + studentRecords
+//                            .get(i).getEssay().getLength());
+//                }
             }
         }
         manager.printFreeList();
     }
 
 
+    /**
+     * 
+     * @param pid
+     * @param fullName
+     * @param essay
+     * @param fil
+     * @param myTable
+     * @param manager
+     * @throws IOException
+     */
     public void essayInsert(
         String pid,
         String fullName,
@@ -262,11 +342,28 @@ public class CommandCalculator {
         fil.write(b);
         myTable.get(pid).setEssay(hand);
         System.out.println("essay saved for " + fullName);
+//        for (int i = 0; i < essay.length(); i++) {
+//            if (essay.charAt(i) == ' ') {
+//                System.out.print("z");
+//            }
+//            else {
+//                System.out.print(essay.charAt(i));
+//            }
+//        }
 
     }
 
 
-    public void update(
+    /**
+     * 
+     * @param pid
+     * @param name
+     * @param fil
+     * @param myTable
+     * @param manager
+     * @throws IOException
+     */
+    public boolean update(
         String pid,
         String name,
         RandomAccessFile fil,
@@ -274,8 +371,9 @@ public class CommandCalculator {
         MemoryManager manager)
         throws IOException {
 
+        boolean checker = false;
         if (myTable.get(pid) == null) {
-            insert(pid, name, fil, myTable, manager);
+            checker = insert(pid, name, fil, myTable, manager);
         }
         else {
             StudentRecord record = myTable.get(pid);
@@ -286,7 +384,10 @@ public class CommandCalculator {
             fil.write(b);
             myTable.get(pid).setName(hand);
             System.out.println("Student " + pid + " updated to " + name);
+            checker = true;
         }
+        return checker;
     }
+    
 
 }
