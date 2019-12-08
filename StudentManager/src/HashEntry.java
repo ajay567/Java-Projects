@@ -16,6 +16,10 @@ public class HashEntry<K,V> {
         return this.value;
     }
     
+    public K getKey() {
+        return this.key;
+    }
+    
     public void setValue(V value) {
         this.value = value;
     }

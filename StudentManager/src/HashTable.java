@@ -123,6 +123,12 @@ public class HashTable<K,V> {
         return -1;
     }
     
+    public void printTable() {
+        for(int i=0; i<capacity; i++) {
+            System.out.println(i +": "+ table[i].getKey());
+        }
+    }
+    
     private int sfold(String s) {
         int intLength = s.length() / 4;
         long sum = 0;
