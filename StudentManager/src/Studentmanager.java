@@ -48,11 +48,11 @@ public class Studentmanager {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-        
+
+        System.out.println("Created Hash Set with " + 64 + " slots.");
         CommandFileParser parser = new CommandFileParser();
-        parser.readFile("SampleInput.txt");
-        
-        
+        parser.readFile("SampleInput.txt", 64,"ajay.bin");
+
     }
 
 }

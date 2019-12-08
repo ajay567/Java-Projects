@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 // On my honor:
 //
 // - I have not used source code obtained from another student,
@@ -129,12 +131,14 @@ public class HashTable<K,V> {
     }
     
     @SuppressWarnings("unchecked")
-    public V[] getValueArray() {
-        V[] valueArray = (V[])new Object[capacity];
-        
+    public ArrayList<StudentRecord> getValueArray() {
+        ArrayList<StudentRecord> valueArray = new ArrayList<StudentRecord>();
         for(int i=0; i<capacity; i++) {
             if(table[i] != null) {
-                valueArray[i] = table[i].getValue();
+                valueArray.add((StudentRecord)table[i].getValue());
+            }
+            else {
+                valueArray.add(null);
             }
         }
         return valueArray;

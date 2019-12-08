@@ -3,6 +3,10 @@ public class StudentRecord {
     private MemoryHandle name;
     private MemoryHandle essay;
     
+    public StudentRecord(MemoryHandle name) {
+        this.name = name;
+    }
+    
     public StudentRecord(MemoryHandle name, MemoryHandle essay) {
         this.name = name;
         this.essay = essay;

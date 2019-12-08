@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class HashTableTest extends student.TestCase{
     private HashTable<String, Integer> myTable;
@@ -55,9 +56,9 @@ public class HashTableTest extends student.TestCase{
             assertTrue(myTable.put("Testing"+ i, i));
         }
         
-        Object[] values = myTable.getValueArray();
+        ArrayList<StudentRecord> values = myTable.getValueArray();
         for(int i=0; i<100; i++) {
-            System.out.println(i + ": "+ values[i]);
+            System.out.println(i + ": "+ values.get(i));
         }
         
     }

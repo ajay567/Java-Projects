@@ -33,6 +33,10 @@ public class MemoryManager {
     private ArrayList<MemoryHandle> freeList;
     private int numBytes;
     
+    public void printNumBytes() {
+        System.out.println(numBytes);
+    }
+    
     public MemoryManager() {
         freeList = new ArrayList<MemoryHandle>();
         numBytes = 0;

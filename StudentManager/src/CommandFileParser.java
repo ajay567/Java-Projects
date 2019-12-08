@@ -1,6 +1,5 @@
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -48,57 +47,99 @@ public class CommandFileParser {
     /**
      * 
      * @param fileName
-     * @throws IOException 
+     * @throws IOException
      */
-    public void readFile(String fileName) throws IOException {
-        
-        String memoryFileName = "ajay.bin";
-        DataOutputStream os = new DataOutputStream(new FileOutputStream(memoryFileName, false));
+    public void readFile(String fileName,int tableSize,String memoryFileName) throws IOException {
+
+        DataOutputStream os = new DataOutputStream(new FileOutputStream(
+            memoryFileName, false));
         os.close();
         RandomAccessFile fil = new RandomAccessFile(memoryFileName, "rw");
-        
+
+        HashTable<String, StudentRecord> myTable =
+            new HashTable<String, StudentRecord>(tableSize);
+
+        MemoryManager manager = new MemoryManager();
+
         CommandCalculator calculator = new CommandCalculator();
-        
+
         File file = new File(fileName);
         Scanner scan = new Scanner(file);
-        
+
         while (scan.hasNext()) {
             String command = scan.next();
-//            if (command.equals("loadstudentdata")) {
-//                String studentFileName = scan.next();
-//                calculator.loadStudentData(studentFileName, fil);
-//            }
-            if (command.equals("insert")){
+            if (command.equals("loadstudentdata")) {
+                String studentFileName = scan.next();
+                System.out.println(studentFileName + " successfully loaded.");
+                calculator.loadStudentData(studentFileName, fil, myTable,
+                    manager);
+            }
+            if (command.equals("insert")) {
                 String pid = scan.next();
                 String fullName = scan.next() + " " + scan.next();
-                calculator.insert(pid, fullName, fil);
+
+                if (calculator.insert(pid, fullName, fil, myTable, manager)
+                    && scan.hasNext("essay")) {
+                    scan.next();
+                    scan.next();
+                    String essayVal = "";
+                    while (!scan.hasNext("essay")) {
+                        essayVal = essayVal + scan.nextLine();
+                    }
+                    ;
+                    calculator.essayInsert(pid, fullName, essayVal, fil,
+                        myTable, manager);
+                    scan.next();
+                    scan.next();
+                }
             }
-            if (command.equals("remove")){
+            if (command.equals("update")) {
                 String pid = scan.next();
-                calculator.remove(pid, fil);
+                String name = scan.next() + " " + scan.next();
+                calculator.update(pid, name, fil, myTable, manager);
+
+                if (scan.hasNext("essay")) {
+                    scan.next();
+                    scan.next();
+                    String essayVal = "";
+                    while (!scan.hasNext("essay")) {
+                        essayVal = essayVal + scan.nextLine();
+                    }
+                    calculator.essayInsert(pid, name, essayVal, fil, myTable,
+                        manager);
+                    scan.next();
+                    scan.next();
+                }
+            }
+            if (command.equals("remove")) {
+                String pid = scan.next();
+                calculator.remove(pid, fil, myTable, manager);
             }
             if (command.equals("clear")) {
                 String pid = scan.next();
-                calculator.clear(pid, fil);
+                calculator.clear(pid, fil, myTable, manager);
             }
             if (command.equals("search")) {
                 String pid = scan.next();
-                calculator.search(pid, fil);
+                calculator.search(pid, fil, myTable);
             }
             if (command.equals("print")) {
-                calculator.print(fil);
+                calculator.print(fil, myTable, manager);
             }
             if (command.equals("essay")) {
                 scan.next();
                 String essayVal = "";
-                while(!scan.hasNext("essay")) {
+                while (!scan.hasNext("essay")) {
                     essayVal = essayVal + scan.nextLine();
                 }
-                System.out.println(essayVal);
                 scan.next();
                 scan.next();
+                System.out.println("essay commands can only follow successful "
+                    + "insert or update commands");
             }
         }
+//        System.out.println(fil.length());
+//        manager.printNumBytes();
     }
 
 }
