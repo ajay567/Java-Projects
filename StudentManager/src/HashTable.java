@@ -49,7 +49,7 @@ public class HashTable<K,V> {
         int pos = getEntryPos(key, true);
         if(pos >= 0) {
             table[pos] = newEntry;
-//            deleted[pos] = false;
+            deleted[pos] = false;
             return true;  
         }
         
@@ -128,15 +128,16 @@ public class HashTable<K,V> {
         return -1;
     }
     
-    public void printTable() {
+    @SuppressWarnings("unchecked")
+    public V[] getValueArray() {
+        V[] valueArray = (V[])new Object[capacity];
+        
         for(int i=0; i<capacity; i++) {
             if(table[i] != null) {
-                System.out.println(i +": "+ table[i].getKey());
-            }
-            else {
-                System.out.println(i +": "+ table[i]);
+                valueArray[i] = table[i].getValue();
             }
         }
+        return valueArray;
     }
     
     private int sfold(String s) {

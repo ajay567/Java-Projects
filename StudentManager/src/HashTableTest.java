@@ -49,4 +49,16 @@ public class HashTableTest extends student.TestCase{
         assertFalse(myTable.remove("Testing"+ 49));
         assertNull(myTable.get("Some value"));
     }
+    
+    public void testGetValueArray() {
+        for(int i=0; i<50; i++) {
+            assertTrue(myTable.put("Testing"+ i, i));
+        }
+        
+        Object[] values = myTable.getValueArray();
+        for(int i=0; i<100; i++) {
+            System.out.println(i + ": "+ values[i]);
+        }
+        
+    }
 }
