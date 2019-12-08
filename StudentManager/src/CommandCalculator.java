@@ -49,7 +49,6 @@ public class CommandCalculator {
         MemoryManager manager)
         throws IOException {
 
-
         File input = new File(fileName);
         Scanner scan = new Scanner(input);
         String[] currentLine = null;
@@ -57,13 +56,13 @@ public class CommandCalculator {
             String newLine = scan.nextLine();
             currentLine = newLine.split(",");
             String name = "";
-//            if (currentLine[2].length() != 0) {
-//                name = currentLine[1] + " " + currentLine[2] + " "
-//                    + currentLine[3];
-//            }
-//            else {
-                name = currentLine[1] + " " + currentLine[3];
-//            }
+// if (currentLine[2].length() != 0) {
+// name = currentLine[1] + " " + currentLine[2] + " "
+// + currentLine[3];
+// }
+// else {
+            name = currentLine[1] + " " + currentLine[3];
+// }
             byte[] b = name.getBytes();
             MemoryHandle hand = manager.getBlock(b.length);
             if (myTable.get(currentLine[0]) != null) {
@@ -156,19 +155,22 @@ public class CommandCalculator {
         MemoryManager manager)
         throws IOException {
 
+        String name ="";
         if (myTable.get(pid) == null) {
             System.out.println(pid + " is not found in the database.");
         }
         else {
             StudentRecord record = myTable.get(pid);
-            manager.removeBlock(record.getEssay());
-            byte[] b = new byte[record.getName().getLength()];
-            fil.seek(record.getName().getStart());
-            fil.readFully(b, 0, record.getName().getLength());
-            ByteBuffer wrapped = ByteBuffer.wrap(b);
-            String name = StandardCharsets.UTF_8.decode(wrapped).toString();
-
-            myTable.get(pid).setEssay(null);
+            if (record.getEssay() != null) {
+                manager.removeBlock(record.getEssay());
+                
+                byte[] b = new byte[record.getName().getLength()];
+                fil.seek(record.getName().getStart());
+                fil.readFully(b, 0, record.getName().getLength());
+                ByteBuffer wrapped = ByteBuffer.wrap(b);
+                name = StandardCharsets.UTF_8.decode(wrapped).toString();
+                myTable.get(pid).setEssay(null);
+            }
             System.out.println("record with pid " + pid + " with full name "
                 + name + " is cleared.");
         }
@@ -221,20 +223,21 @@ public class CommandCalculator {
         HashTable<String, StudentRecord> myTable,
         MemoryManager manager)
         throws IOException {
-        
-        System.out.println("Students in the datbase:");        
+
+        System.out.println("Students in the database:");
         ArrayList<StudentRecord> studentRecords = myTable.getValueArray();
         for (int i = 0; i < studentRecords.size(); i++) {
             if (studentRecords.get(i) != null) {
-                byte[] b = new byte[studentRecords.get(i).getName().getLength()];
+                byte[] b = new byte[studentRecords.get(i).getName()
+                    .getLength()];
                 fil.seek(studentRecords.get(i).getName().getStart());
-                fil.readFully(b, 0, studentRecords.get(i).getName().getLength());
+                fil.readFully(b, 0, studentRecords.get(i).getName()
+                    .getLength());
                 ByteBuffer wrapped = ByteBuffer.wrap(b);
                 String name = StandardCharsets.UTF_8.decode(wrapped).toString();
                 System.out.println(name + " at slot " + i);
             }
         }
-        
         manager.printFreeList();
     }
 
@@ -249,7 +252,7 @@ public class CommandCalculator {
         throws IOException {
 
         StudentRecord record = myTable.get(pid);
-//        System.out.println(record.getEssay());
+// System.out.println(record.getEssay());
         if (record.getEssay() != null) {
             manager.removeBlock(record.getEssay());
         }
