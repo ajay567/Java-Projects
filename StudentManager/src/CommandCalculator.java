@@ -202,13 +202,13 @@ public class CommandCalculator {
             StudentRecord record = myTable.get(pid);
             if (record.getEssay() != null) {
                 manager.removeBlock(record.getEssay());
-
+                myTable.get(pid).setEssay(null);
+ 
                 byte[] b = new byte[record.getName().getLength()];
                 fil.seek(record.getName().getStart());
                 fil.readFully(b, 0, record.getName().getLength());
                 ByteBuffer wrapped = ByteBuffer.wrap(b);
                 name = StandardCharsets.UTF_8.decode(wrapped).toString();
-                myTable.get(pid).setEssay(null);
             }
             System.out.println("record with pid " + pid + " with full name "
                 + name + " is cleared.");
@@ -350,7 +350,6 @@ public class CommandCalculator {
 //                System.out.print(essay.charAt(i));
 //            }
 //        }
-
     }
 
 
