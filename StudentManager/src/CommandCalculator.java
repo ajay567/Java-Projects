@@ -57,13 +57,13 @@ public class CommandCalculator {
             String newLine = scan.nextLine();
             currentLine = newLine.split(",");
             String name = "";
-            if (currentLine[2].length() != 0) {
-                name = currentLine[1] + " " + currentLine[2] + " "
-                    + currentLine[3];
-            }
-            else {
+//            if (currentLine[2].length() != 0) {
+//                name = currentLine[1] + " " + currentLine[2] + " "
+//                    + currentLine[3];
+//            }
+//            else {
                 name = currentLine[1] + " " + currentLine[3];
-            }
+//            }
             byte[] b = name.getBytes();
             MemoryHandle hand = manager.getBlock(b.length);
             if (myTable.get(currentLine[0]) != null) {
