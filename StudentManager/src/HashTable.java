@@ -46,7 +46,7 @@ public class HashTable<K,V> {
         HashEntry<K,V> newEntry = new HashEntry<K,V>(key, value);
         
         // get first free pos for key
-        int pos = getEntryPos(key);
+        int pos = getEntryPos(key, true);
         if(pos >= 0) {
             table[pos] = newEntry;
 //            deleted[pos] = false;
@@ -58,7 +58,7 @@ public class HashTable<K,V> {
     }
     
     public V get(K key) {
-        int pos = getEntryPos(key);
+        int pos = getEntryPos(key, false);
         if(pos >= 0) {
             HashEntry<K,V> entry = table[pos]; 
             
@@ -70,7 +70,7 @@ public class HashTable<K,V> {
     }
     
     public boolean remove(K key) {
-        int pos = getEntryPos(key);
+        int pos = getEntryPos(key, false);
         if(pos >= 0) {
             if(deleted[pos]) {
                 return false;
@@ -91,7 +91,7 @@ public class HashTable<K,V> {
      * the index of the first free slot if it is not. Returns -1
      * if there is no room in the table to insert.
      */
-    private int getEntryPos(K key) {
+    private int getEntryPos(K key, boolean insertion) {
         int pos = sfold(key.toString());
         int bucketStart = (pos/32) * 32;
         int bucketEnd = bucketStart + 32;
@@ -106,8 +106,13 @@ public class HashTable<K,V> {
             HashEntry<K, V> tempEntry = table[checkPos];            
             
             if(tempEntry == null) {
-                if(!deleted[pos]) {
+                if(insertion) {
                     return checkPos;
+                }
+                else {
+                    if(!deleted[pos]) {
+                        return checkPos;
+                    }
                 }
             }
             else {
@@ -125,7 +130,12 @@ public class HashTable<K,V> {
     
     public void printTable() {
         for(int i=0; i<capacity; i++) {
-            System.out.println(i +": "+ table[i].getKey());
+            if(table[i] != null) {
+                System.out.println(i +": "+ table[i].getKey());
+            }
+            else {
+                System.out.println(i +": "+ table[i]);
+            }
         }
     }
     
