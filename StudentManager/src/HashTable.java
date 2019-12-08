@@ -31,6 +31,7 @@ public class HashTable<K,V> {
     // key: String pid
     // value: StudentRecord
     private HashEntry<K,V>[] table;
+    private boolean[] deleted;
     private int capacity;
     private int bucketSize = 32;
     
@@ -38,6 +39,7 @@ public class HashTable<K,V> {
     public HashTable(int capacity) {
         this.capacity = capacity;
         table = new HashEntry[capacity];
+        deleted = new boolean[capacity];
     }
     
     public boolean put(K key, V value) {
@@ -47,6 +49,7 @@ public class HashTable<K,V> {
         int pos = getEntryPos(key);
         if(pos >= 0) {
             table[pos] = newEntry;
+//            deleted[pos] = false;
             return true;  
         }
         
@@ -56,19 +59,25 @@ public class HashTable<K,V> {
     
     public V get(K key) {
         int pos = getEntryPos(key);
-        HashEntry<K,V> entry = table[pos]; 
-        
-        if(entry != null) {
-            return entry.getValue();
+        if(pos >= 0) {
+            HashEntry<K,V> entry = table[pos]; 
+            
+            if(entry != null) {
+                return entry.getValue();
+            }
         }
         return null;
     }
     
     public boolean remove(K key) {
         int pos = getEntryPos(key);
-        
-        if(table[pos] != null) {
+        if(pos >= 0) {
+            if(deleted[pos]) {
+                return false;
+            }
+            
             table[pos] = null;
+            deleted[pos] = true;
             return true;
         }
         
@@ -86,18 +95,20 @@ public class HashTable<K,V> {
         int pos = sfold(key.toString());
         int bucketStart = (pos/32) * 32;
         int bucketEnd = bucketStart + 32;
-        boolean found = false;
         
         int i=0;
         int checkPos = pos;
-        while(!found && i<bucketSize) {
+        while(i<bucketSize) {
             if(checkPos >= bucketEnd) {
                 checkPos = bucketStart;
             }
             
-            HashEntry<K, V> tempEntry = table[checkPos];
+            HashEntry<K, V> tempEntry = table[checkPos];            
+            
             if(tempEntry == null) {
-                return checkPos;
+                if(!deleted[pos]) {
+                    return checkPos;
+                }
             }
             else {
                 if(tempEntry.matchesKey(key)) {
