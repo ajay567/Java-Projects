@@ -6,7 +6,7 @@ public class MemoryHandle {
     public MemoryHandle(int start, int length) {
         this.start = start;
         this.length = length;
-        System.out.println("Start:" + start + " Length:" + length);
+//        System.out.println("Start:" + start + " Length:" + length);
     }
     
     public int getStart() {
