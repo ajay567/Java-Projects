@@ -63,4 +63,21 @@ public class MemoryManagerTest extends student.TestCase{
         assertEquals(handle6.getStart(), 10);
         
     }
+    
+    public void testPrintFreeList() {
+        MemoryHandle handle1 = manager.getBlock(10);
+        MemoryHandle handle2 = manager.getBlock(20);        
+        MemoryHandle handle3 = manager.getBlock(30);
+
+        manager.removeBlock(handle2);
+        MemoryHandle handle4 = manager.getBlock(10);
+        manager.removeBlock(handle1);
+        
+        manager.printFreeList();
+        
+        MemoryHandle handle5 = manager.getBlock(40);
+        MemoryHandle handle6 = manager.getBlock(5);
+
+        manager.printFreeList();
+    }
 }

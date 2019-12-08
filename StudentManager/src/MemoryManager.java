@@ -104,5 +104,13 @@ public class MemoryManager {
         
         
     }
+    
+    public void printFreeList() {
+        System.out.println("Free Block List:");
+        
+        for(int i=0; i<freeList.size(); i++) {
+            System.out.println("Free Block "+ (i+1) + " starts from Byte "+ freeList.get(i).getStart() +" with length "+ freeList.get(i).getLength());
+        }
+    }
 
 }
