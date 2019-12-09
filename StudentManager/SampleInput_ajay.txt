@@ -1,9 +1,28 @@
-insert 000030822 Francisco Paco
-
-insert 022136196 Cassandra Witt 
-
-essay on
-FoxSports: Taylor set for senior Man U debut after chemotherapy
-essay off
 
 loadstudentdata SampleStudents.csv
+search 815012117
+update 815012117 Ajay Dalmia
+search 815012117
+essay on
+My name is
+essay off
+search 815012117
+clear 815012117
+search 815012117
+remove 815012117
+
+remove 729231860
+clear 729231860
+clear 440978815
+remove 440978815
+
+remove 940597271
+
+remove 676975170
+remove 161829536
+print
+
+
+
+
+

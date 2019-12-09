@@ -3,8 +3,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 // On my honor:
@@ -27,10 +25,10 @@ import java.util.Scanner;
 // during the discussion. I have violated neither the spirit nor
 // letter of this restriction.
 /**
- * This class contains the main method. It just has to create the
- * objects of the required classes and call methods that perform
- * external sorting. The methods are passed the names of the
- * files that have to be sorted.
+ * All the commands from command file are parsed in this class.
+ * Then the required output is produced by using the methods
+ * from CommandCalculator. A instance of the hash table, memory
+ * manager exist in this class.
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
@@ -39,7 +37,7 @@ import java.util.Scanner;
 public class CommandFileParser {
 
     /**
-     * 
+     * Constructor
      */
     public CommandFileParser() {
         // Does Nothing
@@ -47,42 +45,54 @@ public class CommandFileParser {
 
 
     /**
+     * This method uses the scanner to parse the commands
+     * from the command file. Then the appropriate operations
+     * are done for those command. It is the only method in this
+     * class.
      * 
      * @param fileName
+     *            name of the command file
+     * @param tableSize
+     *            hash table size
+     * @param memoryFileName
+     *            name of the memory file
      * @throws IOException
      */
     public void readFile(String fileName, int tableSize, String memoryFileName)
         throws IOException {
 
+        // Creating a memory file
         DataOutputStream os = new DataOutputStream(new FileOutputStream(
             memoryFileName, false));
         os.close();
         RandomAccessFile fil = new RandomAccessFile(memoryFileName, "rw");
 
+        // Creating a hash table
         HashTable<String, StudentRecord> myTable =
             new HashTable<String, StudentRecord>(tableSize);
 
+        // Creating a memory manager object
         MemoryManager manager = new MemoryManager();
 
         CommandCalculator calculator = new CommandCalculator();
-
         File file = new File(fileName);
         Scanner scan = new Scanner(file);
 
         while (scan.hasNext()) {
             String command = scan.next();
-            if (command.equals("loadstudentdata")) {
+            if (command.equals("loadstudentdata")) { // load starts
                 String studentFileName = scan.next();
                 System.out.println(studentFileName + " successfully loaded.");
                 calculator.loadStudentData(studentFileName, fil, myTable,
                     manager);
-            }
-            if (command.equals("insert")) {
+            } // load ends
+            if (command.equals("insert")) { // insert starts
                 String pid = scan.next();
                 String fullName = scan.next() + " " + scan.next();
 
-                if (calculator.insert(pid, fullName, fil, myTable, manager)
-                    && scan.hasNext("essay")) {
+                boolean checker = calculator.insert(pid, fullName, fil, myTable,
+                    manager);
+                if (checker && scan.hasNext("essay")) {
                     scan.next();
                     scan.next();
                     String essayVal = "";
@@ -94,8 +104,8 @@ public class CommandFileParser {
                     scan.next();
                     scan.next();
                 }
-            }
-            if (command.equals("update")) {
+            } // insert ends
+            if (command.equals("update")) { // update starts
                 String pid = scan.next();
                 String name = scan.next() + " " + scan.next();
 
@@ -109,10 +119,10 @@ public class CommandFileParser {
                     }
                     calculator.essayInsert(pid, name, essayVal, fil, myTable,
                         manager);
-                    scan.next(); 
+                    scan.next();
                     scan.next();
                 }
-            }
+            } // update ends
             if (command.equals("remove")) {
                 String pid = scan.next();
                 calculator.remove(pid, fil, myTable, manager);
@@ -128,7 +138,7 @@ public class CommandFileParser {
             if (command.equals("print")) {
                 calculator.print(fil, myTable, manager);
             }
-            if (command.equals("essay")) {
+            if (command.equals("essay")) { // essay starts
                 scan.next();
                 String essayVal = "";
                 while (!scan.hasNext("essay")) {
@@ -138,17 +148,9 @@ public class CommandFileParser {
                 scan.next();
                 System.out.println("essay commands can only follow successful "
                     + "insert or update commands");
-            }
+            } // essay ends
         }
-
-// for (int i = 0; i < fil.length(); i++) {
-// byte[] b = new byte[1];
-// fil.seek(i);
-// fil.readFully(b, 0, 1);
-// ByteBuffer wrapped = ByteBuffer.wrap(b);
-// String name = StandardCharsets.UTF_8.decode(wrapped).toString();
-// System.out.println("Number:" + i + " " + " Char:" + name);
-// }
+        scan.close();
     }
 
 }

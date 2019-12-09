@@ -26,10 +26,9 @@ import java.util.Scanner;
 // during the discussion. I have violated neither the spirit nor
 // letter of this restriction.
 /**
- * This class contains the main method. It just has to create the
- * objects of the required classes and call methods that perform
- * external sorting. The methods are passed the names of the
- * files that have to be sorted.
+ * This class helps the CommandFileParser class. Most of the
+ * calculations and print outs for the commands are handled by
+ * this class.
  * 
  * @author <Ajay Dalmia> <ajay99>
  * @author <Amit Ramesh> <amitr>
@@ -38,7 +37,7 @@ import java.util.Scanner;
 public class CommandCalculator {
 
     /**
-     * 
+     * Constructor
      */
     public CommandCalculator() {
         // Does Nothing
@@ -46,11 +45,18 @@ public class CommandCalculator {
 
 
     /**
+     * It loads the csv file into the memory manager
+     * and the hash table and prints warnings if
+     * required
      * 
      * @param fileName
+     *            name of the csv file
      * @param fil
+     *            file object
      * @param myTable
+     *            hash table
      * @param manager
+     *            memory manager object
      * @throws IOException
      */
     public void loadStudentData(
@@ -70,7 +76,6 @@ public class CommandCalculator {
             if (!currentLine[0].equals("")) {
                 name = currentLine[1] + " " + currentLine[3];
                 byte[] b = name.getBytes();
-//                System.out.println(name + " Name:" + name.length() + " Bytes Size:" + b.length);
                 MemoryHandle hand = manager.getBlock(b.length);
                 if (myTable.get(currentLine[0]) != null) {
                     manager.removeBlock(hand);
@@ -79,8 +84,8 @@ public class CommandCalculator {
                         + " is not loaded since a student "
                         + "with the same pid exists.");
                 }
-                else if (!myTable.put(currentLine[0], new StudentRecord(
-                    hand))) {
+                else if (!myTable.put(currentLine[0], new StudentRecord(hand,
+                    null))) {
                     manager.removeBlock(hand);
                     System.out.println(
                         "Warning: There is no free place in the bucket to "
@@ -100,13 +105,20 @@ public class CommandCalculator {
 
 
     /**
+     * The insert method inserts students into the memory file
+     * if they do not already exist.
      * 
      * @param pid
+     *            id of the student used as key value
      * @param name
+     *            student's name
      * @param fil
+     *            file object
      * @param myTable
+     *            hash table
      * @param manager
-     * @return
+     *            memory manager object
+     * @return true if insert was successful
      * @throws IOException
      */
     public boolean insert(
@@ -125,7 +137,7 @@ public class CommandCalculator {
             System.out.println(name + " insertion failed since the pid " + pid
                 + " belongs to another student.");
         }
-        else if (!myTable.put(pid, new StudentRecord(hand))) {
+        else if (!myTable.put(pid, new StudentRecord(hand, null))) {
             manager.removeBlock(hand);
             System.out.println(name
                 + " insertion failed. Attempt to insert in a full bucket.");
@@ -142,11 +154,18 @@ public class CommandCalculator {
 
 
     /**
+     * This method takes care of the remove command. It removes
+     * the existence of a student record from the entire
+     * program.
      * 
      * @param pid
+     *            id of the student used as key value
      * @param fil
+     *            file object
      * @param myTable
+     *            hash table
      * @param manager
+     *            memory manager object
      * @throws IOException
      */
     public void remove(
@@ -161,17 +180,18 @@ public class CommandCalculator {
         }
         else {
             StudentRecord record = myTable.get(pid);
-            myTable.remove(pid);
-            manager.removeBlock(record.getName());
-            if (record.getEssay() != null) {
-                manager.removeBlock(record.getEssay());
-            }
 
             byte[] b = new byte[record.getName().getLength()];
             fil.seek(record.getName().getStart());
             fil.readFully(b, 0, record.getName().getLength());
             ByteBuffer wrapped = ByteBuffer.wrap(b);
             String name = StandardCharsets.UTF_8.decode(wrapped).toString();
+
+            myTable.remove(pid);
+            manager.removeBlock(record.getName());
+            if (record.getEssay() != null) {
+                manager.removeBlock(record.getEssay());
+            }
 
             System.out.println(pid + " with full name " + name
                 + " is removed from " + "the database.");
@@ -180,11 +200,17 @@ public class CommandCalculator {
 
 
     /**
+     * The clear command removes the essay for a student
+     * record.
      * 
      * @param pid
+     *            id of the student used as key value
      * @param fil
+     *            file object
      * @param myTable
+     *            hash table
      * @param manager
+     *            memory manager object
      * @throws IOException
      */
     public void clear(
@@ -203,13 +229,12 @@ public class CommandCalculator {
             if (record.getEssay() != null) {
                 manager.removeBlock(record.getEssay());
                 myTable.get(pid).setEssay(null);
- 
-                byte[] b = new byte[record.getName().getLength()];
-                fil.seek(record.getName().getStart());
-                fil.readFully(b, 0, record.getName().getLength());
-                ByteBuffer wrapped = ByteBuffer.wrap(b);
-                name = StandardCharsets.UTF_8.decode(wrapped).toString();
             }
+            byte[] b = new byte[record.getName().getLength()];
+            fil.seek(record.getName().getStart());
+            fil.readFully(b, 0, record.getName().getLength());
+            ByteBuffer wrapped = ByteBuffer.wrap(b);
+            name = StandardCharsets.UTF_8.decode(wrapped).toString();
             System.out.println("record with pid " + pid + " with full name "
                 + name + " is cleared.");
         }
@@ -218,10 +243,16 @@ public class CommandCalculator {
 
 
     /**
+     * The search method checks the existence of a provided
+     * student record. If it exists then it prints out its
+     * information.
      * 
      * @param pid
+     *            id of the student used as key value
      * @param fil
+     *            file object
      * @param myTable
+     *            hash table
      * @throws IOException
      */
     public void search(
@@ -245,7 +276,7 @@ public class CommandCalculator {
             String name = StandardCharsets.UTF_8.decode(wrapped).toString();
 
             // essay
-            if (record.getEssay() != null) { 
+            if (record.getEssay() != null) {
                 b = new byte[record.getEssay().getLength()];
                 fil.seek(record.getEssay().getStart());
                 fil.readFully(b, 0, record.getEssay().getLength());
@@ -254,7 +285,7 @@ public class CommandCalculator {
                     .toString();
 
                 System.out.println(pid + " " + name + ":");
-                System.out.println(essayVal);
+                System.out.print(essayVal);
             }
             else {
                 System.out.println(pid + " " + name + ":");
@@ -265,10 +296,16 @@ public class CommandCalculator {
 
 
     /**
+     * The print command prints out the names of students in the hash
+     * table and their respective slots. It also prints out the
+     * free list present in the memory manager.
      * 
      * @param fil
+     *            file object
      * @param myTable
+     *            hash table
      * @param manager
+     *            memory manager object
      * @throws IOException
      */
     public void print(
@@ -289,23 +326,6 @@ public class CommandCalculator {
                 ByteBuffer wrapped = ByteBuffer.wrap(b);
                 String name = StandardCharsets.UTF_8.decode(wrapped).toString();
                 System.out.println(name + " at slot " + i);
-                
-//                System.out.println("Start:" + studentRecords.get(i).getName()
-//                    .getStart() + " Length:" + studentRecords.get(i).getName()
-//                        .getLength());
-//
-//                if (studentRecords.get(i).getEssay() != null) {
-//                    b = new byte[studentRecords.get(i).getEssay().getLength()];
-//                    fil.seek(studentRecords.get(i).getEssay().getStart());
-//                    fil.readFully(b, 0, studentRecords.get(i).getEssay()
-//                        .getLength());
-//                    wrapped = ByteBuffer.wrap(b);
-//                    name = StandardCharsets.UTF_8.decode(wrapped).toString();
-//                    System.out.println(name);
-//                    System.out.println("Start:" + studentRecords.get(i)
-//                        .getEssay().getStart() + " Length:" + studentRecords
-//                            .get(i).getEssay().getLength());
-//                }
             }
         }
         manager.printFreeList();
@@ -313,13 +333,22 @@ public class CommandCalculator {
 
 
     /**
+     * This command is only used if there is a successful
+     * insert or update command. It provides a essay for
+     * the student which is saved in the memory file.
      * 
      * @param pid
+     *            id of the student used as key value
      * @param fullName
+     *            name of the student
      * @param essay
+     *            string supposed to be stored as a essay
      * @param fil
+     *            file object
      * @param myTable
+     *            hash table
      * @param manager
+     *            memory manager object
      * @throws IOException
      */
     public void essayInsert(
@@ -332,34 +361,37 @@ public class CommandCalculator {
         throws IOException {
 
         StudentRecord record = myTable.get(pid);
-// System.out.println(record.getEssay());
+
         if (record.getEssay() != null) {
             manager.removeBlock(record.getEssay());
         }
+        essay = essay + "\n";
         byte[] b = essay.getBytes();
         MemoryHandle hand = manager.getBlock(b.length);
         fil.seek(hand.getStart());
         fil.write(b);
         myTable.get(pid).setEssay(hand);
         System.out.println("essay saved for " + fullName);
-//        for (int i = 0; i < essay.length(); i++) {
-//            if (essay.charAt(i) == ' ') {
-//                System.out.print("z");
-//            }
-//            else {
-//                System.out.print(essay.charAt(i));
-//            }
-//        }
+
     }
 
 
     /**
+     * The update command updates the name of a student if the
+     * pid matches. If it does not then the student record
+     * is inserted.
      * 
      * @param pid
+     *            id of the student used as key value
      * @param name
+     *            name of the student
      * @param fil
+     *            file object
      * @param myTable
+     *            hash table
      * @param manager
+     *            memory manager object
+     * @return true if update is successful
      * @throws IOException
      */
     public boolean update(
@@ -376,17 +408,25 @@ public class CommandCalculator {
         }
         else {
             StudentRecord record = myTable.get(pid);
-            manager.removeBlock(record.getName());
-            byte[] b = name.getBytes();
-            MemoryHandle hand = manager.getBlock(b.length);
-            fil.seek(hand.getStart());
-            fil.write(b);
-            myTable.get(pid).setName(hand);
-            System.out.println("Student " + pid + " updated to " + name);
+
+            byte[] c = new byte[record.getName().getLength()];
+            fil.seek(record.getName().getStart());
+            fil.readFully(c, 0, record.getName().getLength());
+            ByteBuffer wrapped = ByteBuffer.wrap(c);
+            String oldName = StandardCharsets.UTF_8.decode(wrapped).toString();
+
+            if (!oldName.equals(name)) {
+                manager.removeBlock(record.getName());
+                byte[] b = name.getBytes();
+                MemoryHandle hand = manager.getBlock(b.length);
+                fil.seek(hand.getStart());
+                fil.write(b);
+                myTable.get(pid).setName(hand);
+            }
             checker = true;
+            System.out.println("Student " + pid + " updated to " + name);
         }
         return checker;
     }
-    
 
 }
