@@ -284,8 +284,8 @@ public class CommandCalculator {
                 String essayVal = StandardCharsets.UTF_8.decode(wrapped)
                     .toString();
 
-                System.out.println(pid + " " + name + ":");
-                System.out.print(essayVal);
+                System.out.print(pid + " " + name + ":");
+                System.out.println(essayVal);
             }
             else {
                 System.out.println(pid + " " + name + ":");
@@ -361,11 +361,9 @@ public class CommandCalculator {
         throws IOException {
 
         StudentRecord record = myTable.get(pid);
-
         if (record.getEssay() != null) {
             manager.removeBlock(record.getEssay());
         }
-        essay = essay + "\n";
         byte[] b = essay.getBytes();
         MemoryHandle hand = manager.getBlock(b.length);
         fil.seek(hand.getStart());

@@ -49,14 +49,16 @@ public class StudentRecordTest extends student.TestCase {
      * 
      * @throws IOException
      */
+    @SuppressWarnings("static-access")
     public void testStudentRecord() throws IOException {
         MemoryHandle name = new MemoryHandle(0, 10);
         MemoryHandle essay = new MemoryHandle(20, 30);
 
         assertEquals(name.getStart(), sr.getName().getStart());
         assertEquals(name.getLength(), sr.getName().getLength());
-        CommandFileParser parser = new CommandFileParser();
-        parser.readFile("SampleInput.txt", 64, "ajaytest.bin");
+        String[] args = { "SampleInput_ajay.txt", null, "64", "ajaytest.bin" };
+        Studentmanager manager = new Studentmanager();
+        manager.main(args);
         assertEquals(essay.getStart(), sr.getEssay().getStart());
         assertEquals(essay.getLength(), sr.getEssay().getLength());
 

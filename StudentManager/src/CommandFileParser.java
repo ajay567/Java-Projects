@@ -78,6 +78,7 @@ public class CommandFileParser {
         File file = new File(fileName);
         Scanner scan = new Scanner(file);
 
+        
         while (scan.hasNext()) {
             String command = scan.next();
             if (command.equals("loadstudentdata")) { // load starts
@@ -96,8 +97,20 @@ public class CommandFileParser {
                     scan.next();
                     scan.next();
                     String essayVal = "";
+                    int count = 0;
                     while (!scan.hasNext("essay")) {
-                        essayVal = essayVal + scan.nextLine();
+                        String temp = scan.nextLine();
+                        
+                        if (!scan.hasNext("essay")) {
+                            essayVal = essayVal + temp + "\n";
+                        }
+                        else {
+                            essayVal = essayVal + temp;
+                        }
+                        count++;
+                    }
+                    if (count == 0) {
+                        essayVal = essayVal + "\n";
                     }
                     calculator.essayInsert(pid, fullName, essayVal, fil,
                         myTable, manager);
@@ -114,8 +127,19 @@ public class CommandFileParser {
                     scan.next();
                     scan.next();
                     String essayVal = "";
+                    int count = 0;
                     while (!scan.hasNext("essay")) {
-                        essayVal = essayVal + scan.nextLine();
+                        String temp = scan.nextLine();
+                        if (!scan.hasNext("essay")) {
+                            essayVal = essayVal + temp + "\n";
+                        }
+                        else {
+                            essayVal = essayVal + temp;
+                        }
+                        count++;
+                    }   
+                    if (count == 0) {
+                        essayVal = essayVal + "  \n";
                     }
                     calculator.essayInsert(pid, name, essayVal, fil, myTable,
                         manager);
@@ -142,7 +166,14 @@ public class CommandFileParser {
                 scan.next();
                 String essayVal = "";
                 while (!scan.hasNext("essay")) {
-                    essayVal = essayVal + scan.nextLine();
+                    String temp = scan.nextLine();
+                    
+                    if (!scan.hasNext("essay")) {
+                        essayVal = essayVal + temp + "\n";
+                    }
+                    else {
+                        essayVal = essayVal + temp;
+                    }
                 }
                 scan.next();
                 scan.next();
