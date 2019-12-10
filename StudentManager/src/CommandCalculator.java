@@ -74,23 +74,25 @@ public class CommandCalculator {
             currentLine = newLine.split(",");
             String name = "";
             if (!currentLine[0].equals("")) {
-                name = currentLine[1] + " " + currentLine[3];
+                name = currentLine[1].trim() + " " + currentLine[3].trim();
                 byte[] b = name.getBytes();
                 MemoryHandle hand = manager.getBlock(b.length);
-                if (myTable.get(currentLine[0]) != null) {
+                if (myTable.get(currentLine[0].trim()) != null) {
                     manager.removeBlock(hand);
                     System.out.println("Warning: Student " + currentLine[0]
-                        + " " + currentLine[1] + " " + currentLine[3]
+                        .trim() + " " + currentLine[1].trim() + " "
+                        + currentLine[3].trim()
                         + " is not loaded since a student "
                         + "with the same pid exists.");
                 }
-                else if (!myTable.put(currentLine[0], new StudentRecord(hand,
-                    null))) {
+                else if (!myTable.put(currentLine[0].trim(), new StudentRecord(
+                    hand, null))) {
                     manager.removeBlock(hand);
                     System.out.println(
                         "Warning: There is no free place in the bucket to "
-                            + "load student " + currentLine[0] + " "
-                            + currentLine[1] + " " + currentLine[3] + ".");
+                            + "load student " + currentLine[0].trim() + " "
+                            + currentLine[1].trim() + " " + currentLine[3]
+                                .trim() + ".");
                 }
                 else {
                     fil.seek(hand.getStart());
@@ -181,20 +183,24 @@ public class CommandCalculator {
         else {
             StudentRecord record = myTable.get(pid);
 
-            byte[] b = new byte[record.getName().getLength()];
-            fil.seek(record.getName().getStart());
-            fil.readFully(b, 0, record.getName().getLength());
-            ByteBuffer wrapped = ByteBuffer.wrap(b);
-            String name = StandardCharsets.UTF_8.decode(wrapped).toString();
+            if (myTable.remove(pid)) {
+                byte[] b = new byte[record.getName().getLength()];
+                fil.seek(record.getName().getStart());
+                fil.readFully(b, 0, record.getName().getLength());
+                ByteBuffer wrapped = ByteBuffer.wrap(b);
+                String name = StandardCharsets.UTF_8.decode(wrapped).toString();
 
-            myTable.remove(pid);
-            manager.removeBlock(record.getName());
-            if (record.getEssay() != null) {
-                manager.removeBlock(record.getEssay());
+                manager.removeBlock(record.getName());
+                if (record.getEssay() != null) {
+                    manager.removeBlock(record.getEssay());
+                }
+
+                System.out.println(pid + " with full name " + name
+                    + " is removed from " + "the database.");
             }
-
-            System.out.println(pid + " with full name " + name
-                + " is removed from " + "the database.");
+            else {
+                System.out.println(pid + " is not found in the database.");
+            }
         }
     }
 

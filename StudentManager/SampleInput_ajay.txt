@@ -1,12 +1,76 @@
-insert 98305753 Ajay Dalmia
-insert 98305754 Ajay Dalmia1
-essay on
-my name is Ajay Dalmia
-essay off
-insert 98305755 Ajay Dalmia2
-insert 98305756 Ajay Dalmia3
-update 98305754 Ajay Dalmia
+loadstudentdata SampleStudents_ajay.csv
 
+update 98305753 name changed
+essay on
+given value
+essay off
+
+search 98305753
+
+remove 98305753
 remove 98305754
+remove 98305755
+remove 98305756
+remove 98305757
+remove 98305758
+remove 98305759
+remove 98305760
+remove 98305761
+remove 98305762
+remove 98305763
+remove 98305764
+remove 98305765
+remove 98305766
+remove 98305767
+remove 98305768
+remove 98305769
+remove 98305770
+remove 98305771
+remove 98305772
+remove 98305773
+remove 98305774
+remove 98305775
+remove 98305776
+remove 98305777
+remove 98305778
+remove 98305779
+remove 98305780
+remove 98305781
+remove 98305782
+remove 98305783
+remove 98305784
+
+search 98305753
+search 98305754
+search 98305755
+search 98305756
+search 98305757
+search 98305758
+search 98305759
+search 98305760
+search 98305761
+search 98305762
+search 98305763
+search 98305764
+search 98305765
+search 98305766
+search 98305767
+search 98305768
+search 98305769
+search 98305770
+search 98305771
+search 98305772
+search 98305773
+search 98305774
+search 98305775
+search 98305776
+search 98305777
+search 98305778
+search 98305779
+search 98305780
+search 98305781
+search 98305782
+search 98305783
+search 98305784
 
 
